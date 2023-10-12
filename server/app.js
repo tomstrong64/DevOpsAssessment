@@ -9,6 +9,14 @@ const app = express();
 const { MONGODB_URI } = process.env;
 
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
+
+mongoose.connection.on("connected", () => {
+  console.log(
+    "MongoDB connection established successfully",
+    chalk.green("✓")
+  );
+});
+
 mongoose.connection.on("error", (err) => {
   console.error(err);
   console.log(
