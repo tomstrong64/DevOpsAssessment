@@ -4,8 +4,8 @@ import * as PoiController from '../controllers/poi.controller.js';
 const router = Router();
 
 router.get('/allPois', PoiController.getPois);
-router.get('/addPoi', PoiController.addPoi);
-router.get('/deletePoi', PoiController.deletePoi);
-router.get('/updatePoi', PoiController.updatePoi);
+router.post('/addPoi', PoiController.addPoi);
+router.delete('/deletePoi', PoiController.deletePoi);
+router.put('/updatePoi', PoiController.updatePoi);
 
 export default router;
