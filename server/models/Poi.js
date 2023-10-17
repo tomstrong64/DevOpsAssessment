@@ -6,11 +6,11 @@ const poiSchema = new Schema(
         Type: { type: String },
         Country: { type: String },
         Region: { type: String },
-        lat: { type: Double },
-        lon: { type: Double },
+        lat: { type: Number },
+        lon: { type: Number },
         Description: { type: String },
     },
     { timestamps: true }
 );
 
-module.exports = mongoose.model('Poi', poiSchema);
+export const POI = mongoose.model('Poi', poiSchema);

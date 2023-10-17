@@ -7,3 +7,5 @@ router.get('/allPois', PoiController.getPois);
 router.get('/addPoi', PoiController.addPoi);
 router.get('/deletePoi', PoiController.deletePoi);
 router.get('/updatePoi', PoiController.updatePoi);
+
+export default router;

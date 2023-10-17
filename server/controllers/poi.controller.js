@@ -1,8 +1,8 @@
-import { Poi } from '../models/Poi.js';
+import { POI } from '../models/Poi.js';
 
 export const getPois = async (req, res) => {
     try {
-        const pois = await Poi.find({});
+        const pois = await POI.find({});
         res.render('/pois');
     } catch (error) {
         res.status(404).send({ message: "could not find any POI's" });
@@ -13,7 +13,7 @@ export const deletePoi = async (req, res) => {
     const id = req.params.id;
 
     try {
-        await Poi.findByIdAndRemove(id);
+        await POI.findByIdAndRemove(id);
         res.redirect('/Pois');
     } catch (error) {
         res.status(404).send({ message: 'could not delete the POI' });
@@ -22,7 +22,7 @@ export const deletePoi = async (req, res) => {
 
 export const addPoi = async (req, res) => {
     try {
-        const pois = new Poi({
+        const pois = new POI({
             name: req.body.name,
             type: req.body.type,
             country: req.body.country,
@@ -32,7 +32,7 @@ export const addPoi = async (req, res) => {
             description: req.body.description,
         });
 
-        await Poi.save();
+        await POI.save();
         res.redirect('/Pois/?message= POI has been added!');
     } catch (e) {
         if ((e, erros)) {
@@ -49,7 +49,7 @@ export const addPoi = async (req, res) => {
 export const updatePoi = async (req, res) => {
     const id = req.params.id;
     try {
-        const poi = await Poi.updateOne({ _id: id }, req.body);
+        const poi = await POI.updateOne({ _id: id }, req.body);
         res.redirect('/Pois/?message= POI has been updated!');
     } catch (e) {
         res.status(404).send({

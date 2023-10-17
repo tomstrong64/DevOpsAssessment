@@ -4,8 +4,8 @@ import chalk from 'chalk';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 
-import UserRouter from './routes/user.route';
-import PoiRouter from './routes/poi.route';
+import UserRouter from './routes/user.route.js';
+import PoiRouter from './routes/poi.route.js';
 
 const app = express();
 
