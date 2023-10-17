@@ -1,7 +1,7 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 
-exports.login = async (req, res) => {
+export const login = async (req, res) => {
     try {
         const user = await User.findOne({ email: req.body.email });
         if (!user) {
@@ -27,7 +27,7 @@ exports.login = async (req, res) => {
     }
 }
 
-exports.create = async (req, res) => {
+export const create = async (req, res) => {
     try {
 
         const user = new User({ name: req.body.name, email: req.body.email, password: req.body.password });
@@ -43,4 +43,20 @@ exports.create = async (req, res) => {
             message: JSON.parse(e),
         });
     }
+}
+export const logout = async (req, res) => {
+    try {
+        req.session.destroy();
+        global.user = false;
+        res.redirect('/');
+    } catch (e) {
+        if (e.errors) {
+            console.log(e.errors);
+            res.render('/logut', { errors: e.errors })
+            return;
+        }
+        return res.status(400).send({
+            message: JSON.parse(e),
+        });
+     }
 }
