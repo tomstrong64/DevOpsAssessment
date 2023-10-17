@@ -1,5 +1,5 @@
-const User = require('../models/User');
-const bcrypt = require('bcrypt');
+import User from ('../models/User');
+import bcrypt from ('bcrypt');
 
 export const login = async (req, res) => {
     try {
