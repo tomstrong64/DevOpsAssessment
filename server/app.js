@@ -2,7 +2,9 @@ import {} from 'dotenv/config'
 import express from 'express';
 import chalk  from 'chalk';
 import mongoose from 'mongoose';
+import bodyParser from 'body-parser';
 
+import UserRouter from ("./routes/user.route");
 
 const app = express();
 
@@ -27,10 +29,34 @@ mongoose.connection.on("error", (err) => {
 });
 
 app.use(express.static('public'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+
+app.use("*", async (req, res, next) => {
+  global.user = false;
+  if (req.session.userID && !global.user) {
+    const user = await User.findById(req.session.userID);
+    global.user = user;
+  }
+  next();
+});
+const authMiddleware = async (req, res, next) => {
+  const user = await User.findById(req.session.userID);
+  if (!user) {
+    return res.redirect('/');
+  }
+  next()
+};
+
+app.use('/user', UserRouter);
+
 
 app.get("/", (req,res,next) => {
     res.send("Hello World");
 });
+
+
 
 app.listen(3000, () => {
     console.log("Server is running on port 3000");
