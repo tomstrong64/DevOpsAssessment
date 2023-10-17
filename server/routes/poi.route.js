@@ -1,5 +1,5 @@
-import {Router} from 'express'
-import * as PoiController from '../controllers/poi.controller.js'
+import { Router } from 'express';
+import * as PoiController from '../controllers/poi.controller.js';
 
 const router = Router();
 
