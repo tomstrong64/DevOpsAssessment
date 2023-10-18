@@ -10,7 +10,6 @@ export const login = async (req, res) => {
             });
             return;
         }
-
         const match = await bcrypt.compare(req.body.password, user.password);
         if (match) {
             req.session.userID = user._id;
