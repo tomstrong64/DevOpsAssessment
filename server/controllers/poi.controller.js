@@ -28,7 +28,7 @@ export const addPoi = async (req, res) => {
             country: req.body.country,
             region: req.body.region,
             lat: req.body.lat,
-            lot: req.body.lot,
+            lon: req.body.lon,
             description: req.body.description,
         });
         await pois.save();
