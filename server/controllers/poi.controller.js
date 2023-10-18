@@ -3,7 +3,7 @@ import { POI } from '../models/Poi.js';
 export const getPois = async (req, res) => {
     try {
         const pois = await POI.find({});
-        res.render('/pois');
+        res.json(pois);
     } catch (error) {
         res.status(404).send({ message: "could not find any POI's" });
     }
@@ -14,9 +14,9 @@ export const deletePoi = async (req, res) => {
 
     try {
         await POI.findByIdAndRemove(id);
-        res.redirect('/Pois');
+        res.json({deleted: true});
     } catch (error) {
-        res.status(404).send({ message: 'could not delete the POI' });
+        res.status(500).send({ message: 'could not delete the POI' });
     }
 };
 
@@ -28,21 +28,13 @@ export const addPoi = async (req, res) => {
             country: req.body.country,
             region: req.body.region,
             lat: req.body.lat,
-            lot: req.body.lot,
+            lon: req.body.lon,
             description: req.body.description,
         });
-
-        await POI.save();
-        res.redirect('/Pois/?message= POI has been added!');
+        await pois.save();
+        res.sendStatus(201); 
     } catch (e) {
-        if ((e, erros)) {
-            console.log(e.errors);
-            res.render('add-poi', { errors: e.errors });
-            return;
-        }
-        return res.status(400).send({
-            message: JSON.parse(e),
-        });
+        return res.status(400).send({message: JSON.parse(e),});
     }
 };
 
@@ -50,10 +42,8 @@ export const updatePoi = async (req, res) => {
     const id = req.params.id;
     try {
         const poi = await POI.updateOne({ _id: id }, req.body);
-        res.redirect('/Pois/?message= POI has been updated!');
+        res.json({updated: true})
     } catch (e) {
-        res.status(404).send({
-            message: `could not find POI! ${id}`,
-        });
+        res.status(500);
     }
 };

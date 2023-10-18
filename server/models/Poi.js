@@ -2,13 +2,13 @@ import mongoose, { Schema } from 'mongoose';
 
 const poiSchema = new Schema(
     {
-        Name: { type: String, required: [true, 'Name is required'] },
-        Type: { type: String },
-        Country: { type: String },
-        Region: { type: String },
+        name: { type: String, required: [true, 'Name is required'] },
+        type: { type: String },
+        country: { type: String },
+        region: { type: String },
         lat: { type: Number },
         lon: { type: Number },
-        Description: { type: String },
+        description: { type: String },
     },
     { timestamps: true }
 );
