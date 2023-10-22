@@ -93,6 +93,34 @@ app.post('/login', async function (req, res) {
     }
 });
 
+app.get('/addpoi', function (req, res) {
+    res.render('addPoi'); // Adjust the path to your HTML file
+});
+
+// Handle the form submission to add a POI
+app.post('/addpoi', async (req, res) => {
+    try {
+        // Create a new POI based on the Poi model
+        const poi = new Poi({
+            name: req.body.name,
+            type: req.body.type,
+            country: req.body.country,
+            region: req.body.region,
+            lat: req.body.lat,
+            lon: req.body.lon,
+            description: req.body.description,
+        });
+
+        // Save the POI to the database
+        await poi.save();
+
+        res.redirect('/addpoi'); // Redirect to the POI creation form or a success page
+    } catch (error) {
+        // Handle any errors here, e.g., validation errors or database errors
+        res.status(400).send('Error: ' + error.message);
+    }
+});
+
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
 });
