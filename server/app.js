@@ -121,6 +121,18 @@ app.post('/addpoi', async (req, res) => {
     }
 });
 
+app.get('/displaypois', async (req, res) => {
+    try {
+        // Fetch the list of POIs from your database
+        const poiList = await Poi.find(); // Adjust this query to match your database structure
+
+        // Render the "displayPois" template and pass the POI list as a variable
+        res.render('displayPois', { poiList });
+    } catch (error) {
+        // Handle any errors, e.g., database query errors
+        res.status(500).send('Error: ' + error.message);
+    }
+});
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
 });
