@@ -9,4 +9,5 @@ router.get('/login', UserController.login);
 router.post('/register', UserController.create);
 router.get('/logout', authMiddleware, UserController.logout);
 
+
 export default router;
