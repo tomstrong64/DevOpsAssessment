@@ -3,12 +3,11 @@ import express from 'express';
 import chalk from 'chalk';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
-import ejs from 'ejs';
 import UserRouter from './routes/user.route.js';
 import PoiRouter from './routes/poi.route.js';
-import { fileURLToPath } from 'url'; // Import fileURLToPath
-import path from 'path'; // Import the 'path' module
-
+import IndexRouter from './routes/index.route.js';
+import { fileURLToPath } from 'url';
+import path from 'path';
 const app = express();
 
 const __filename = fileURLToPath(import.meta.url); // Get the filename of the current module
@@ -38,101 +37,12 @@ app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.get('/', (req, res, next) => {
-    res.send('Hello World');
-});
-
 app.use('/user', UserRouter);
 
 app.use('/pois', PoiRouter);
 
-app.get('/home', function (req, res) {
-    res.render('home');
-});
+app.get('/', IndexRouter);
 
-app.set('view engine', 'ejs');
-
-app.set('views', path.join(__dirname, 'views'));
-
-// Showing register form
-app.get('/register', function (req, res) {
-    res.render('register');
-});
-
-app.post('/register', async (req, res) => {
-    const user = await User.create({
-        username: req.body.username,
-        password: req.body.password,
-    });
-
-    return res.status(200).json(user);
-});
-
-//Showing login form
-app.get('/login', function (req, res) {
-    res.render('login');
-});
-
-app.post('/login', async function (req, res) {
-    try {
-        // check if the user exists
-        const user = await User.findOne({ username: req.body.username });
-        if (user) {
-            //check if password matches
-            const result = req.body.password === user.password;
-            if (result) {
-                res.render('secret');
-            } else {
-                res.status(400).json({ error: "password doesn't match" });
-            }
-        } else {
-            res.status(400).json({ error: "User doesn't exist" });
-        }
-    } catch (error) {
-        res.status(400).json({ error });
-    }
-});
-
-app.get('/addpoi', function (req, res) {
-    res.render('addPoi'); // Adjust the path to your HTML file
-});
-
-// Handle the form submission to add a POI
-app.post('/addpoi', async (req, res) => {
-    try {
-        // Create a new POI based on the Poi model
-        const poi = new Poi({
-            name: req.body.name,
-            type: req.body.type,
-            country: req.body.country,
-            region: req.body.region,
-            lat: req.body.lat,
-            lon: req.body.lon,
-            description: req.body.description,
-        });
-
-        // Save the POI to the database
-        await poi.save();
-
-        res.redirect('/addpoi'); // Redirect to the POI creation form or a success page
-    } catch (error) {
-        // Handle any errors here, e.g., validation errors or database errors
-        res.status(400).send('Error: ' + error.message);
-    }
-});
-
-app.get('/displaypois', async (req, res) => {
-    try {
-        // Fetch the list of POIs from your database
-        const poiList = await Poi.find(); // Adjust this query to match your database structure
-
-        // Render the "displayPois" template and pass the POI list as a variable
-        res.render('displayPois', { poiList });
-    } catch (error) {
-        // Handle any errors, e.g., database query errors
-        res.status(500).send('Error: ' + error.message);
-    }
-});
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
 });
