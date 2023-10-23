@@ -56,7 +56,7 @@ export const logout = async (req, res) => {
     } catch (e) {
         if (e.errors) {
             console.log(e.errors);
-            res.render('/logut', { errors: e.errors });
+            res.render('/logout', { errors: e.errors });
             return;
         }
         return res.status(400).send({
