@@ -11,11 +11,14 @@ RUN npm ci --omit=dev
 # Production image
 FROM node:20.8.1-bookworm-slim
 
+ENV NODE_ENV=production
 COPY --from=build /usr/bin/dumb-init /usr/bin/dumb-init
 
 USER node
 WORKDIR /usr/src/app
 COPY --chown=node:node --from=build /usr/src/app/node_modules /usr/src/app/node_modules
 COPY --chown=node:node . /usr/src/app/
+
+HEALTHCHECK --interval=5m --timeout=5s --start-period=5s --retries=3 CMD node healthcheck.js
 
 CMD ["dumb-init", "node", "app.js"]
