@@ -8,7 +8,6 @@ import UserRouter from './routes/user.route.js';
 import PoiRouter from './routes/poi.route.js';
 
 const app = express();
-app.set("view engine", "ejs");
 
 const { MONGODB_URI } = process.env;
 
