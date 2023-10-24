@@ -6,6 +6,6 @@ const router = Router();
 router.get('/list', PoiController.getPois);
 router.post('/addPoi', PoiController.addPoi);
 router.delete('/deletePoi/:id', PoiController.deletePoi);
-router.put('/updatePoi/:id', PoiController.updatePoi);
+router.put('/updatePoi?id=id', PoiController.updatePoi);
 
 export default router;

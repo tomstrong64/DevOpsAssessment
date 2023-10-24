@@ -4,7 +4,11 @@ export const getPois = async (req, res) => {
     try {
         let pois;
         const region = req.query.search;
-        if (region) {
+        const poiId = req.query.id;
+
+        if (poiId) {
+            pois = await POI.findById(poiId);
+        } else if (region) {
             pois = await POI.find({ region: region });
         } else {
             pois = await POI.find({});
@@ -45,12 +49,12 @@ export const addPoi = async (req, res) => {
         await pois.save();
         res.sendStatus(201); 
     } catch (e) {
-        return res.status(400).send({message: JSON.parse(e),});
+        return res.status(400).send({message: JSON.parse(e)});
     }
 };
 
 export const updatePoi = async (req, res) => {
-    const id = req.params.id;
+    const id = req.query.id;
     try {
         const poi = await POI.updateOne({ _id: id }, req.body);
         res.json({updated: true})
