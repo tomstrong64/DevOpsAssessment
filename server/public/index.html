@@ -30,14 +30,13 @@
         <a class="navbar-brand" href="#">Home</a>
         <a class="navbar-brand" href="addpoi.html">Add POI</a>
         <form class="form-inline">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-light my-2 my-sm-0" type="submit">Search</button>
+            <input class="form-control mr-sm-2" id="poi_region" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-light my-2 my-sm-0" id="poi_search" type="submit">Search</button>
         </form>
         <a href="profile.html" class="btn btn-light ml-auto">Profile</a>
     </nav>
 
-    
-    <div class="container">
+     <div class="container">
         <div class="row">
             <div class="col-md-8"> 
                 <div id="map1" style="height: 500px; width: 100%; "></div>
@@ -47,6 +46,7 @@
             </div>
         </div>
     </div>
+    <div style="margin-top: 20px;" id="poi_results"></div>
     
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.7.2/dist/umd/popper.min.js"></script>

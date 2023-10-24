@@ -68,3 +68,58 @@ map.on("click", async(e) => {
 
 });
 
+document.getElementById("poi_search").addEventListener("click", e => {
+  e.preventDefault()
+  const region = document.getElementById("poi_region").value;
+  ajaxSearch(region);
+});
+
+async function ajaxSearch(region) {
+    const ajaxResponse = await fetch(`/pois/searchPoi/${region}`);
+    console.log(ajaxResponse);
+    const pois = await ajaxResponse.json();
+    console.log(pois);
+    const resultsDiv = document.getElementById("poi_results");
+    resultsDiv.innerHTML = "";
+  
+    // Create table and table headings
+    const table = document.createElement("table");
+    const thead = document.createElement("thead");
+    const trHeadings = document.createElement("tr");
+    trHeadings.innerHTML = `
+      <th>Name</th>
+      <th>Type</th>
+      <th>Country</th>
+      <th>Region</th>
+      <th>Longitude</th>
+      <th>Latitude</th>
+      <th>Description</th>
+    `;
+    thead.appendChild(trHeadings);
+    table.appendChild(thead);
+  
+    // Add table rows
+    const tbody = document.createElement("tbody");
+    table.appendChild(tbody);
+    pois.forEach(poi => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${poi.name}</td>
+        <td>${poi.type}</td>
+        <td>${poi.country}</td>
+        <td>${poi.region}</td>
+        <td>${poi.lon}</td>
+        <td>${poi.lat}</td>
+        <td>${poi.description}</td>
+      `;
+      tbody.appendChild(tr);
+  
+      const pos = [poi.lat, poi.lon];
+      const marker = L.marker(pos).addTo(map);
+      marker.bindPopup(`<b>${poi.name}</b><br>${poi.description}`).openPopup();
+    });
+  
+    resultsDiv.innerHTML = "";
+    resultsDiv.appendChild(table);
+};
+

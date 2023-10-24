@@ -9,6 +9,22 @@ export const getPois = async (req, res) => {
     }
 };
 
+export const getPoiByRegion = async (req, res) => {
+    const region = req.params.region;
+
+    try {
+        const poi = await POI.find({ region: region });
+
+        if (!poi) {
+            return res.status(404).json({ message: "POI not found" });
+        }
+
+        res.json(poi);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 export const deletePoi = async (req, res) => {
     const id = req.params.id;
 
