@@ -51,7 +51,7 @@ map.on("click", async(e) => {
       });    
 
       
-      if(response.status == 200) {
+      if(response.status == 201) {
           alert("Successfully added");
           const pos = [lat, lon]
           const marker = L.marker(pos).addTo(map);
@@ -67,3 +67,4 @@ map.on("click", async(e) => {
 });
 
 });
+
