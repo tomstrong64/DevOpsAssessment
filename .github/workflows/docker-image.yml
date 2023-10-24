@@ -25,7 +25,7 @@ jobs:
         run: cd server
 
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag geoguide.azurecr.io/server:$(date +%s)
+        run: docker build -t geoguide.azurecr.io/server:$(date +%s) .
 
       - name: Push the Docker image
         run: docker push geoguide.azurecr.io/server:$(date +%s)
