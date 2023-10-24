@@ -76,9 +76,11 @@ document.getElementById("poi_search").addEventListener("click", e => {
 
 async function ajaxSearch(region) {
     const ajaxResponse = await fetch(`/pois/list?search=${region}`);
-    console.log(ajaxResponse);
-    const pois = await ajaxResponse.json();
-    console.log(pois);
+    const pois = await ajaxResponse.json()
+    if (pois.length == 0) {
+      alert('No Pois Found');
+      return
+    }
     const resultsDiv = document.getElementById("poi_results");
     resultsDiv.innerHTML = "";
   
@@ -94,6 +96,8 @@ async function ajaxSearch(region) {
       <th>Longitude</th>
       <th>Latitude</th>
       <th>Description</th>
+      <th>Update</th>
+      <th>Delete</th>
     `;
     thead.appendChild(trHeadings);
     table.appendChild(thead);
@@ -111,6 +115,12 @@ async function ajaxSearch(region) {
         <td>${poi.lon}</td>
         <td>${poi.lat}</td>
         <td>${poi.description}</td>
+        <td>
+          <a href="updatepoi.html">Update</a>
+        </td>
+        <td>
+          <button onclick="deletePoi('${poi._id}')">Delete</button>
+        </td>
       `;
       tbody.appendChild(tr);
   
@@ -121,5 +131,21 @@ async function ajaxSearch(region) {
   
     resultsDiv.innerHTML = "";
     resultsDiv.appendChild(table);
+};
+
+async function deletePoi(id) {
+  try {
+    const response = await fetch(`/pois/deletePoi/${id}`, {
+      method: 'DELETE'
+    });
+    if (response.status == 200) {
+      alert('Successfully Deleted!');
+    } else {
+      const jsonData = await response.json();
+      alert(jsonData.error);
+    }
+  } catch (e) {
+    alert(`Error with POI ID ${id}: ${e}`);
+  }
 };
 

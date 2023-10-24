@@ -10,8 +10,8 @@ export const getPois = async (req, res) => {
             pois = await POI.find({});
         }
 
-        if (!pois || pois.length === 0) {
-            return res.status(404).json({ message: "No POIs found" });
+        if (!pois) {
+            return res.status(500).json({ message: "No POIs found" });
         }
 
         res.json(pois);
