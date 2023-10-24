@@ -1,0 +1,31 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.1.1
+
+      - name: Login to Container registry
+        uses: docker/login-action@v3.0.0
+        with:
+          registry: geoguide.azurecr.io
+          username: ${{ secrets.DOCKER_REGISTRY_UNAME }}
+          password: ${{ secrets.DOCKER_REGISTRY_PWORD }}
+
+      - name: Navigate to server directory
+        run: cd server
+
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag geoguide.azurecr.io/server:$(date +%s)
+
+      - name: Push the Docker image
+        run: docker push geoguide.azurecr.io/server:$(date +%s)
