@@ -8,6 +8,7 @@ import UserRouter from './routes/user.route.js';
 import PoiRouter from './routes/poi.route.js';
 
 const app = express();
+app.set("view engine", "ejs");
 
 const { MONGODB_URI } = process.env;
 
@@ -34,7 +35,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/', (req, res, next) => {
-    res.render("index.html");
+    res.render("index");
 });
 
 app.use('/user', UserRouter);
