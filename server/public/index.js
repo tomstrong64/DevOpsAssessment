@@ -75,7 +75,7 @@ document.getElementById("poi_search").addEventListener("click", e => {
 });
 
 async function ajaxSearch(region) {
-    const ajaxResponse = await fetch(`/pois/searchPoi/${region}`);
+    const ajaxResponse = await fetch(`/pois/list?search=${region}`);
     console.log(ajaxResponse);
     const pois = await ajaxResponse.json();
     console.log(pois);

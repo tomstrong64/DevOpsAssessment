@@ -2,24 +2,19 @@ import { POI } from '../models/Poi.js';
 
 export const getPois = async (req, res) => {
     try {
-        const pois = await POI.find({});
-        res.json(pois);
-    } catch (error) {
-        res.status(404).send({ message: "could not find any POI's" });
-    }
-};
-
-export const getPoiByRegion = async (req, res) => {
-    const region = req.params.region;
-
-    try {
-        const poi = await POI.find({ region: region });
-
-        if (!poi) {
-            return res.status(404).json({ message: "POI not found" });
+        let pois;
+        const region = req.query.search;
+        if (region) {
+            pois = await POI.find({ region: region });
+        } else {
+            pois = await POI.find({});
         }
 
-        res.json(poi);
+        if (!pois || pois.length === 0) {
+            return res.status(404).json({ message: "No POIs found" });
+        }
+
+        res.json(pois);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
