@@ -35,7 +35,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/', (req, res, next) => {
-    res.send('Hello World');
+    res.render("index.html");
 });
 
 app.use('/user', UserRouter);
