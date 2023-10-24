@@ -22,7 +22,7 @@ jobs:
                   password: ${{ secrets.DOCKER_REGISTRY_PWORD }}
 
             - name: Build the Docker image
-              run: docker build -t geoguide.azurecr.io/server:$(date +%s) .
+              run: docker build -t geoguide.azurecr.io/server:latest .
 
             - name: Push the Docker image
-              run: docker push geoguide.azurecr.io/server:$(date +%s)
+              run: docker push geoguide.azurecr.io/server:latest
