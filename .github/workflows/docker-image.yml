@@ -26,3 +26,12 @@ jobs:
 
             - name: Push the Docker image
               run: docker push geoguide.azurecr.io/server:latest
+
+            - name: Deploy on Azure VM
+              uses: appleboy/ssh-action@master
+              with:
+                  host: ${{ secrets.SSH_HOST }}
+                  username: ${{ secrets.SSH_USER }}
+                  key: ${{ secrets.SSH_KEY }}
+                  script: |
+                      bash ~/GeoGuide/update.sh
