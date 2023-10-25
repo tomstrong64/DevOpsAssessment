@@ -31,7 +31,7 @@ document.getElementById('UPDATE POI').addEventListener('click', async (e) => {
     e.preventDefault();
     const poi = {
         // Get the values from the form fields
-        "-_id": document.getElementById('poiId').value,
+        "_id": document.getElementById('poiId').value,
         "name": document.getElementById('name').value,
         "type": document.getElementById('type').value,
         "country": document.getElementById('country').value,
