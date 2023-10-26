@@ -2,10 +2,25 @@ import { POI } from '../models/Poi.js';
 
 export const getPois = async (req, res) => {
     try {
-        const pois = await POI.find({});
+        let pois;
+        const region = req.query.search;
+        const poiId = req.query.id;
+
+        if (poiId) {
+            pois = await POI.findById(poiId);
+        } else if (region) {
+            pois = await POI.find({ region: region });
+        } else {
+            pois = await POI.find({});
+        }
+
+        if (!pois) {
+            return res.status(500).json({ message: "No POIs found" });
+        }
+
         res.json(pois);
     } catch (error) {
-        res.status(404).send({ message: "could not find any POI's" });
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -34,12 +49,12 @@ export const addPoi = async (req, res) => {
         await pois.save();
         res.sendStatus(201); 
     } catch (e) {
-        return res.status(400).send({message: JSON.parse(e),});
+        return res.status(400).send({message: JSON.parse(e)});
     }
 };
 
 export const updatePoi = async (req, res) => {
-    const id = req.params.id;
+    const id = req.query.id;
     try {
         const poi = await POI.updateOne({ _id: id }, req.body);
         res.json({updated: true})
