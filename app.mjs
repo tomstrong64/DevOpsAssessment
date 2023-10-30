@@ -1,12 +1,12 @@
 import {} from 'dotenv/config';
-import express from 'express';
-import chalk from 'chalk';
-import mongoose from 'mongoose';
-import bodyParser from 'body-parser';
+import {express} from 'express';
+import {chalk} from 'chalk';
+import {mongoose} from 'mongoose';
+import {bodyParser} from 'body-parser';
 
-import UserRouter from './routes/user.route.js';
-import PoiRouter from './routes/poi.route.js';
-import HealthRouter from './routes/health.route.js';
+import {UserRouter} from './routes/user.route.js';
+import {PoiRouter} from './routes/poi.route.mjs';
+import {HealthRouter} from './routes/health.route.js';
 
 const app = express();
 
