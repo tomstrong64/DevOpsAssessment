@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const response = await fetch(`/user/list?id=${userId}`);
         const user = await response.json();
         if (response.status !== 200) {
-            throw new Error(poi.message || 'Failed to fetch User details');
+            throw new Error(user.message || 'Failed to fetch User details');
         }
 
         // Pre-populate the form fields
@@ -24,27 +24,40 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 document.getElementById('UPDATE USER').addEventListener('click', async (e) => {
     e.preventDefault();
-    const user = {
-        // Get the values from the form fields
-        "_id": document.getElementById('userId').value,
-        "userame": document.getElementById('username').value,
-        "email": document.getElementById('email').value,
-        "password": document.getElementById('password').value,
-        
-    };
+
+    // Get the values from the form fields
+    const userId = document.getElementById('userId').value;
+    const username = document.getElementById('username').value;
+    const email = document.getElementById('email').value;
+    const newPassword = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('password2').value;
+    const currentPassword = document.getElementById('Cpassword').value;
+
+    // Check if new password and confirm password match
+    if (newPassword !== confirmPassword) {
+        alert('New password and confirm password do not match');
+        return;
+    }
+
     try {
-        const response = await fetch(`/user/updateUser?id=${user._id}`, 
-       
-        {
+        const response = await fetch(`/user/updateUser?id=${userId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(user)
+            body: JSON.stringify({
+                _id: userId,
+                username: username,
+                email: email,
+                password: newPassword,
+                currentPassword: currentPassword // Send the current password for verification
+            })
         });
 
         if (response.status === 200) {
             alert('User updated successfully');
+        } else if (response.status === 401) {
+            alert('Current password is incorrect');
         } else {
             alert(`Failed to update User: ${response.statusText}`);
         }
@@ -53,3 +66,4 @@ document.getElementById('UPDATE USER').addEventListener('click', async (e) => {
         alert('Failed to update User');
     }
 });
+
