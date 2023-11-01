@@ -130,3 +130,4 @@ export const updateUser = async (req, res) => {
 export const profile = async (req, res) => {
     res.render('updateuser')
 }
+

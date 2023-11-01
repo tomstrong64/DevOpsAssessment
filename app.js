@@ -2,7 +2,6 @@ import {} from 'dotenv/config';
 import express from 'express';
 import chalk from 'chalk';
 import mongoose from 'mongoose';
-import bodyParser from 'body-parser';
 
 import UserRouter from './routes/user.route.js';
 import PoiRouter from './routes/poi.route.js';
@@ -31,8 +30,8 @@ mongoose.connection.on('error', (err) => {
 });
 
 app.use(express.static('public'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 
 app.use('/user', UserRouter);
