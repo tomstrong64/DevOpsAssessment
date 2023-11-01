@@ -49,7 +49,8 @@ export const addPoi = async (req, res) => {
         await pois.save();
         res.sendStatus(201);
     } catch (e) {
-        return res.status(400).send({ message: JSON.parse(e) });
+        return res.status(400).send({ message: e.message });
+
     }
 };
 

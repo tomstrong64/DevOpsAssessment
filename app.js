@@ -11,7 +11,14 @@ const app = express();
 
 const { MONGODB_URI } = process.env;
 
+if (process.env.NODE_ENV === 'test') {
+    mongoose.connect('mongodb://admin:admin@localhost:27017/admin',{
+        useNewUrlParser:true,
+        useUnifiedTopology:true,
+    });
+}else{
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
+}
 
 mongoose.connection.on('connected', () => {
     console.log(
@@ -39,8 +46,9 @@ app.use('/pois', PoiRouter);
 
 app.use('/healthcheck', HealthRouter);
 
+if (process.env.NODE_ENV !== 'test') {
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
 });
-
+}
 export default app;
