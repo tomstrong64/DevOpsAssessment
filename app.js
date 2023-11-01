@@ -1,12 +1,11 @@
 import {} from 'dotenv/config';
-import {express} from 'express';
-import {chalk} from 'chalk';
-import {mongoose} from 'mongoose';
-import {bodyParser} from 'body-parser';
+import express from 'express';
+import chalk from 'chalk';
+import mongoose from 'mongoose';
 
-import {UserRouter} from './routes/user.route.js';
-import {PoiRouter} from './routes/poi.route.mjs';
-import {HealthRouter} from './routes/health.route.js';
+import UserRouter from './routes/user.route.js';
+import PoiRouter from './routes/poi.route.js';
+import HealthRouter from './routes/health.route.js';
 
 const app = express();
 
@@ -31,9 +30,8 @@ mongoose.connection.on('error', (err) => {
 });
 
 app.use(express.static('public'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 app.use('/user', UserRouter);
 
@@ -44,3 +42,5 @@ app.use('/healthcheck', HealthRouter);
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
 });
+
+export default app;
