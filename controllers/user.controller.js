@@ -1,6 +1,27 @@
 import { User } from '../models/User.js';
 import bcrypt from 'bcrypt';
 
+export const getUser = async (req, res) => {
+    try {
+        let user;
+        const userId = req.query.id;
+
+        if (userId) {
+            user = await User.findById(userId);
+        } 
+        else {
+            user = await User.find({});
+        }
+        if (!user) {
+            return res.status(500).json({ message: "No Users found" });
+        }
+
+        res.json(user);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 export const login = async (req, res) => {
     try {
         const user = await User.findOne({ email: req.body.email });
@@ -36,14 +57,14 @@ export const create = async (req, res) => {
             password: req.body.password,
         });
         await user.save();
-        res.redirect('/?message=user saved');
+        return res.status(200).json({ message: 'User Created' });
     } catch (e) {
         if (e.errors) {
             console.log(e.errors);
-            res.render('create-user', { errors: e.errors });
+            res.render('register.html', { errors: e.errors });
             return;
         }
-        return res.status(400).send({
+        return res.status(400).json({
             message: JSON.parse(e),
         });
     }
@@ -62,5 +83,14 @@ export const logout = async (req, res) => {
         return res.status(400).send({
             message: JSON.parse(e),
         });
+    }
+};
+export const updateUser = async (req, res) => {
+    const id = req.query.id;
+    try {
+        const user = await User.updateOne({ _id: id }, req.body);
+        res.json({updated: true})
+    } catch (e) {
+        res.status(500);
     }
 };

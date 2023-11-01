@@ -5,9 +5,11 @@ import * as UserController from '../controllers/user.controller.js';
 
 const router = Router();
 
+router.get('/list', UserController.getUser);
 router.get('/login', UserController.login);
-router.post('/register', UserController.create);
 router.get('/logout', authMiddleware, UserController.logout);
+router.post('/register', UserController.create);
+router.put('/updateUser', UserController.updateUser);
 
 
 export default router;
