@@ -1,7 +1,5 @@
-import express from 'express';
 import app from '../app.js';
-
-app.use(express.json());
+import request from 'supertest';
 
 describe('POST /pois/addPoi', () => {
     it('should add new POI', async () => {
