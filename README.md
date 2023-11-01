@@ -1,58 +1,30 @@
-# API Routes
+# GeoGuide
 
-## /pois
+## Requirements
 
-- GET 
-    - If not authenticated send a 401 error
-    - If normal user, send their POIs
-    - If admin, send all POIs
+### Server
 
-    - If search param is present, return POIs matching the search query
+-   [x] the application will be secured with https using correct certificates
+-   [ ] ReST api's will be documented using openAPI (swagger)
+-   [x] all dynamic data will be stored in a database
+-   [ ] the application will support internationalisation i18n
+-   [ ] user documentation will be included on the hosted site
+-   [ ] the site will respect GPDR guidelines
+-   [x] the backend server will be hosted in the cloud and use container technology (docker)
+-   [ ] user authentication will authenticate access to upload to the app
+-   [ ] the app will support user and administrator roles and the signing up of new users
 
-- POST
-    - If not authenticated send a 401 error
-    - If user is authenticated, add POI to the database
+### Client
 
-- PUT
-    - If not authenticated send a 401 error
-    - If user is not the owner of the POI send a 403 error
-    - If user is the owner, update the POI
+-   [ ] it shall be possible to use the application from a mobile device
+-   [ ] the web site will render on a mobile and desktop screen (responsive)
+-   [ ] the mobile client will include code to upload geolocation provided by the device
+-   [ ] The remote client must authenticate itself and use the ReST api to communicate with the hosted server.
 
-- DELETE
-    - If not authenticated send a 401 error
-    - If admin, delete the POI
-    - If user is not the owner of the POI send a 403 error
-    - If user is the owner, delete the POI
+## Contributors
 
-## /users
-
-- GET
-    - If admin, get all users
-    - Else send 401
-
-
-## /users/me
-
-- GET
-    - If authenticated return users details
-    - Else send a 401
-
-
-## /users/logout
-
-- PUT
-    - If authenticated, delete user session
-    - Else send 401
-
-
-## /users/login
-
-- POST
-    - If credentials correct, login
-    - Else 403
-
-## /users/register
-
-- POST
-    - If authenticated, send 400
-    - Create user and login
+-   Tom Strong [TomStrong](https://github.com/TomStrong)
+-   Shiv Thakkar [5thaks07](https://github.com/5thaks07)
+-   Faizen Ahmed [FaizanAhmedSP707](https://github.com/FaizanAhmedSP707)
+-   Ali Dashti [ali1373107](https://github.com/ali1373107)
+-   Joao Potes [Joao-Potes](https://github.com/Joao-Potes)
