@@ -2,7 +2,6 @@ import {} from 'dotenv/config';
 import express from 'express';
 import chalk from 'chalk';
 import mongoose from 'mongoose';
-import bodyParser from 'body-parser';
 
 import UserRouter from './routes/user.route.js';
 import PoiRouter from './routes/poi.route.js';
@@ -13,7 +12,14 @@ const app = express();
 
 const { MONGODB_URI } = process.env;
 
-mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
+if (process.env.NODE_ENV === 'test') {
+    mongoose.connect('mongodb://admin:admin@localhost:27017/admin', {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    });
+} else {
+    mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
+}
 
 mongoose.connection.on('connected', () => {
     console.log(
@@ -32,9 +38,8 @@ mongoose.connection.on('error', (err) => {
 });
 
 app.use(express.static('public'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 initSwagger(app);
 
 app.use('/user', UserRouter);
@@ -43,6 +48,9 @@ app.use('/pois', PoiRouter);
 
 app.use('/healthcheck', HealthRouter);
 
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
-});
+if (process.env.NODE_ENV !== 'test') {
+    app.listen(3000, () => {
+        console.log('Server is running on port 3000');
+    });
+}
+export default app;
