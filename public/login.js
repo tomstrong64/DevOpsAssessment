@@ -2,6 +2,7 @@ Login();
 // Login
 async function Login() {
     document.getElementById('login').addEventListener('click', async (e) => {
+        e.preventDefault
         const user = {
             email: document.getElementById('email').value,
             password: document.getElementById('password').value,
@@ -16,6 +17,7 @@ async function Login() {
             });
             if (response.status == 200) {
                 alert('Login Successful')
+                redirect();
             } else if (response.status == 401) {
                 alert('INCORRECT LOGIN');
             } else {
@@ -25,4 +27,7 @@ async function Login() {
             alert(`Error: ${error}`);
         }
     });
+}
+function redirect(){
+    location.replace("index.html")
 }

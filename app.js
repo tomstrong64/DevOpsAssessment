@@ -35,7 +35,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(expressSession({
-
     secret: 'easy man', 
     resave: false,
     saveUninitialized: true,
