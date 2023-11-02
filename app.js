@@ -7,6 +7,7 @@ import bodyParser from 'body-parser';
 import UserRouter from './routes/user.route.js';
 import PoiRouter from './routes/poi.route.js';
 import HealthRouter from './routes/health.route.js';
+import { initSwagger } from './swagger.js';
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+initSwagger(app);
 
 app.use('/user', UserRouter);
 
