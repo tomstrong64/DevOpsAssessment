@@ -50,7 +50,6 @@ export const addPoi = async (req, res) => {
         res.sendStatus(201);
     } catch (e) {
         return res.status(400).send({ message: e.message });
-
     }
 };
 
