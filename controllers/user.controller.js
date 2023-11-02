@@ -26,26 +26,18 @@ export const login = async (req, res) => {
     try {
         const user = await User.findOne({ email: req.body.email });
         if (!user) {
-            res.render('login-user', {
-                errors: { email: { message: 'email not found' } },
-            });
-            return;
+            return res.status(401).json({ message: 'Email not found'});
         }
         const match = await bcrypt.compare(req.body.password, user.password);
         if (match) {
             req.session.userID = user._id;
             console.log(req.session.userID);
-            res.redirect('/');
-            return;
+            return res.status(200).json({ message: 'Login Sucessful' });
         }
-
-        res.render('login-user', {
-            errors: { password: { message: 'password does not match' } },
-        });
-    } catch (e) {
-        return res.status(400).send({
-            message: JSON.parse(e),
-        });
+         
+        return res.status(401).json({ message: 'Password does not match'});
+        } catch (e) {
+        return res.status(500).json({ message: 'Internal sever error'})
     }
 };
 

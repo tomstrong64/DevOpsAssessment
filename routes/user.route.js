@@ -9,8 +9,8 @@ const router = Router();
 router.post('/login', UserController.login);
 router.post('/register', UserController.create);
 
-router.put('/updateUser', UserController.updateUser);
-router.get('/profile', UserController.profile);
-router.get('/list', UserController.getUser);
+router.put('/updateUser', authMiddleware, UserController.updateUser);
+router.get('/profile', authMiddleware, UserController.profile);
+router.get('/list', authMiddleware, UserController.getUser);
 router.get('/logout', authMiddleware, UserController.logout);
 export default router;
