@@ -11,7 +11,14 @@ const app = express();
 
 const { MONGODB_URI } = process.env;
 
-mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
+if(process.env.NODE_ENV === 'test') {
+    mongoose.connect('mongodb://admin:admin@localhost:27017/admin',{
+        useNewUrlParser:true,
+        useUnifiedTopology:true,
+    });
+} else {
+    mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
+}
 
 mongoose.connection.on('connected', () => {
     console.log(
