@@ -2,7 +2,7 @@ Login();
 // Login
 async function Login() {
     document.getElementById('login').addEventListener('click', async (e) => {
-        e.preventDefault
+        e.preventDefault();
        
         const user = {
             email: document.getElementById('email').value,
