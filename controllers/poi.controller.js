@@ -1,4 +1,4 @@
-import { POI } from '../models/Poi.js';
+import POI from '../models/Poi.js';
 
 export const getPois = async (req, res) => {
     try {
@@ -63,3 +63,4 @@ export const updatePoi = async (req, res) => {
         res.status(500);
     }
 };
+export default getPois;
