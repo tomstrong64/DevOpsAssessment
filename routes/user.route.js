@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { authMiddleware } from '../middlewares/user.middleware.js';
+import { adminMiddleware } from '../middlewares/admin.middleware.js';
 
 import * as UserController from '../controllers/user.controller.js';
 
