@@ -105,7 +105,7 @@ export const addPoi = async (req, res) => {
         await pois.save();
         return res.sendStatus(201);
     } catch (e) {
-        return res.status(400).json({ message: e.message });
+        return res.status(500).json({ message: 'Internal server error' });
     }
 };
 
