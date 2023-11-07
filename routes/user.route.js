@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import { authMiddleware } from '../middlewares/user.middleware.js';
+import { noAuth, stdAuth } from '../middlewares/user.middleware.js';
 
 import * as UserController from '../controllers/user.controller.js';
 
 const router = Router();
 
-router.get('/login', UserController.login);
-router.post('/register', UserController.create);
-router.get('/logout', authMiddleware, UserController.logout);
+router.post('/login', noAuth, UserController.login);
+router.post('/register', noAuth, UserController.create);
+router.get('/logout', stdAuth, UserController.logout);
 
 export default router;

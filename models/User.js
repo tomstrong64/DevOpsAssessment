@@ -10,6 +10,7 @@ const userSchema = new Schema(
             unique: true,
         },
         password: { type: String, required: [true, 'password is required'] },
+        token: { type: String },
     },
     { timestamps: true }
 );
