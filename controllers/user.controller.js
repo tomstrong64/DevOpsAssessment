@@ -56,7 +56,7 @@ export const create = async (req, res) => {
                 .json({ message: 'Name, email and password required' });
 
         // check if user exists
-        const existing = User.findOne({ email: req.body.email });
+        const existing = await User.findOne({ email: req.body.email });
         if (existing)
             return res.status(401).json({
                 message: 'A user with this email already exists',
