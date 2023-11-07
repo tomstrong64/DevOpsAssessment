@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const userId = urlParams.get('id');
 
     try {
-        const response = await fetch(`/user/list?id=${userId}`);
+        const response = await fetch(`/user/getUser?id=${userId}`);
         const user = await response.json();
         if (response.status !== 200) {
             throw new Error(user.message || 'Failed to fetch User details');
