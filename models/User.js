@@ -7,7 +7,11 @@ const userSchema = new Schema(
         name: { type: String },
         email: {type: String, required: [true, 'email is required'], unique: true,},
         password: { type: String, required: [true, 'password is required'] },
+<<<<<<< HEAD
         admin: {type:  Boolean, default : false}
+=======
+        token: { type: String },
+>>>>>>> 67-auth-uses-cookies-instead-of-tokens-which-is-not-ideal-for-api-use
     },
     { timestamps: true }
 );

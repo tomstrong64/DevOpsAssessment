@@ -1,5 +1,6 @@
 import { User } from '../models/User.js';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 export const getUserById = async (req, res) => {
     try {
@@ -20,6 +21,7 @@ export const getUserById = async (req, res) => {
 };
 export const login = async (req, res) => {
     try {
+<<<<<<< HEAD
         const user = await User.findOne({ email: req.body.email });
         if (!user) {
             return res.status(401).json({ message: 'Email not found'});
@@ -34,10 +36,53 @@ export const login = async (req, res) => {
         return res.status(401).json({ message: 'Password does not match'});
         } catch (e) {
         return res.status(500).json({ message: 'Internal sever error'})
+=======
+        // check if all fields are provided
+        if (!req.body.email || !req.body.password)
+            return res
+                .status(400)
+                .json({ message: 'Email and password required' });
+
+        // check if user exists
+        const user = await User.findOne({ email: req.body.email });
+        if (!user)
+            return res
+                .status(401)
+                .json({ message: 'Invalid email or password' });
+
+        // check if password matches
+        const match = await bcrypt.compare(req.body.password, user.password);
+        if (!match)
+            return res
+                .status(401)
+                .json({ message: 'Invalid email or password' });
+
+        // generate auth token
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+            expiresIn: '1d',
+        });
+
+        // save token to user document
+        user.token = token;
+        await user.save();
+
+        // return token to client
+        return res.status(200).json({
+            message: 'Login successful',
+            token,
+            redirect: '/',
+        });
+    } catch (e) {
+        console.log(e);
+        return res.status(500).json({
+            message: 'Internal server error',
+        });
+>>>>>>> 67-auth-uses-cookies-instead-of-tokens-which-is-not-ideal-for-api-use
     }
 };
 export const create = async (req, res) => {
     try {
+<<<<<<< HEAD
         const { name, email, password } = req.body;
 
         // Check if the password field is not blank
@@ -67,22 +112,76 @@ export const create = async (req, res) => {
         }
         return res.status(400).json({
             message: JSON.parse(e),
+=======
+        // check if all fields are provided
+        if (!req.body.name || !req.body.email || !req.body.password)
+            return res
+                .status(400)
+                .json({ message: 'Name, email and password required' });
+
+        // check if user exists
+        const existing = User.findOne({ email: req.body.email });
+        if (existing)
+            return res.status(401).json({
+                message: 'A user with this email already exists',
+                redirect: '/user/login',
+            });
+
+        // create user
+        const user = new User({
+            name: req.body.name,
+            email: req.body.email,
+            password: bcrypt.hashSync(req.body.password, 10),
+        });
+        await user.save();
+
+        // generate auth token
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+            expiresIn: '1d',
+        });
+
+        // save token to user document
+        user.token = token;
+        await user.save();
+
+        // return token to client
+        return res.status(200).json({
+            message: 'User created successfully',
+            token,
+            redirect: '/',
+        });
+    } catch (e) {
+        console.log(e);
+        return res.status(500).send({
+            message: 'Internal server error',
+>>>>>>> 67-auth-uses-cookies-instead-of-tokens-which-is-not-ideal-for-api-use
         });
     }
 };
+
 export const logout = async (req, res) => {
     try {
-        req.session.destroy();
-        global.user = false;
-        res.redirect('/');
+        const token = req.headers.authorization.split(' ')[1];
+
+        // decode token
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        // find user
+        const user = await User.findById(decoded.id);
+
+        // remove token
+        user.token = '';
+        await user.save();
+
+        // return success message
+        return res.status(200).json({
+            message: 'Logout successful',
+            redirect: '/user/login',
+        });
     } catch (e) {
-        if (e.errors) {
-            console.log(e.errors);
-            res.render('/logout', { errors: e.errors });
-            return;
-        }
-        return res.status(400).send({
-            message: JSON.parse(e),
+        console.log(e);
+        return res.status(500).send({
+            message: 'Internal server error',
         });
     }
 };

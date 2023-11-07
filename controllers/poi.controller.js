@@ -15,7 +15,7 @@ export const getPois = async (req, res) => {
         }
 
         if (!pois) {
-            return res.status(500).json({ message: "No POIs found" });
+            return res.status(500).json({ message: 'No POIs found' });
         }
 
         res.json(pois);
@@ -29,7 +29,7 @@ export const deletePoi = async (req, res) => {
 
     try {
         await POI.findByIdAndRemove(id);
-        res.json({deleted: true});
+        res.json({ deleted: true });
     } catch (error) {
         res.status(500).send({ message: 'could not delete the POI' });
     }
@@ -47,9 +47,9 @@ export const addPoi = async (req, res) => {
             description: req.body.description,
         });
         await pois.save();
-        res.sendStatus(201); 
+        res.sendStatus(201);
     } catch (e) {
-        return res.status(400).send({message: JSON.parse(e)});
+        return res.status(400).send({ message: e.message });
     }
 };
 
@@ -57,7 +57,7 @@ export const updatePoi = async (req, res) => {
     const id = req.query.id;
     try {
         const poi = await POI.updateOne({ _id: id }, req.body);
-        res.json({updated: true})
+        res.json({ updated: true });
     } catch (e) {
         res.status(500);
     }
