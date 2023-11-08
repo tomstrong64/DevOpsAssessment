@@ -8,9 +8,8 @@ export const getUserById = async (req, res) => {
 
         if (userId) {
             user = await User.findById(userId);
-        } 
-        else  {
-            return res.status(500).json({ message: "No Users found" });
+        } else {
+            return res.status(500).json({ message: 'No Users found' });
         }
 
         res.json(user);
@@ -22,7 +21,7 @@ export const login = async (req, res) => {
     try {
         const user = await User.findOne({ email: req.body.email });
         if (!user) {
-            return res.status(401).json({ message: 'Email not found'});
+            return res.status(401).json({ message: 'Email not found' });
         }
         const match = await bcrypt.compare(req.body.password, user.password);
         if (match) {
@@ -30,10 +29,10 @@ export const login = async (req, res) => {
             console.log(req.session.userID);
             return res.status(200).json({ message: 'Login Sucessful' });
         }
-         
-        return res.status(401).json({ message: 'Password does not match'});
-        } catch (e) {
-        return res.status(500).json({ message: 'Internal sever error'})
+
+        return res.status(401).json({ message: 'Password does not match' });
+    } catch (e) {
+        return res.status(500).json({ message: 'Internal sever error' });
     }
 };
 export const create = async (req, res) => {
@@ -42,20 +41,24 @@ export const create = async (req, res) => {
 
         // Check if the password field is not blank
         if (!password) {
-            return res.status(400).json({ message: 'Password cannot be blank' });
+            return res
+                .status(400)
+                .json({ message: 'Password cannot be blank' });
         }
 
-        // Check if the email already exists
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            return res.status(400).json({ message: 'Email already exists' });
-        }
+        // check if user exists
+        const existing = await User.findOne({ email: req.body.email });
+        if (existing)
+            return res.status(401).json({
+                message: 'A user with this email already exists',
+                redirect: '/user/login',
+            });
 
-        // If email doesn't exist and password is provided, create a new user
+        // create user
         const user = new User({
-            name,
-            email,
-            password,
+            name: req.body.name,
+            email: req.body.email,
+            password: req.body.password,
         });
         await user.save();
         return res.status(201).json({ message: 'User Created' });
@@ -93,7 +96,9 @@ export const updateUser = async (req, res) => {
     try {
         // Check if the password field is not blank
         if (!password) {
-            return res.status(400).json({ message: 'Password cannot be blank' });
+            return res
+                .status(400)
+                .json({ message: 'Password cannot be blank' });
         }
 
         // Find the user by ID
@@ -101,18 +106,23 @@ export const updateUser = async (req, res) => {
 
         // Check if the current password matches
         if (user.password !== currentPassword) {
-            return res.status(401).json({ message: 'Current password is incorrect' });
+            return res
+                .status(401)
+                .json({ message: 'Current password is incorrect' });
         }
 
         // If current password is correct, update the user's details
-        const updatedUser = await User.updateOne({ _id: id }, { username, email, password });
+        const updatedUser = await User.updateOne(
+            { _id: id },
+            { username, email, password }
+        );
         res.json({ updated: true });
     } catch (e) {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
 export const profile = async (req, res) => {
-    res.render('updateuser')
+    res.render('updateuser');
 };
 export const getAllUsers = async (req, res) => {
     try {
@@ -128,7 +138,9 @@ export const createAdmin = async (req, res) => {
 
         // Check if the password field is not blank
         if (!password) {
-            return res.status(400).json({ message: 'Password cannot be blank' });
+            return res
+                .status(400)
+                .json({ message: 'Password cannot be blank' });
         }
 
         // Check if the email already exists
@@ -157,16 +169,3 @@ export const createAdmin = async (req, res) => {
         });
     }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
