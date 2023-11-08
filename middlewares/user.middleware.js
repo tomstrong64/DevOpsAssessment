@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import { User } from '../models/User.js';
 import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
 
 // middleware to ensure user is not logged in already
 export const noAuth = async (req, res, next) => {
@@ -26,7 +27,10 @@ export const stdAuth = async (req, res, next) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         // get user from db
-        const user = await User.findOne({ _id: new mongoose.Types.ObjectId(decoded.id), token: token });
+        const user = await User.findOne({
+            _id: new mongoose.Types.ObjectId(decoded.id),
+            token: token,
+        });
 
         // check if user exists
         if (!user) return res.status(401).json({ message: 'Unauthorized' });
@@ -69,4 +73,3 @@ export const adminAuth = async (req, res, next) => {
         return res.status(500).json({ message: 'Internal server error' });
     }
 };
-

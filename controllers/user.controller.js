@@ -80,12 +80,11 @@ export const create = async (req, res) => {
             });
 
         // create user
-        const user = new User({
+        const user = await User.create({
             name: req.body.name,
             email: req.body.email,
-            password: await bcrypt.hash(req.body.password, 10)
+            password: await bcrypt.hash(req.body.password, 10),
         });
-        await user.save();
 
         // generate auth token
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
