@@ -13,14 +13,4 @@ const userSchema = new Schema(
     { timestamps: true }
 );
 
-userSchema.pre('save', async function (next) {
-    try {
-        const hash = await bcrypt.hash(this.password, 10);
-        this.password = hash;
-        next();
-    } catch (e) {
-        throw Error('could not hash password');
-    }
-});
-
 export const User = mongoose.model('User', userSchema);

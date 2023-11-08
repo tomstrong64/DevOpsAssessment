@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { User } from '../models/User.js';
 import jwt from 'jsonwebtoken';
 
@@ -25,7 +26,7 @@ export const stdAuth = async (req, res, next) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         // get user from db
-        const user = await User.findOne({ _id: decoded.id, token: token });
+        const user = await User.findOne({ _id: new mongoose.Types.ObjectId(decoded.id), token: token });
 
         // check if user exists
         if (!user) return res.status(401).json({ message: 'Unauthorized' });
@@ -52,7 +53,7 @@ export const adminAuth = async (req, res, next) => {
 
         // get user from db
         const user = await User.findOne({
-            _id: decoded.id,
+            _id: new mongoose.Types.ObjectId(decoded.id),
             token: token,
             admin: true,
         });

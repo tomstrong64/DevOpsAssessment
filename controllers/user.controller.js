@@ -83,7 +83,7 @@ export const create = async (req, res) => {
         const user = new User({
             name: req.body.name,
             email: req.body.email,
-            password: req.body.password,
+            password: await bcrypt.hash(req.body.password, 10)
         });
         await user.save();
 
