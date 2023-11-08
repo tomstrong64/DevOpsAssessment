@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 import UserRouter from './routes/user.route.js';
 import PoiRouter from './routes/poi.route.js';
 import HealthRouter from './routes/health.route.js';
+
 import { initSwagger } from './swagger.js';
 
 const app = express();
