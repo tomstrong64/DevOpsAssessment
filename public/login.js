@@ -33,7 +33,7 @@ async function Login() {
           //  const token = localStorage.getItem('token')
            // await fetch('/', {
             //    headers: { 
-            //        Authorization: `Bearer ${token}`
+            //        'Authorization': `Bearer ${token}`
               //  }
            // })
 

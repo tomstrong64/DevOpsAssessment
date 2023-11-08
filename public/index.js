@@ -41,11 +41,12 @@ map.on("click", async(e) => {
   };
 
   try {
-
+        const token = localStorage.getItem('token')
       const response = await fetch('/pois/addPoi', {
           method: 'POST',
           headers: {
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
           },
           body: JSON.stringify(poi)
       });    
