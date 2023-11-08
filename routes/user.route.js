@@ -1,21 +1,20 @@
 import { Router } from 'express';
-import { authMiddleware } from '../middlewares/user.middleware.js';
-import { adminMiddleware } from '../middlewares/admin.middleware.js';
+import { noAuth, stdAuth, adminAuth } from '../middlewares/user.middleware.js';
 
 import * as UserController from '../controllers/user.controller.js';
 
 const router = Router();
 
-router.post('/login', UserController.login);
-router.post('/register', UserController.create);
-router.post('/registerAdmin', UserController.createAdmin);
+router.post('/login', noAuth, UserController.login);
+router.post('/register', noAuth, UserController.create);
+router.get('/logout', stdAuth, UserController.logout);
+router.post('/registerAdmin', adminAuth, UserController.createAdmin);
 
 
-router.put('/updateUser', authMiddleware, UserController.updateUser);
-router.get('/profile', authMiddleware, UserController.profile);
-router.get('/getUser', authMiddleware, UserController.getUserById);
-router.get('/logout', authMiddleware, UserController.logout);
-router.get('/list', adminMiddleware, UserController.getAllUsers);
+router.put('/updateUser', stdAuth, UserController.updateUser);
+router.get('/profile', stdAuth, UserController.profile);
+router.get('/getUser', stdAuth, UserController.getUserById);
+router.get('/list', stdAuth, UserController.getAllUsers);
 
 
 

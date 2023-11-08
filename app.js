@@ -2,7 +2,7 @@ import {} from 'dotenv/config';
 import express from 'express';
 import chalk from 'chalk';
 import mongoose from 'mongoose';
-import expressSession from 'express-session'
+
 
 import UserRouter from './routes/user.route.js';
 import PoiRouter from './routes/poi.route.js';
@@ -34,12 +34,7 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use(expressSession({
-    secret: 'easy man', 
-    resave: false,
-    saveUninitialized: true,
-    cookie: { expires: new Date(253402300000000) } 
-  }));
+
 
 app.use('/user', UserRouter);
 
