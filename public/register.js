@@ -16,13 +16,14 @@ document.getElementById('register').addEventListener('click', async (e) => {
             body: JSON.stringify(user),
         });
 
-        if (response.status == 201) {
-            alert('Successfully added');
-        } else if (response.status == 400) {
-            alert('Blank fields');
-        } else {
-            alert(`Unknown error: code ${response.status}`);
-        }
+        const data = await response.json();
+        if (response.status !== 201) return alert(data.message);
+
+        alert(data.message);
+        // save the token in the local storage
+        localStorage.setItem('token', data.token);
+        // redirect user
+        window.location.replace(data.redirect);
     } catch (e) {
         alert(`Error: ${e}`);
     }
