@@ -75,7 +75,12 @@ document.getElementById("poi_search").addEventListener("click", e => {
 });
 
 async function ajaxSearch(region) {
-    const ajaxResponse = await fetch(`/pois/list?search=${region}`);
+  const token = localStorage.getItem('token')
+    const ajaxResponse = await fetch(`/pois/list?search=${region}`, {
+      headers: {
+        "Authorization" : `Bearer ${token}`
+      }
+    });
     const pois = await ajaxResponse.json()
     if (pois.length == 0) {
       alert('No Pois Found');

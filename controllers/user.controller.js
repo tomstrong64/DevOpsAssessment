@@ -127,7 +127,7 @@ export const logout = async (req, res) => {
         // return success message
         return res.status(200).json({
             message: 'Logout successful',
-            redirect: '/user/login',
+            redirect: '/login.html',
         });
     } catch (e) {
         console.log(e);

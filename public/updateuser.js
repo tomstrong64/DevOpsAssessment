@@ -10,16 +10,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         // Pre-populate the form fields
-        document.getElementById('userId').value = user._id
+        document.getElementById('userId').value = user._id;
         document.getElementById('username').value = user.name;
         document.getElementById('email').value = user.email;
-       
-
     } catch (error) {
         console.error(error);
         alert('Failed to fetch User details');
     }
-    
 });
 
 document.getElementById('UPDATE USER').addEventListener('click', async (e) => {
@@ -43,15 +40,15 @@ document.getElementById('UPDATE USER').addEventListener('click', async (e) => {
         const response = await fetch(`/user/updateUser?id=${userId}`, {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({
                 _id: userId,
                 username: username,
                 email: email,
                 password: newPassword,
-                currentPassword: currentPassword // Send the current password for verification
-            })
+                currentPassword: currentPassword, // Send the current password for verification
+            }),
         });
 
         if (response.status === 200) {
@@ -66,4 +63,23 @@ document.getElementById('UPDATE USER').addEventListener('click', async (e) => {
         alert('Failed to update User');
     }
 });
-
+document.getElementById('LOGOUT USER').addEventListener('click', async (e) => {
+    e.preventDefault();
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('/user/logout', {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        const data = await response.json();
+        if (response.status !== 200) {
+            return alert(data.message);
+        }
+        localStorage.removeItem('token');
+        window.location.replace(data.redirect);
+    } catch (error) {
+        console.error(error);
+        alert('Failed to update User');
+    }
+});

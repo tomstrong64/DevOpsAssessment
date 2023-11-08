@@ -14,7 +14,7 @@ router.post('/registerAdmin', adminAuth, UserController.createAdmin);
 router.put('/updateUser', stdAuth, UserController.updateUser);
 router.get('/profile', stdAuth, UserController.profile);
 router.get('/getUser', stdAuth, UserController.getUserById);
-router.get('/list', stdAuth, UserController.getAllUsers);
+router.get('/list', adminAuth, UserController.getAllUsers);
 
 
 

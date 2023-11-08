@@ -22,6 +22,22 @@ async function Login() {
             } else if (response.status !== 200) {
                return alert(`Unknown error: code ${response.status}`);
             } 
+            // if user logged in
+            // get the data
+            const data = await response.json();
+            // save the token in the local storage
+            localStorage.setItem('token', data.token);
+            //redirect
+            window.location.replace(data.redirect);
+
+          //  const token = localStorage.getItem('token')
+           // await fetch('/', {
+            //    headers: { 
+            //        Authorization: `Bearer ${token}`
+              //  }
+           // })
+
+
         } catch (error) {
            return alert(`Error: ${error}`);
         }
