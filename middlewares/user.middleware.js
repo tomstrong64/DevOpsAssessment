@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 export const noAuth = async (req, res, next) => {
     try {
         if (req.headers.authorization)
-            return res.send(400).json({ message: 'Already logged in' });
+            return res.status(400).json({ message: 'Already logged in' });
         return next();
     } catch (e) {
         console.log(e);
