@@ -72,3 +72,4 @@ export const adminAuth = async (req, res, next) => {
         return res.status(500).json({ message: 'Internal server error' });
     }
 };
+http://localhost:3000/user/register
