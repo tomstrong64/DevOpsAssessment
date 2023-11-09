@@ -9,6 +9,7 @@ const poiSchema = new Schema(
         lat: { type: Number },
         lon: { type: Number },
         description: { type: String },
+        user: { type: Schema.Types.ObjectId, ref: 'User' },
     },
     { timestamps: true }
 );
