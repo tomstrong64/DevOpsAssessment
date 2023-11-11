@@ -5,14 +5,13 @@ import jwt from 'jsonwebtoken';
 export const getUserById = async (req, res) => {
     try {
         let user;
-        const userId = req.query.id;
+        const userId = res.locals.user._id;
 
         if (userId) {
             user = await User.findById(userId);
         } else {
             return res.status(500).json({ message: 'No Users found' });
         }
-
         res.json(user);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -137,9 +136,7 @@ export const logout = async (req, res) => {
 };
 
 export const updateUser = async (req, res) => {
-    const id = req.query.id;
-    const { username, email, password, currentPassword } = req.body;
-
+    const { _id, username, email, password, currentPassword } = req.body;
     try {
         // Check if the password field is not blank
         if (!password) {
@@ -149,21 +146,29 @@ export const updateUser = async (req, res) => {
         }
 
         // Find the user by ID
-        const user = await User.findById(id);
+        const user = await User.findById(_id);
 
         // Check if the current password matches
-        if (user.password !== currentPassword) {
+        const match = await bcrypt.compare(currentPassword, user.password);
+        console.log('Provided Password:', currentPassword);
+        console.log('Stored Password:', user.password);
+        console.log('Password Match:', match);
+
+        if (!match)
             return res
                 .status(401)
-                .json({ message: 'Current password is incorrect' });
-        }
+                .json({ message: 'Current pasword is Incorrect' });
 
         // If current password is correct, update the user's details
         const updatedUser = await User.updateOne(
-            { _id: id },
+            { _id },
             { username, email, password }
         );
-        res.json({ updated: true });
+        return res.status(200).json({
+            updated: true,
+            message: 'Updated successfully',
+            redirect: '/index.html',
+        });
     } catch (e) {
         res.status(500).json({ message: 'Internal server error' });
     }
