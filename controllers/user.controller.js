@@ -136,7 +136,7 @@ export const logout = async (req, res) => {
 };
 
 export const updateUser = async (req, res) => {
-    const { _id, username, email, password, currentPassword } = req.body;
+    const { name, email, newpassword, confirmpassword, password } = req.body;
     try {
         // Check if the password field is not blank
         if (!password) {
@@ -144,16 +144,10 @@ export const updateUser = async (req, res) => {
                 .status(400)
                 .json({ message: 'Password cannot be blank' });
         }
-     const hashedpassword =  await bcrypt.hash(password, 10);
-     const hashedcurrentPassword = await bcrypt.hash(currentPassword, 10)
-        // Find the user by ID
-        const user = await User.findById(_id);
-         
+        let user = res.locals.user;
+
         // Check if the current password matches
-        const match = await bcrypt.compare(hashedcurrentPassword, user.password);
-        console.log('Provided Password:', currentPassword);
-        console.log('Stored Password:', user.password);
-        console.log('Password Match:', match);
+        const match = await bcrypt.compare(password, user.password);
 
         if (!match)
             return res
@@ -161,10 +155,12 @@ export const updateUser = async (req, res) => {
                 .json({ message: 'Current pasword is Incorrect' });
 
         // If current password is correct, update the user's details
-        const updatedUser = await User.updateOne(
-            { _id },
-            { username, email, hashedpassword }
-        );
+        if (name) user.name = name;
+        if (email) user.email = email;
+        if (newpassword && newpassword === confirmpassword);
+        user.password = await bcrypt.hash(newpassword, 10);
+        await user.save();
+
         return res.status(200).json({
             updated: true,
             message: 'Updated successfully',

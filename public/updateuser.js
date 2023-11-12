@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         // Pre-populate the form fields
-        document.getElementById('userId').value = data._id;
+        
         document.getElementById('username').value = data.name;
         document.getElementById('email').value = data.email;
     } catch (error) {
@@ -25,38 +25,39 @@ document.getElementById('UPDATE USER').addEventListener('click', async (e) => {
     e.preventDefault();
 
     // Get the values from the form fields
-    const userId = document.getElementById('userId').value;
-    const username = document.getElementById('username').value;
+    
+    const name = document.getElementById('username').value;
     const email = document.getElementById('email').value;
-    const newPassword = document.getElementById('password').value;
-    const confirmPassword = document.getElementById('password2').value;
-    const currentPassword = document.getElementById('Cpassword').value;
-    console.log(currentPassword)
+    const newpassword = document.getElementById('NewPassword').value;
+    const confirmpassword = document.getElementById('ConfirmNewPassword').value;
+    const password = document.getElementById('Password').value;
 
     // Check if new password and confirm password match
-    if (newPassword !== confirmPassword) {
+    if (newpassword !== confirmpassword) {
         alert('New password and confirm password do not match');
         return;
     }
 
     try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`/user/updateUser?id=${userId}`, {
+        const response = await fetch('/user/updateUser', {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
-                _id: userId,
-                name: username,
+                name: name,
                 email: email,
-                password: newPassword,
-                currentPassword: currentPassword, // Send the current password for verification
+                newpassword: newpassword,
+                confirmpassword: confirmpassword,
+                password: password, // Send the current password for verification
             }),
         });
-         await responseHandler(response);
+        console.log(password)
+        await responseHandler(response);
+        
     } catch (error) {
+        
         console.error(error);
         alert('Failed to update User');
     }
