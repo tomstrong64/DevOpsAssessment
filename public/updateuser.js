@@ -49,7 +49,7 @@ document.getElementById('UPDATE USER').addEventListener('click', async (e) => {
             },
             body: JSON.stringify({
                 _id: userId,
-                username: username,
+                name: username,
                 email: email,
                 password: newPassword,
                 currentPassword: currentPassword, // Send the current password for verification

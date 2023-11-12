@@ -144,12 +144,13 @@ export const updateUser = async (req, res) => {
                 .status(400)
                 .json({ message: 'Password cannot be blank' });
         }
-
+     const hashedpassword =  await bcrypt.hash(password, 10);
+     const hashedcurrentPassword = await bcrypt.hash(currentPassword, 10)
         // Find the user by ID
         const user = await User.findById(_id);
-
+         
         // Check if the current password matches
-        const match = await bcrypt.compare(currentPassword, user.password);
+        const match = await bcrypt.compare(hashedcurrentPassword, user.password);
         console.log('Provided Password:', currentPassword);
         console.log('Stored Password:', user.password);
         console.log('Password Match:', match);
@@ -162,7 +163,7 @@ export const updateUser = async (req, res) => {
         // If current password is correct, update the user's details
         const updatedUser = await User.updateOne(
             { _id },
-            { username, email, password }
+            { username, email, hashedpassword }
         );
         return res.status(200).json({
             updated: true,
