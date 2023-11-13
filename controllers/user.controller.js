@@ -137,6 +137,7 @@ export const logout = async (req, res) => {
 
 export const updateUser = async (req, res) => {
     const { name, email, newpassword, confirmpassword, password } = req.body;
+    console.log(password);
     try {
         // Check if the password field is not blank
         if (!password) {
@@ -144,6 +145,7 @@ export const updateUser = async (req, res) => {
                 .status(400)
                 .json({ message: 'Password cannot be blank' });
         }
+        
         let user = res.locals.user;
 
         // Check if the current password matches
@@ -157,8 +159,8 @@ export const updateUser = async (req, res) => {
         // If current password is correct, update the user's details
         if (name) user.name = name;
         if (email) user.email = email;
-        if (newpassword && newpassword === confirmpassword);
-        user.password = await bcrypt.hash(newpassword, 10);
+        if (newpassword && newpassword === confirmpassword)
+            user.password = await bcrypt.hash(newpassword, 10);
         await user.save();
 
         return res.status(200).json({
