@@ -43,6 +43,7 @@ document.getElementById('UPDATE USER').addEventListener('click', async (e) => {
         const response = await fetch('/user/updateUser', {
             method: 'PUT',
             headers: {
+                'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
