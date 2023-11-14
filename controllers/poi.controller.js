@@ -103,8 +103,12 @@ export const addPoi = async (req, res) => {
             user: res.locals.user._id,
         });
         await pois.save();
-        return res.sendStatus(201);
+        return res.status(201).json({
+            message: 'Poi Added successfully',
+            redirect: '/index.html',
+        });
     } catch (e) {
+        console.log(e)
         return res.status(500).json({ message: 'Internal server error' });
     }
 };

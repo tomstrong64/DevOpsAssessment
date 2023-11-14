@@ -54,7 +54,7 @@ document.getElementById('UPDATE USER').addEventListener('click', async (e) => {
                 password: password, // Send the current password for verification
             }),
         });
-        console.log(password)
+    
         await responseHandler(response);
         
     } catch (error) {
