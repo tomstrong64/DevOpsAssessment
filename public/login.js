@@ -20,7 +20,5 @@ async function Login() {
         } catch (error) {
             return alert(`Error: ${error}`);
         }
-        alert('Login Successful');
-        return (window.location.href = '/index.html');
     });
 }
