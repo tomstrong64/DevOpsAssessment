@@ -27,6 +27,13 @@ beforeAll( async() => {
         });
     auth_token = response.body.token;
     console.log(response); // Debugging purposes
+});
+
+// TEARDOWN
+afterAll( async() => {
+    // LOGOUT
+    const response = await request(app)
+        .get('/user/logout');
 })
 
 describe('POST /register', () => {
