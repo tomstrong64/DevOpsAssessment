@@ -21,4 +21,4 @@ COPY --chown=node:node . /usr/src/app/
 
 HEALTHCHECK --interval=5m --timeout=5s --start-period=5s --retries=3 CMD node healthcheck.js
 
-CMD ["dumb-init", "node", "app.js"]
+CMD ["dumb-init", "node", "./bin/www.js"]

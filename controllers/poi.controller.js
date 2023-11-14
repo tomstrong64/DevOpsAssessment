@@ -100,7 +100,7 @@ export const addPoi = async (req, res) => {
         }
 
         // create POI
-        const pois = new POI({
+        const poi = new POI({
             name: req.body.name,
             type: req.body.type,
             country: req.body.country,
