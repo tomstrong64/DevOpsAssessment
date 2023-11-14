@@ -24,9 +24,9 @@ export const login = async (req, res) => {
             return res
                 .status(400)
                 .json({ message: 'Email and password required' });
-
+        const email = req.body.email.toLowerCase();
         // check if user exists
-        const user = await User.findOne({ email: req.body.email });
+        const user = await User.findOne({ email: email });
         if (!user)
             return res
                 .status(401)
@@ -69,9 +69,9 @@ export const create = async (req, res) => {
             return res
                 .status(400)
                 .json({ message: 'Name, email and password required' });
-
+        const email = req.body.email.toLowerCase();
         // check if user exists
-        const existing = await User.findOne({ email: req.body.email });
+        const existing = await User.findOne({ email: email });
         if (existing)
             return res.status(401).json({
                 message: 'A user with this email already exists',
@@ -81,7 +81,7 @@ export const create = async (req, res) => {
         // create user
         const user = await User.create({
             name: req.body.name,
-            email: req.body.email,
+            email: email,
             password: await bcrypt.hash(req.body.password, 10),
         });
 
@@ -136,8 +136,9 @@ export const logout = async (req, res) => {
 };
 
 export const updateUser = async (req, res) => {
-    const { name, email, newpassword, confirmpassword, password } = req.body;
-    console.log(password);
+    const email = req.body.email.toLowerCase();
+    const { name, newpassword, confirmpassword, password } = req.body;
+    
     try {
         // Check if the password field is not blank
         if (!password) {
@@ -185,7 +186,8 @@ export const getAllUsers = async (req, res) => {
 };
 export const createAdmin = async (req, res) => {
     try {
-        const { name, email, password, admin } = req.body;
+        const email = req.body.email.toLowerCase();
+        const { name, password, admin } = req.body;
 
         // Check if the password field is not blank
         if (!password) {
