@@ -76,3 +76,59 @@ describe('POST /register', () => {
         expect(response.statusCode).toBe(201);
     }, 15000);
 });
+
+describe('POST /register negative cases', () => {
+    it('A new user registering with an existing email address should return an error status code', async () => {
+        const response = await request(app)
+            .post('/user/register')
+            .set('Content-Type', 'application/json')
+            .send({
+                name: 'DUMMY_Alpha2',
+                email: 'dum273@gmail.com',
+                password: 'apDHe86g^$',
+            });
+        expect(response.statusCode).toBe(401);
+    });
+
+    it('missing application/json with Content-Type in the header should be an invalid request', async () => {
+        const response = await request(app).post('/user/register').send({
+            name: 'test6',
+            email: 'test6dummail@gmail.com',
+            password: '137325GG!',
+        });
+        expect(response.statusCode).toBe(400);
+    });
+
+    it('missing the name field for a new user should return an error status code', async () => {
+        const response = await request(app)
+            .post('/user/register')
+            .set('Content-Type', 'application/json')
+            .send({
+                email: 'test7dummail@outlook.com',
+                password: 'jhriqu#H2t89',
+            });
+        expect(response.statusCode).toBe(400);
+    });
+
+    it('missing the email field for a new user should return an error status code', async () => {
+        const response = await request(app)
+            .post('/user/register')
+            .set('Content-Type', 'application/json')
+            .send({
+                name: 'test7',
+                password: 'K2y8egh^35gh@',
+            });
+        expect(response.statusCode).toBe(400);
+    });
+
+    it('missing the password field for a new user should return an error status code', async () => {
+        const response = await request(app)
+            .post('/user/register')
+            .set('Content-Type', 'application/json')
+            .send({
+                name: 'test8',
+                email: 'test8dummail@yahoo.com',
+            });
+        expect(response.statusCode).toBe(400);
+    });
+});
