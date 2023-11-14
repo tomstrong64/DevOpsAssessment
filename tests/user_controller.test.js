@@ -78,6 +78,6 @@ describe('POST /register', () => {
             "email": "dum273@gmail.com",
             "password": "luo2ry92@a1h",
         });
-        expect(response.statusCode).toBe(200);
+        expect(response.statusCode).toBe(201);
     }, 15000)
 });
