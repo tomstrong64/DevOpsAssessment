@@ -19,7 +19,7 @@ beforeAll( async() => {
 
     // Login
     const response = await request(app)
-        .post('/users/login')
+        .post('/user/login')
         .set('Content-Type', 'application/json')
         .send({
             email: "testeruser@testbed.com",
