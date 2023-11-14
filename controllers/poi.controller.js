@@ -92,7 +92,7 @@ export const addPoi = async (req, res) => {
         }
 
         // create POI
-        const pois = new POI({
+        const poi = new POI({
             name: req.body.name,
             type: req.body.type,
             country: req.body.country,
@@ -102,8 +102,9 @@ export const addPoi = async (req, res) => {
             description: req.body.description,
             user: res.locals.user._id,
         });
-        await pois.save();
-        return res.sendStatus(201);
+        await poi.save();
+
+        return res.status(201).json(poi);
     } catch (e) {
         return res.status(500).json({ message: 'Internal server error' });
     }
