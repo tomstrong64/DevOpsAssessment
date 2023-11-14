@@ -1,4 +1,5 @@
 import { POI } from '../models/Poi.js';
+import mongoose from 'mongoose';
 
 export const getPois = async (req, res) => {
     try {
@@ -43,7 +44,8 @@ export const getPoiById = async (req, res) => {
             poi = await POI.findById(req.params.id);
         } else {
             poi = await POI.findOne({
-                _id: req.params._id,
+                _id: new mongoose.Types.ObjectId(req.params.id),
+                user: new mongoose.Types.ObjectId(res.locals.user._id),
             });
         }
 
@@ -60,27 +62,26 @@ export const deletePoi = async (req, res) => {
     const user = res.locals.user;
     const id = req.params.id;
     try {
-      if (user.admin){
-        const poi = await POI.findById(id);
-        return res.status(200).json({
-            message: 'Poi Deleted successfully',
-        });
-      }
-      else{
-        // check if POI exists and is owned by user
-        const poi = await POI.findOne({
-            _id: id,
-            user: res.locals.user.id,
-        });
-    
-        if (!poi) return res.status(404).json({ message: 'POI not found' });
+        if (user.admin) {
+            const poi = await POI.findById(id);
+            return res.status(200).json({
+                message: 'Poi Deleted successfully',
+            });
+        } else {
+            // check if POI exists and is owned by user
+            const poi = await POI.findOne({
+                _id: id,
+                user: res.locals.user.id,
+            });
 
-        // delete POI
-        await POI.findByIdAndRemove(id);
-        return res.json({ message: 'POI successfully deleted' });
-    }
+            if (!poi) return res.status(404).json({ message: 'POI not found' });
+
+            // delete POI
+            await POI.findByIdAndRemove(id);
+            return res.json({ message: 'POI successfully deleted' });
+        }
     } catch (error) {
-        return res.status(404).json({  message: `could not delete poi ${id}.` });
+        return res.status(404).json({ message: `could not delete poi ${id}.` });
     }
 };
 
@@ -110,13 +111,14 @@ export const addPoi = async (req, res) => {
             description: req.body.description,
             user: res.locals.user._id,
         });
-        await pois.save();
+        await poi.save();
         return res.status(201).json({
+            poi: poi,
             message: 'Poi Added successfully',
             redirect: '/index.html',
         });
     } catch (e) {
-        console.log(e)
+        console.log(e);
         return res.status(500).json({ message: 'Internal server error' });
     }
 };

@@ -57,8 +57,8 @@ describe('POST /pois/addPoi', () => {
                 lon: -1.4049,
                 description: 'Test Description',
             });
-        poi_id = response.body._id;
-        poi_region = response.body.region;
+        poi_id = response.body.poi._id;
+        poi_region = response.body.poi.region;
 
         expect(response.status).toEqual(201);
     });
