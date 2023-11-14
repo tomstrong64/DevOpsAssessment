@@ -2,6 +2,21 @@
 import app from '../app.js';
 import request from 'supertest';
 
+let auth_token; //Private authorisation stuff, should not be exposed outside!
+
+// SETUP FOR USER TEST
+beforeAll( async() => {
+    // Login
+    const response = await request(app)
+        .post('/users/login')
+        .set('Content-Type', 'application/json')
+        .send({
+            email: "testeruser@testbed.com",
+            password: "9136472085",
+        });
+    auth_token = response.body.token;
+})
+
 describe('POST /register', () => {
     it('should save the new user to the database', async () => {
         const response = await request(app)
@@ -12,6 +27,7 @@ describe('POST /register', () => {
                 "password": 'jumjams1234',
             })
             .set('Content-Type', 'application/json');
+            .set('Authorization');
         expect(response.status).toBe(201);  // returns 302, which is known as 'Found', it means that the URI of the requested URI has been changed temporarily
     }, 60000);
 
