@@ -27,6 +27,16 @@ beforeAll( async() => {
     auth_token = response.body.token;
 });
 
+// TEARDOWN
+afterAll( async() => {
+    // LOGOUT
+    const response = await request(app)
+        .set('Authorization', `Bearer ${auth_token}`)
+        .get('/user/logout')
+
+    // Should have some code to close the connection to the database as well!
+})
+
 describe('POST /pois/addPoi', () => {
     it('should add new POI', async () => {
         const response = await request(app)
