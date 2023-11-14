@@ -26,7 +26,7 @@ beforeAll( async() => {
             password: "9136472085",
         });
     auth_token = response.body.token;
-    console.log(auth_token); // Debugging purposes
+    console.log(response); // Debugging purposes
 })
 
 describe('POST /register', () => {
