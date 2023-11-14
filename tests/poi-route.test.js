@@ -17,14 +17,16 @@ beforeAll( async() => {
         chalk.green('✓')
     );
 
-    // Login
+    // Register a user first, as Git Actions will create a new database each time!
     const response = await request(app)
-        .post('/users/login')
+        .post('user/register')
         .set('Content-Type', 'application/json')
+        .set('Authorization', `Bearer ${auth_token}`)
         .send({
+            name: "Default User Tester",
             email: "testeruser@testbed.com",
             password: "9136472085",
-        });
+        })
     auth_token = response.body.token;
 });
 

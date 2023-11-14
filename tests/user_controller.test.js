@@ -14,18 +14,20 @@ beforeAll( async() => {
         useUnifiedTopology: true,
     });
     console.log(
-            'MongoDB connection established successfully',
-            chalk.green('✓')
-        );
-
-    // Login
+        'MongoDB connection established successfully',
+        chalk.green('✓')
+    );
+    
+    // Register a user first, as Git Actions will create a new database each time!
     const response = await request(app)
-        .post('/user/login')
+        .post('user/register')
         .set('Content-Type', 'application/json')
+        .set('Authorization', `Bearer ${auth_token}`)
         .send({
+            name: "Default User Tester",
             email: "testeruser@testbed.com",
             password: "9136472085",
-        });
+        })
     auth_token = response.body.token;
     console.log(response); // Debugging purposes
 });
