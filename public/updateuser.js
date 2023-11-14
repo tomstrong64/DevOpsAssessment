@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         // Pre-populate the form fields
-        
+
         document.getElementById('username').value = data.name;
         document.getElementById('email').value = data.email;
     } catch (error) {
@@ -25,7 +25,7 @@ document.getElementById('UPDATE USER').addEventListener('click', async (e) => {
     e.preventDefault();
 
     // Get the values from the form fields
-    
+
     const name = document.getElementById('username').value;
     const email = document.getElementById('email').value;
     const newpassword = document.getElementById('NewPassword').value;
@@ -54,11 +54,9 @@ document.getElementById('UPDATE USER').addEventListener('click', async (e) => {
                 password: password, // Send the current password for verification
             }),
         });
-    
+
         await responseHandler(response);
-        
     } catch (error) {
-        
         console.error(error);
         alert('Failed to update User');
     }
@@ -72,14 +70,28 @@ document.getElementById('LOGOUT USER').addEventListener('click', async (e) => {
                 Authorization: `Bearer ${token}`,
             },
         });
-        const data = await response.json();
-        if (response.status !== 200) {
-            return alert(data.message);
-        }
+        await responseHandler(response);
         localStorage.removeItem('token');
-        window.location.replace(data.redirect);
+        
     } catch (error) {
         console.error(error);
-        alert('Failed to update User');
+        alert('Failed to logout User');
+    }
+});
+document.getElementById('DELETE USER').addEventListener('click', async (e) => {
+    e.preventDefault();
+
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('/user/deleteUser', {
+            headers: {
+                method: 'DELETE',
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        await responseHandler(response);
+        localStorage.removeItem('token');
+    } catch (e) {
+        alert('Failed to delete User');
     }
 });

@@ -222,3 +222,17 @@ export const createAdmin = async (req, res) => {
         });
     }
 };
+export const deleteUser = async (req, res) => {
+    const id = res.locals.user.id;
+    try {
+      await User.findByIdAndRemove(id);
+      return res.status(200).json({
+        message: 'User Deleted successfully',
+        redirect: '/login.html',
+    });
+    } catch (e) {
+      res.status(404).send({
+        message: `could not delete user ${id}.`,
+      });
+    }
+  };
