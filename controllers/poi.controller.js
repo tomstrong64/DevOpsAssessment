@@ -1,4 +1,4 @@
-import POI from '../models/Poi.js';
+import { POI } from '../models/Poi.js';
 
 export const getPois = async (req, res) => {
     try {
