@@ -26,8 +26,8 @@ describe('POST /register', () => {
                 "email": 'testingmail44@yahoo.com',
                 "password": 'jumjams1234',
             })
-            .set('Content-Type', 'application/json');
-            .set('Authorization');
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${auth_token}`);
         expect(response.status).toBe(201);  // returns 302, which is known as 'Found', it means that the URI of the requested URI has been changed temporarily
     }, 60000);
 
@@ -39,7 +39,8 @@ describe('POST /register', () => {
                 "email": "testingmail11@yahoo.com",
                 "password": "adbdfec2891",
             })
-            .set('Content-Type', 'application/json');
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${auth_token}`);
             expect(response.headers).toBeDefined();
     }, 60000);
 
@@ -52,6 +53,7 @@ describe('POST /register', () => {
             "password": "luo2ry92@a1h",
         })
         .set('Content-Type', 'application/json')
+        .set('Authorization', `Bearer ${auth_token}`);
         expect(response.statusCode).toBe(200);
     }, 60000)
 });
