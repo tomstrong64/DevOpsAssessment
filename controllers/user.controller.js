@@ -138,7 +138,7 @@ export const logout = async (req, res) => {
 export const updateUser = async (req, res) => {
     const email = req.body.email.toLowerCase();
     const { name, newpassword, confirmpassword, password } = req.body;
-    
+
     try {
         // Check if the password field is not blank
         if (!password) {
@@ -146,7 +146,7 @@ export const updateUser = async (req, res) => {
                 .status(400)
                 .json({ message: 'Password cannot be blank' });
         }
-        
+
         let user = res.locals.user;
 
         // Check if the current password matches
@@ -223,16 +223,21 @@ export const createAdmin = async (req, res) => {
     }
 };
 export const deleteUser = async (req, res) => {
-    const id = res.locals.user.id;
+    const user = res.locals.user;
+    const id = req.body.id;
     try {
-      await User.findByIdAndRemove(id);
-      return res.status(200).json({
-        message: 'User Deleted successfully',
-        redirect: '/login.html',
-    });
+        if (user.admin) {
+            await User.findByIdAndRemove(id);
+        }
+        await User.findByIdAndRemove(user.id);
+        return res.status(200).json({
+            message: 'User Deleted successfully',
+            redirect: '/login.html',
+        });
     } catch (e) {
-      res.status(404).send({
-        message: `could not delete user ${id}.`,
-      });
+        console.log(e);
+        res.status(404).send({
+            message: `could not delete user ${id}.`,
+        });
     }
-  };
+};

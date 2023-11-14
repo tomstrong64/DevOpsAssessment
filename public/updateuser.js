@@ -63,6 +63,7 @@ document.getElementById('UPDATE USER').addEventListener('click', async (e) => {
 });
 document.getElementById('LOGOUT USER').addEventListener('click', async (e) => {
     e.preventDefault();
+
     try {
         const token = localStorage.getItem('token');
         const response = await fetch('/user/logout', {
@@ -72,7 +73,6 @@ document.getElementById('LOGOUT USER').addEventListener('click', async (e) => {
         });
         await responseHandler(response);
         localStorage.removeItem('token');
-        
     } catch (error) {
         console.error(error);
         alert('Failed to logout User');
@@ -81,11 +81,18 @@ document.getElementById('LOGOUT USER').addEventListener('click', async (e) => {
 document.getElementById('DELETE USER').addEventListener('click', async (e) => {
     e.preventDefault();
 
+    const password = document.getElementById('Password').value;
+
     try {
+        if (!password) {
+            alert('Password cannot be blank');
+            return;
+        }
+
         const token = localStorage.getItem('token');
         const response = await fetch('/user/deleteUser', {
+            method: 'DELETE',
             headers: {
-                method: 'DELETE',
                 Authorization: `Bearer ${token}`,
             },
         });
