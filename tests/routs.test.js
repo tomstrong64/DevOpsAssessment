@@ -2,6 +2,7 @@ import app from '../app.js';
 import request from 'supertest';
 import mongoose from 'mongoose';
 import chalk from 'chalk';
+import { POI } from '../models/Poi.js';
 
 let auth_token; //Private authorisation stuff, should not be exposed outside!
 
@@ -35,6 +36,8 @@ afterAll( async() => {
         .get('/user/logout')
 
     // Should have some code to close the connection to the database as well!
+    await POI.deleteMany({});
+    mongoose.connection.close(); // To close the connection otherwise Jest reports the connection as open which is not good!
 })
 
 describe('POST /pois/addPoi', () => {
