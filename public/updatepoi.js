@@ -11,7 +11,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             },
         });
         const poi = await response.json();
-        console.log(poi._name);
+        console.log(poi)
+        
         if (response.status !== 200) {
             throw new Error(poi.message || 'Failed to fetch POI details');
         }
