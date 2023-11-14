@@ -6,6 +6,11 @@ let auth_token; //Private authorisation stuff, should not be exposed outside!
 
 // SETUP FOR USER TEST
 beforeAll( async() => {
+    mongoose.connect('mongodb://admin:admin@localhost:27017/admin', {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    });
+    
     // Login
     const response = await request(app)
         .post('/users/login')
