@@ -32,3 +32,4 @@ jobs:
               run: npm test
               env:
                   MONGODB_URI: mongodb://admin:admin@localhost:27017
+                  JWT_SECRET: secret
