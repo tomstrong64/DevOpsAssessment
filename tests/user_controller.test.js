@@ -33,7 +33,10 @@ beforeAll( async() => {
 afterAll( async() => {
     // LOGOUT
     const response = await request(app)
-        .get('/user/logout');
+        .set('Authorization', `Bearer ${auth_token}`)
+        .get('/user/logout')
+
+    // Should have some code to close the connection to the database as well!
 })
 
 describe('POST /register', () => {
