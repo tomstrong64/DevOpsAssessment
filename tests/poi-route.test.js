@@ -1,5 +1,6 @@
 import app from '../app.js';
 import request from 'supertest';
+import mongoose from 'mongoose';
 
 let auth_token; //Private authorisation stuff, should not be exposed outside!
 
