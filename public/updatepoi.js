@@ -29,7 +29,7 @@ document.getElementById('UPDATE POI').addEventListener('click', async (e) => {
     e.preventDefault();
     const poi = {
         // Get the values from the form fields
-        _id: document.getElementById('poiId').value,
+      const  id: document.getElementById('poiId').value,
         name: document.getElementById('name').value,
         type: document.getElementById('type').value,
         country: document.getElementById('country').value,
@@ -40,6 +40,7 @@ document.getElementById('UPDATE POI').addEventListener('click', async (e) => {
     };
 
     try {
+        const token = localStorage.getItem('token');
         const response = await fetch(
             `/pois/updatePoi?id=${poi._id}`,
 
@@ -47,16 +48,13 @@ document.getElementById('UPDATE POI').addEventListener('click', async (e) => {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify(poi),
             }
         );
 
-        if (response.status === 200) {
-            alert('POI updated successfully');
-        } else {
-            alert(`Failed to update POI: ${response.statusText}`);
-        }
+        await responseHandler(response);
     } catch (error) {
         console.error(error);
         alert('Failed to update POI');

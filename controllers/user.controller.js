@@ -1,4 +1,5 @@
 import { User } from '../models/User.js';
+import { POI } from '../models/Poi.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
@@ -227,16 +228,22 @@ export const deleteUser = async (req, res) => {
     const id = req.body.id;
     try {
         if (user.admin) {
+            await POI.deleteMany({user: id})
             await User.findByIdAndRemove(id);
+            return res.status(200).json({
+                message: 'User Deleted successfully',
+            });
+        } else {
+            await POI.deleteMany({user: user.id})
+            await User.findByIdAndRemove(user.id);
+            return res.status(200).json({
+                message: 'User Deleted successfully',
+                redirect: '/login.html',
+            });
         }
-        await User.findByIdAndRemove(user.id);
-        return res.status(200).json({
-            message: 'User Deleted successfully',
-            redirect: '/login.html',
-        });
     } catch (e) {
         console.log(e);
-        res.status(404).send({
+        return res.status(404).send({
             message: `could not delete user ${id}.`,
         });
     }

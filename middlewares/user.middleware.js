@@ -38,7 +38,10 @@ export const stdAuth = async (req, res, next) => {
         res.locals.user = user;
         return next();
     } catch (e) {
-        console.log(e);
+        if (err instanceof jwt.TokenExpiredError){
+          return  res.redirect('/login.html');
+            
+        }
         return res.status(500).json({ message: 'Internal server error' });
     }
 };

@@ -51,7 +51,6 @@ map.on('click', async (e) => {
             });
 
             await responseHandler(response);
-
             const pos = [lat, lon];
             const marker = L.marker(pos).addTo(map);
             marker
@@ -137,15 +136,14 @@ async function ajaxSearch(region) {
 
 async function deletePoi(id) {
     try {
+      const token = localStorage.getItem('token')
         const response = await fetch(`/pois/deletePoi/${id}`, {
             method: 'DELETE',
+            headers: {
+              Authorization: `Bearer ${token}`,
+          },
         });
-        if (response.status == 200) {
-            alert('Successfully Deleted!');
-        } else {
-            const jsonData = await response.json();
-            alert(jsonData.error);
-        }
+        await responseHandler(response);
     } catch (e) {
         alert(`Error with POI ID ${id}: ${e}`);
     }
