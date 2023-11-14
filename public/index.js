@@ -143,7 +143,7 @@ async function deletePoi(id) {
     const response = await fetch(`/pois/deletePoi/${id}`, {
       method: 'DELETE'
     });
-    if (response.status == 200) {
+    if (response.status === 200) {
       alert('Successfully Deleted!');
     } else {
       const jsonData = await response.json();
