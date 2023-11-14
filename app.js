@@ -13,12 +13,7 @@ const app = express();
 
 const { MONGODB_URI } = process.env;
 
-if (process.env.NODE_ENV === 'test') {
-    mongoose.connect('mongodb://admin:admin@localhost:27017/admin', {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    });
-} else {
+if (process.env.NODE_ENV !== 'test') {
     mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 }
 

@@ -1,8 +1,20 @@
 import app from '../app.js';
 import request from 'supertest';
+import mongoose from 'mongoose';
 
-let poi_region = 'London';
+let poi_region;
 let poi_id;
+
+beforeAll(() => {
+    mongoose.connect('mongodb://admin:admin@localhost:27017/admin', {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    });
+});
+
+afterAll(() => {
+    mongoose.disconnect();
+});
 
 describe('POST /pois/addPoi', () => {
     it('should add new POI', async () => {
@@ -11,7 +23,7 @@ describe('POST /pois/addPoi', () => {
             .send({
                 name: 'Swindon',
                 type: 'Test Type',
-                country: poi_region,
+                country: 'London',
                 region: 'Solent',
                 lat: 50.9105,
                 lon: -1.4049,
@@ -23,7 +35,8 @@ describe('POST /pois/addPoi', () => {
                 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NGNjNTRjMjI0NTRhY2QyNTEyNTZlMyIsImlhdCI6MTY5OTk1OTk1NCwiZXhwIjoxNzAwMDQ2MzU0fQ.jfzCKYEK9n3-i4jvb7a_ODPazXT-dusLPanxnF6xEpk'
             );
         poi_id = response.body._id;
-        console.log(poi_id);
+        poi_region = response.body.region;
+
         expect(response.status).toEqual(201);
     });
 });
@@ -53,23 +66,20 @@ it('should return all POIs when no query parameters are provided', async () => {
     expect(typeof response.body).toBe('object');
 });
 
-/*it('should return a single POI by ID', async () => {
-   
-    const response = await request(app).get(`/pois/getPois?id=${poiId}`)
-        .set('Authorization','Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NGNjNTRjMjI0NTRhY2QyNTEyNTZlMyIsImlhdCI6MTY5OTYzNTU4MiwiZXhwIjoxNjk5NzIxOTgyfQ.7yv4NlcBbzvI62d2awQjhrkcm6GBSnRENiwrameMSjM');
+describe('GET /poi/id ', () => {
+    it('should return a single POI by ID', async () => {
+        const response = await request(app)
+            .get(`/pois/${poi_id}`)
+            .set(
+                'Authorization',
+                'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NGNjNTRjMjI0NTRhY2QyNTEyNTZlMyIsImlhdCI6MTY5OTk1OTk1NCwiZXhwIjoxNzAwMDQ2MzU0fQ.jfzCKYEK9n3-i4jvb7a_ODPazXT-dusLPanxnF6xEpk'
+            );
 
-    expect(response.status).toEqual(200);
-    expect(response.body._id).toEqual(poiId);
-  });
+        expect(response.status).toEqual(200);
+        expect(response.body._id).toEqual(poi_id);
+    });
+});
 
-  it('should return all POIs when no query parameters are provided', async () => {
-    const response = await request(app).get('/pois/getPois')
-        .set('Authorization','Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NGNjNTRjMjI0NTRhY2QyNTEyNTZlMyIsImlhdCI6MTY5OTYzNTU4MiwiZXhwIjoxNjk5NzIxOTgyfQ.7yv4NlcBbzvI62d2awQjhrkcm6GBSnRENiwrameMSjM');
-
-    expect(response.status).toEqual(500);
-    expect(typeof response.body).toBe('object');
-  });
-});*/
 /*describe('DELETE /pois/deletePoi/:id',() =>{
   it('Should delete the poi with given id',async () => {
      
