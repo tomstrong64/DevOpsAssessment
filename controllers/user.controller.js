@@ -1,18 +1,18 @@
 import { User } from '../models/User.js';
+import { POI } from '../models/Poi.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 export const getUserById = async (req, res) => {
     try {
         let user;
-        const userId = req.query.id;
+        const userId = res.locals.user._id;
 
         if (userId) {
             user = await User.findById(userId);
         } else {
             return res.status(500).json({ message: 'No Users found' });
         }
-
         res.json(user);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -53,7 +53,7 @@ export const login = async (req, res) => {
         return res.status(200).json({
             message: 'Login successful',
             token,
-            redirect: '/',
+            redirect: '/index.html',
         });
     } catch (e) {
         console.log(e);
@@ -99,7 +99,7 @@ export const create = async (req, res) => {
         return res.status(201).json({
             message: 'User created successfully',
             token,
-            redirect: '/',
+            redirect: '/index.html',
         });
     } catch (e) {
         console.log(e);
@@ -137,9 +137,8 @@ export const logout = async (req, res) => {
 };
 
 export const updateUser = async (req, res) => {
-    const id = req.query.id;
     const email = req.body.email.toLowerCase();
-    const { username, password, currentPassword } = req.body;
+    const { name, newpassword, confirmpassword, password } = req.body;
 
     try {
         // Check if the password field is not blank
@@ -149,22 +148,28 @@ export const updateUser = async (req, res) => {
                 .json({ message: 'Password cannot be blank' });
         }
 
-        // Find the user by ID
-        const user = await User.findById(id);
+        let user = res.locals.user;
 
         // Check if the current password matches
-        if (user.password !== currentPassword) {
+        const match = await bcrypt.compare(password, user.password);
+
+        if (!match)
             return res
                 .status(401)
-                .json({ message: 'Current password is incorrect' });
-        }
+                .json({ message: 'Current pasword is Incorrect' });
 
         // If current password is correct, update the user's details
-        const updatedUser = await User.updateOne(
-            { _id: id },
-            { username, email, password }
-        );
-        res.json({ updated: true });
+        if (name) user.name = name;
+        if (email) user.email = email;
+        if (newpassword && newpassword === confirmpassword)
+            user.password = await bcrypt.hash(newpassword, 10);
+        await user.save();
+
+        return res.status(200).json({
+            updated: true,
+            message: 'Updated successfully',
+            redirect: '/index.html',
+        });
     } catch (e) {
         res.status(500).json({ message: 'Internal server error' });
     }
@@ -215,6 +220,31 @@ export const createAdmin = async (req, res) => {
         }
         return res.status(400).json({
             message: JSON.parse(e),
+        });
+    }
+};
+export const deleteUser = async (req, res) => {
+    const user = res.locals.user;
+    const id = req.body.id;
+    try {
+        if (user.admin) {
+            await POI.deleteMany({user: id})
+            await User.findByIdAndRemove(id);
+            return res.status(200).json({
+                message: 'User Deleted successfully',
+            });
+        } else {
+            await POI.deleteMany({user: user.id})
+            await User.findByIdAndRemove(user.id);
+            return res.status(200).json({
+                message: 'User Deleted successfully',
+                redirect: '/login.html',
+            });
+        }
+    } catch (e) {
+        console.log(e);
+        return res.status(404).send({
+            message: `could not delete user ${id}.`,
         });
     }
 };

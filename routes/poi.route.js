@@ -8,7 +8,7 @@ router.get('/list', stdAuth, PoiController.getPois);
 router.get('/:id', stdAuth, PoiController.getPoiById);
 router.post('/addPoi', stdAuth, PoiController.addPoi);
 
-router.delete('/deletePoi/:id', adminAuth, PoiController.deletePoi);
-router.put('/updatePoi/:id', adminAuth, PoiController.updatePoi);
+router.delete('/deletePoi/:id', stdAuth, PoiController.deletePoi);
+router.put('/updatePoi/:id', stdAuth, PoiController.updatePoi);
 
 export default router;

@@ -15,15 +15,7 @@ document.getElementById('register').addEventListener('click', async (e) => {
             },
             body: JSON.stringify(user),
         });
-
-        const data = await response.json();
-        if (response.status !== 201) return alert(data.message);
-
-        alert(data.message);
-        // save the token in the local storage
-        localStorage.setItem('token', data.token);
-        // redirect user
-        window.location.replace(data.redirect);
+        await responseHandler(response);
     } catch (e) {
         alert(`Error: ${e}`);
     }

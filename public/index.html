@@ -1,56 +1,74 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index Page</title>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Index Page</title>
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel='stylesheet' href='https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'/>
-    <script type='text/javascript' src='https://unpkg.com/leaflet@1.7.1/dist/leaflet.js'></script>
-    <script type='text/javascript' src='index.js' defer></script>
-    <style>
-        #map1 {
-            height: 300px; /* Adjust the height as needed */
-            width: 55%; /* Take up 85% of the container width */
-            margin-top: 20px; /* Add some space between the header and the map */
-            border: 1px solid #ccc; /* Add a border for a neat look */
-            border-radius: 8px; /* Optional: Add rounded corners */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
-        }
-    </style>
-    
-    
-</head>
-<body>
+        <!-- Bootstrap CSS -->
+        <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        />
+        <link
+            rel="stylesheet"
+            href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        />
+        <script
+            type="text/javascript"
+            src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        ></script>
+        <script type="text/javascript" src="index.js" defer></script>
+        <script type="text/javascript" src="utils.js" defer></script>
+        <style>
+            #map1 {
+                height: 300px; /* Adjust the height as needed */
+                width: 55%; /* Take up 85% of the container width */
+                margin-top: 20px; /* Add some space between the header and the map */
+                border: 1px solid #ccc; /* Add a border for a neat look */
+                border-radius: 8px; /* Optional: Add rounded corners */
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Header Section -->
+        <nav class="navbar navbar-dark bg-primary">
+            <a class="navbar-brand" href="#">Home</a>
+            <a class="navbar-brand" href="addpoi.html">Add POI</a>
+            <form class="form-inline">
+                <input
+                    class="form-control mr-sm-2"
+                    id="poi_region"
+                    type="search"
+                    placeholder="Search"
+                    aria-label="Search"
+                />
+                <button
+                    class="btn btn-light my-2 my-sm-0"
+                    id="poi_search"
+                    type="submit"
+                >
+                    Search
+                </button>
+            </form>
+            <a href="updateuser.html" class="btn btn-light ml-auto">Profile</a>
+        </nav>
 
-    <!-- Header Section -->
-    <nav class="navbar navbar-dark bg-primary">
-        <a class="navbar-brand" href="#">Home</a>
-        <a class="navbar-brand" href="addpoi.html">Add POI</a>
-        <form class="form-inline">
-            <input class="form-control mr-sm-2" id="poi_region" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-light my-2 my-sm-0" id="poi_search" type="submit">Search</button>
-        </form>
-        <a href="updateuser.html" class="btn btn-light ml-auto">Profile</a>
-    </nav>
-
-     <div class="container">
-        <div class="row">
-            <div class="col-md-8"> 
-                <div id="map1" style="height: 500px; width: 100%; "></div>
-            </div>
-            <div class="col-md-4">
-                <div id="addpoi"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div id="map1" style="height: 500px; width: 100%"></div>
+                </div>
+                <div class="col-md-4">
+                    <div id="addpoi"></div>
+                </div>
             </div>
         </div>
-    </div>
-    <div style="margin-top: 20px;" id="poi_results"></div>
-    
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.7.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <div style="margin-top: 20px" id="poi_results"></div>
 
-
-    
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.7.2/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
+</html>

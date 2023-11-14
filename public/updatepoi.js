@@ -3,15 +3,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     const poiId = urlParams.get('id');
 
     try {
-        const response = await fetch(`/pois/list?id=${poiId}`);
+        console.log(poiId)
+        const token = localStorage.getItem('token');
+        const response = await fetch(`/pois/${poiId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
         const poi = await response.json();
-        console.log(poi._name)
+        console.log(poi)
+        
         if (response.status !== 200) {
             throw new Error(poi.message || 'Failed to fetch POI details');
         }
 
         // Pre-populate the form fields
-        document.getElementById('poiId').value = poi._id
+        document.getElementById('poiId').value = poi._id;
         document.getElementById('name').value = poi.name;
         document.getElementById('type').value = poi.type;
         document.getElementById('country').value = poi.country;
@@ -19,46 +26,42 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('lat').value = poi.lat;
         document.getElementById('lon').value = poi.lon;
         document.getElementById('description').value = poi.description;
-
     } catch (error) {
         console.error(error);
         alert('Failed to fetch POI details');
     }
-    
 });
 
 document.getElementById('UPDATE POI').addEventListener('click', async (e) => {
     e.preventDefault();
     const poi = {
         // Get the values from the form fields
-        "_id": document.getElementById('poiId').value,
-        "name": document.getElementById('name').value,
-        "type": document.getElementById('type').value,
-        "country": document.getElementById('country').value,
-        "region": document.getElementById('region').value,
-        "lat": document.getElementById('lat').value,
-        "lon": document.getElementById('lon').value,
-        "description": document.getElementById('description').value
+        _id: document.getElementById('poiId').value,
+        name: document.getElementById('name').value,
+        type: document.getElementById('type').value,
+        country: document.getElementById('country').value,
+        region: document.getElementById('region').value,
+        lat: document.getElementById('lat').value,
+        lon: document.getElementById('lon').value,
+        description: document.getElementById('description').value,
     };
-    console.log(poi._id)
-    console.log(poi._name)
 
     try {
-        const response = await fetch(`/pois/updatePoi?id=${poi._id}`, 
-       
-        {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(poi)
-        });
+        const token = localStorage.getItem('token');
+        const response = await fetch(
+            `/pois/updatePoi/${poi._id}`,
 
-        if (response.status === 200) {
-            alert('POI updated successfully');
-        } else {
-            alert(`Failed to update POI: ${response.statusText}`);
-        }
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(poi),
+            }
+        );
+
+        await responseHandler(response);
     } catch (error) {
         console.error(error);
         alert('Failed to update POI');
