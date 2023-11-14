@@ -22,7 +22,6 @@ beforeAll( async() => {
     const response = await request(app)
         .post('/user/register')
         .set('Content-Type', 'application/json')
-        .set('Authorization', `Bearer ${auth_token}`)
         .send({
             name: "Default User Tester",
             email: "testeruser@testbed.com",
@@ -36,8 +35,9 @@ beforeAll( async() => {
 afterAll( async() => {
     // LOGOUT
     const response = await request(app)
-        .set('Authorization', `Bearer ${auth_token}`)
         .get('/user/logout')
+        .set('Authorization', `Bearer ${auth_token}`)
+        .send();
 
     // Should have some code to close the connection to the database as well!
     await User.deleteMany({});
@@ -49,7 +49,6 @@ describe('POST /register', () => {
         const response = await request(app)
             .post('/user/register')
             .set('Content-Type', 'application/json')
-            .set('Authorization', `Bearer ${auth_token}`)
             .send({
                 "name": 'Test Name',
                 "email": 'testingmail44@yahoo.com',
@@ -62,7 +61,6 @@ describe('POST /register', () => {
         const response = await request(app)
             .post('/user/register')
             .set('Content-Type', 'application/json')
-            .set('Authorization', `Bearer ${auth_token}`)
             .send({
                 "name": "Test Name 2",
                 "email": "testingmail11@yahoo.com",
@@ -75,7 +73,6 @@ describe('POST /register', () => {
         const response = await request(app)
         .post('/user/register')
         .set('Content-Type', 'application/json')
-        .set('Authorization', `Bearer ${auth_token}`)
         .send({
             "name": "DUMMY_Alpha",
             "email": "dum273@gmail.com",

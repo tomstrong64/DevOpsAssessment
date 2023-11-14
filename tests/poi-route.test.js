@@ -34,11 +34,12 @@ beforeAll( async() => {
 afterAll( async() => {
     // LOGOUT
     const response = await request(app)
-        .set('Authorization', `Bearer ${auth_token}`)
         .get('/user/logout')
+        .set('Authorization', `Bearer ${auth_token}`)
+        .send()
 
     // Should have some code to close the connection to the database as well!
-    await User.deleteMany({});
+    await POI.deleteMany({});
     mongoose.connection.close(); // To close the connection otherwise Jest reports the connection as open which is not good!
 })
 
