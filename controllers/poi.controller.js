@@ -62,26 +62,26 @@ export const deletePoi = async (req, res) => {
     const user = res.locals.user;
     const id = req.params.id;
     try {
-      if (user.admin) {
-        const poi = await POI.findById(id);
+        if (user.admin) {
+            await POI.findByIdAndRemove(id);
+        } else {
+            // check if POI exists and is owned by user
+            const poi = await POI.findOne({
+                _id: id,
+                user: res.locals.user.id,
+            });
+
+            if (!poi) return res.status(404).json({ message: 'POI not found' });
+
+            // delete POI
+            await POI.findByIdAndRemove(id);
+        }
         return res.status(200).json({
             message: 'Poi Deleted successfully',
         });
-    } else {
-        // check if POI exists and is owned by user
-        const poi = await POI.findOne({
-            _id: id,
-            user: res.locals.user.id,
-        });
-    
-        if (!poi) return res.status(404).json({ message: 'POI not found' });
-
-        // delete POI
-        await POI.findByIdAndRemove(id);
-        return res.json({ message: 'POI successfully deleted' });
-    }
-    } catch (error) {
-        return res.status(404).json({ message: `could not delete poi ${id}.` });
+    } catch (e) {
+        console.log(e);
+        return res.status(500).json({ message: `could not delete poi ${id}.` });
     }
 };
 
@@ -144,10 +144,10 @@ export const updatePoi = async (req, res) => {
         if (req.body.description) poi.description = req.body.description;
         await poi.save();
 
-        return res.json({ 
+        return res.json({
             message: 'POI successfully updated',
             redirect: '/index.html',
-     });
+        });
     } catch (e) {
         console.log(e);
         return res.status(500).json({ message: 'Internal server error' });
