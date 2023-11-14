@@ -43,8 +43,7 @@ export const getPoiById = async (req, res) => {
             poi = await POI.findById(req.params.id);
         } else {
             poi = await POI.findOne({
-                _id: req.params.id,
-                user: res.locals.user._id,
+                _id: req.params._id,
             });
         }
 
@@ -58,21 +57,30 @@ export const getPoiById = async (req, res) => {
 };
 
 export const deletePoi = async (req, res) => {
+    const user = res.locals.user;
+    const id = req.params.id;
     try {
-        const id = req.params.id;
-
+      if (user.admin){
+        const poi = await POI.findById(id);
+        return res.status(200).json({
+            message: 'Poi Deleted successfully',
+        });
+      }
+      else{
         // check if POI exists and is owned by user
         const poi = await POI.findOne({
             _id: id,
-            user: res.locals.user._id,
+            user: res.locals.user.id,
         });
+    
         if (!poi) return res.status(404).json({ message: 'POI not found' });
 
         // delete POI
         await POI.findByIdAndRemove(id);
         return res.json({ message: 'POI successfully deleted' });
+    }
     } catch (error) {
-        return res.status(500).json({ message: 'Internal server error' });
+        return res.status(404).json({  message: `could not delete poi ${id}.` });
     }
 };
 

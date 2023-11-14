@@ -121,6 +121,7 @@ async function ajaxSearch(region) {
           <button onclick="deletePoi('${poi._id}')">Delete</button>
         </td>
       `;
+      tr.id = poi._id;
         tbody.appendChild(tr);
 
         const pos = [poi.lat, poi.lon];
@@ -143,7 +144,12 @@ async function deletePoi(id) {
               Authorization: `Bearer ${token}`,
           },
         });
-        await responseHandler(response);
+       const result = await responseHandler(response);
+       if(result){
+        document.getElementById(id).remove();
+       }
+
+        
     } catch (e) {
         alert(`Error with POI ID ${id}: ${e}`);
     }
