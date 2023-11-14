@@ -9,6 +9,10 @@ beforeAll( async() => {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     });
+    console.log(
+        'MongoDB connection established successfully',
+        chalk.green('✓')
+    );
 
     // Login
     const response = await request(app)

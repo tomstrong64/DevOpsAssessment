@@ -1,6 +1,8 @@
 // This is tests for the user controller as it a standalone part of the app
 import app from '../app.js';
 import request from 'supertest';
+import mongoose from 'mongoose';
+import chalk from 'chalk';
 
 let auth_token; //Private authorisation stuff, should not be exposed outside!
 
@@ -10,7 +12,11 @@ beforeAll( async() => {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     });
-    
+    console.log(
+            'MongoDB connection established successfully',
+            chalk.green('✓')
+        );
+
     // Login
     const response = await request(app)
         .post('/users/login')
@@ -20,6 +26,7 @@ beforeAll( async() => {
             password: "9136472085",
         });
     auth_token = response.body.token;
+    console.log(auth_token); // Debugging purposes
 })
 
 describe('POST /register', () => {

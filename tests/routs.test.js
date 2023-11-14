@@ -1,6 +1,7 @@
 import app from '../app.js';
 import request from 'supertest';
 import mongoose from 'mongoose';
+import chalk from 'chalk';
 
 let auth_token; //Private authorisation stuff, should not be exposed outside!
 
@@ -10,6 +11,10 @@ beforeAll( async() => {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     });
+    console.log(
+        'MongoDB connection established successfully',
+        chalk.green('✓')
+    );
 
     // Login
     const response = await request(app)
