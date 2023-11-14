@@ -29,7 +29,11 @@ beforeAll( async() => {
 
 describe('POST /pois/addPoi', () => {
     it('should add new POI', async () => {
-        const response = await request(app).post('/pois/addPoi').send({
+        const response = await request(app)
+        .post('/pois/addPoi')
+        .set('Content-Type', 'application/json')
+        .set('Authorization', `Bearer ${auth_token}`)
+        .send({
             "name": 'Test POI',
             "type": 'Test Type',
             "country": 'Test Country',
@@ -37,9 +41,7 @@ describe('POST /pois/addPoi', () => {
             "lat": 123.45,
             "lon": 67.89,
             "description": 'Test Description',
-        })
-        .set('Content-Type', 'application/json')
-        .set('Authorization', `Bearer ${auth_token}`);
+        });
         expect(response.headers['Content-Type']).toBeUndefined();
         expect(response.status).toBe(201);
     });

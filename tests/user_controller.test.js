@@ -43,39 +43,39 @@ describe('POST /register', () => {
     it('should save the new user to the database', async () => {
         const response = await request(app)
             .post('/user/register')
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${auth_token}`)
             .send({
                 "name": 'Test Name',
                 "email": 'testingmail44@yahoo.com',
                 "password": 'jumjams1234',
-            })
-            .set('Content-Type', 'application/json')
-            .set('Authorization', `Bearer ${auth_token}`);
+            });
         expect(response.status).toBe(201);  // returns 302, which is known as 'Found', it means that the URI of the requested URI has been changed temporarily
     }, 15000);
 
     it('the headers should be defined', async() => {
         const response = await request(app)
             .post('/user/register')
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${auth_token}`)
             .send({
                 "name": "Test Name 2",
                 "email": "testingmail11@yahoo.com",
                 "password": "adbdfec2891",
-            })
-            .set('Content-Type', 'application/json')
-            .set('Authorization', `Bearer ${auth_token}`);
+            });
             expect(response.headers).toBeDefined();
     }, 15000);
 
     it("the response code should be appropriate for this request' ", async() => {
         const response = await request(app)
         .post('/user/register')
+        .set('Content-Type', 'application/json')
+        .set('Authorization', `Bearer ${auth_token}`)
         .send({
             "name": "DUMMY_Alpha",
             "email": "dum273@gmail.com",
             "password": "luo2ry92@a1h",
-        })
-        .set('Content-Type', 'application/json')
-        .set('Authorization', `Bearer ${auth_token}`);
+        });
         expect(response.statusCode).toBe(200);
     }, 15000)
 });
