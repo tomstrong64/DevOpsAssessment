@@ -14,5 +14,4 @@ const poiSchema = new Schema(
     { timestamps: true }
 );
 
-const POI = mongoose.model('Poi', poiSchema);
-export default POI;
+export const POI = mongoose.model('Poi', poiSchema);
