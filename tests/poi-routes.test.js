@@ -94,18 +94,19 @@ describe('GET /poi/id ', () => {
     });
 });
 
-/*describe('DELETE /pois/deletePoi/:id',() =>{
-  it('Should delete the poi with given id',async () => {
-     
-      const response = await request(app).delete(`/pois/deletePoi/${poiId}`);
-      expect(response.status)===(200);
-      expect(response.body)===({ deleted: true });
-  });
-  it('Should return 404 if the ID does not exist', async () => {
-      const invalidPoiId = "invalid_id";
-      const response = await request(app).delete(`/pois/deletePoi/${invalidPoiId}`);
-      expect(response.status)===(404);
-  });
-  
+describe('DELETE /pois/deletePoi/:id', () => {
+    it('Should delete the poi with given id', async () => {
+        const response = await request(app)
+            .delete(`/pois/deletePoi/${poi_id}`)
+            .set('Authorization', `Bearer ${auth_token}`);
+        expect(response.status).toEqual(200);
+        expect(response.body).toEqual({ deleted: true });
+    });
+    it('Should return 404 if the ID does not exist', async () => {
+        const invalidPoiId = 'invalid_id';
+        const response = await request(app).delete(
+            `/pois/deletePoi/${invalidPoiId}`
+        );
+        expect(response.status).toEqual(404);
+    });
 });
-*/
