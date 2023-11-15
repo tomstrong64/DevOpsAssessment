@@ -1,3 +1,8 @@
+document.addEventListener('DOMContentLoaded', function () {
+    Logincheck();
+});
+
+
 const map = L.map('map1');
 
 const attrib =
@@ -121,7 +126,7 @@ async function ajaxSearch(region) {
           <button onclick="deletePoi('${poi._id}')">Delete</button>
         </td>
       `;
-      tr.id = poi._id;
+        tr.id = poi._id;
         tbody.appendChild(tr);
 
         const pos = [poi.lat, poi.lon];
@@ -137,25 +142,49 @@ async function ajaxSearch(region) {
 
 async function deletePoi(id) {
     try {
-      const token = localStorage.getItem('token')
+        const token = localStorage.getItem('token');
         const response = await fetch(`/pois/deletePoi/${id}`, {
             method: 'DELETE',
             headers: {
-              Authorization: `Bearer ${token}`,
-          },
+                Authorization: `Bearer ${token}`,
+            },
         });
-       const result = await responseHandler(response);
-       if(result){
-        document.getElementById(id).remove();
-       }
-
-        
+        const result = await responseHandler(response);
+        if (result) {
+            document.getElementById(id).remove();
+        }
     } catch (e) {
         alert(`Error with POI ID ${id}: ${e}`);
     }
 }
-document.getElementById('get_users').addEventListener('click', async(e) => {
-     const token = localStorage.getItem('token');
+async function Logincheck()
+{
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`/user/getUser`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        const data = await response.json();
+        if (response.status !== 200) {
+            return alert(data.message);
+        }
+        if(data.admin === true){
+            const getUsersElement = document.getElementById("get_users");
+            const getPoisElement = document.getElementById("get_pois");
+
+            getUsersElement.hidden = false;
+            getPoisElement.hidden = false;
+        }
+       
+    } catch (error) {
+        console.error(error);
+        alert('Failed to fetch User details');
+    }
+}
+document.getElementById('get_users').addEventListener('click', async (e) => {
+    const token = localStorage.getItem('token');
     const response = await fetch(`/user/list`, {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -175,14 +204,8 @@ document.getElementById('get_users').addEventListener('click', async(e) => {
     const trHeadings = document.createElement('tr');
     trHeadings.innerHTML = `
       <th>Name</th>
-      <th>Type</th>
-      <th>Country</th>
-      <th>Region</th>
-      <th>Longitude</th>
-      <th>Latitude</th>
-      <th>Description</th>
-      <th>Update</th>
-      <th>Delete</th>
+      <th>E-mail</th>
+      <th>Admin</th>
     `;
     thead.appendChild(trHeadings);
     table.appendChild(thead);
@@ -190,31 +213,21 @@ document.getElementById('get_users').addEventListener('click', async(e) => {
     // Add table rows
     const tbody = document.createElement('tbody');
     table.appendChild(tbody);
-    pois.forEach((poi) => {
+    users.forEach((user) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-        <td>${poi.name}</td>
-        <td>${poi.type}</td>
-        <td>${poi.country}</td>
-        <td>${poi.region}</td>
-        <td>${poi.lon}</td>
-        <td>${poi.lat}</td>
-        <td>${poi.description}</td>
+        <td>${user.name}</td>
+        <td>${user.email}</td>
+        <td>${user.admin}</td>
         <td>
-          <a href="updatepoi.html?id=${poi._id}">Update</a>
+        <button onclick="UpdateUserStatus('${user._id}')">Admin</button>
         </td>
         <td>
-          <button onclick="deletePoi('${poi._id}')">Delete</button>
+          <button onclick="deleteUser('${user._id}')">Delete</button>
         </td>
       `;
-      tr.id = poi._id;
+        tr.id = user._id;
         tbody.appendChild(tr);
-
-        const pos = [poi.lat, poi.lon];
-        const marker = L.marker(pos).addTo(map);
-        marker
-            .bindPopup(`<b>${poi.name}</b><br>${poi.description}`)
-            .openPopup();
     });
 
     resultsDiv.innerHTML = '';

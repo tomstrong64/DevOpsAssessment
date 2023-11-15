@@ -212,7 +212,7 @@ export const createAdmin = async (req, res) => {
             admin,
         });
         await user.save();
-        return res.status(201).json({ message: 'User Created' });
+        return res.status(201).json({ message: 'Admin Created' });
     } catch (e) {
         if (e.errors) {
             console.log(e.errors);
