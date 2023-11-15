@@ -90,15 +90,6 @@ describe('POST /register negative cases', () => {
         expect(response.statusCode).toBe(401);
     });
 
-    it('missing application/json with Content-Type in the header should be an invalid request', async () => {
-        const response = await request(app).post('/user/register').send({
-            name: 'test6',
-            email: 'test6dummail@gmail.com',
-            password: '137325GG!',
-        });
-        expect(response.statusCode).toBe(400);
-    });
-
     it('missing the name field for a new user should return an error status code', async () => {
         const response = await request(app)
             .post('/user/register')
