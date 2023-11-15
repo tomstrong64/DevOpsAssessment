@@ -154,3 +154,69 @@ async function deletePoi(id) {
         alert(`Error with POI ID ${id}: ${e}`);
     }
 }
+document.getElementById('get_users').addEventListener('click', async(e) => {
+     const token = localStorage.getItem('token');
+    const response = await fetch(`/user/list`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    const users = await response.json();
+    if (users.length == 0) {
+        alert('No Users Found');
+        return;
+    }
+    const resultsDiv = document.getElementById('users_results');
+    resultsDiv.innerHTML = '';
+
+    // Create table and table headings
+    const table = document.createElement('table');
+    const thead = document.createElement('thead');
+    const trHeadings = document.createElement('tr');
+    trHeadings.innerHTML = `
+      <th>Name</th>
+      <th>Type</th>
+      <th>Country</th>
+      <th>Region</th>
+      <th>Longitude</th>
+      <th>Latitude</th>
+      <th>Description</th>
+      <th>Update</th>
+      <th>Delete</th>
+    `;
+    thead.appendChild(trHeadings);
+    table.appendChild(thead);
+
+    // Add table rows
+    const tbody = document.createElement('tbody');
+    table.appendChild(tbody);
+    pois.forEach((poi) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+        <td>${poi.name}</td>
+        <td>${poi.type}</td>
+        <td>${poi.country}</td>
+        <td>${poi.region}</td>
+        <td>${poi.lon}</td>
+        <td>${poi.lat}</td>
+        <td>${poi.description}</td>
+        <td>
+          <a href="updatepoi.html?id=${poi._id}">Update</a>
+        </td>
+        <td>
+          <button onclick="deletePoi('${poi._id}')">Delete</button>
+        </td>
+      `;
+      tr.id = poi._id;
+        tbody.appendChild(tr);
+
+        const pos = [poi.lat, poi.lon];
+        const marker = L.marker(pos).addTo(map);
+        marker
+            .bindPopup(`<b>${poi.name}</b><br>${poi.description}`)
+            .openPopup();
+    });
+
+    resultsDiv.innerHTML = '';
+    resultsDiv.appendChild(table);
+});
