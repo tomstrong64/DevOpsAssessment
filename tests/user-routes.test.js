@@ -144,3 +144,37 @@ describe('POST /register negative cases', () => {
         expect(response.statusCode).toBe(400);
     });
 });
+
+describe('POST /login positive case', () => {
+    it('The user should be able to successfully login to the app with status code 200', async () => {
+        const response = await request(app)
+            .post('/user/login')
+            .set('Content-Type', 'application/json')
+            .send({
+                email: 'testingmail11@yahoo.com',
+                password: 'adbdfec2891',
+            });
+        expect(response.statusCode).toBe(200);
+    });
+    it("Upon successful login, the message inside the response should equal 'Login successful' ", async () => {
+        const response = await request(app)
+            .post('/user/login')
+            .set('Content-Type', 'application/json')
+            .send({
+                email: 'testingmail44@yahoo.com',
+                password: 'jumjams1234',
+            });
+        expect(response.body['message']).toEqual('Login successful');
+    });
+    it('Check if the token exists in the response body when user successfully logged in', async () => {
+        const response = await request(app)
+            .post('/user/login')
+            .set('Content-Type', 'application/json')
+            .send({
+                name: 'DUMMY_Alpha',
+                email: 'dum273@gmail.com',
+                password: 'luo2ry92@a1h',
+            });
+        expect(response.body['token']).toBeDefined();
+    });
+});
