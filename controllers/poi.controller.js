@@ -67,8 +67,8 @@ export const deletePoi = async (req, res) => {
         } else {
             // check if POI exists and is owned by user
             const poi = await POI.findOne({
-                _id: id,
-                user: res.locals.user.id,
+                _id: new mongoose.Types.ObjectId(id),
+                user: new mongoose.Types.ObjectId(user._id),
             });
 
             if (!poi) return res.status(404).json({ message: 'POI not found' });
