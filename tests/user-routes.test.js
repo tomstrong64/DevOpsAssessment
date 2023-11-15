@@ -75,6 +75,27 @@ describe('POST /register', () => {
             });
         expect(response.statusCode).toBe(201);
     }, 15000);
+    /*
+    it('The admin property of a newly registered non-admin user should be set to false by default', async () => {
+        const response = await request(app)
+            .post('/user/register')
+            .set('Content-Type', 'application/json')
+            .send({
+                name: 'test9',
+                email: 'test9dummymail@gmail.com',
+                password: 'allu!8yGHdt#@62',
+            });
+        let user_auth_token = response.body.token;
+
+        // Get the profile of the user to check the necessary property
+        const profileResponse = await request(app)
+            .get('/user/profile')
+            .set('Authorization', `Bearer ${user_auth_token}`)
+            .send();
+        expect(profileResponse.statusCode).toBe(200);
+        // This test will need to be rewritten.
+    });
+    */
 });
 
 describe('POST /register negative cases', () => {
