@@ -2,6 +2,7 @@ import { User } from '../models/User.js';
 import { POI } from '../models/Poi.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
 
 export const getUserById = async (req, res) => {
     try {
@@ -182,8 +183,8 @@ export const getAllUsers = async (req, res) => {
         const users = await User.find({});
         res.json(users);
     } catch (e) {
-        console.log(e)
-        res.status(500).json({ message:'Internal server error' });
+        console.log(e);
+        res.status(500).json({ message: 'Internal server error' });
     }
 };
 export const createAdmin = async (req, res) => {
@@ -229,13 +230,22 @@ export const deleteUser = async (req, res) => {
     const id = req.params.id;
     try {
         if (user.admin) {
-            await POI.deleteMany({user: id})
-            await User.findByIdAndRemove(id);
-            return res.status(200).json({
-                message: 'User Deleted successfully',
+            const founduser = await User.findOne({
+                _id: new mongoose.Types.ObjectId(id),
             });
+            if (founduser.admin) {
+                return res.status(403).send({
+                    message: `cannot delete a admin user.`,
+                });
+            } else {
+                await POI.deleteMany({ user: id });
+                await User.findByIdAndRemove(id);
+                return res.status(200).json({
+                    message: 'User Deleted successfully',
+                });
+            }
         } else {
-            await POI.deleteMany({user: user.id})
+            await POI.deleteMany({ user: user.id });
             await User.findByIdAndRemove(user.id);
             return res.status(200).json({
                 message: 'User Deleted successfully',
