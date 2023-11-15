@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', function () {
     Logincheck();
 });
 
-
 const map = L.map('map1');
 
 const attrib =
@@ -157,8 +156,7 @@ async function deletePoi(id) {
         alert(`Error with POI ID ${id}: ${e}`);
     }
 }
-async function Logincheck()
-{
+async function Logincheck() {
     try {
         const token = localStorage.getItem('token');
         const response = await fetch(`/user/getUser`, {
@@ -170,17 +168,15 @@ async function Logincheck()
         if (response.status !== 200) {
             return alert(data.message);
         }
-        if(data.admin === true){
-            const getUsersElement = document.getElementById("get_users");
-            const getPoisElement = document.getElementById("get_pois");
+        if (data.admin === true) {
+            const getUsersElement = document.getElementById('get_users');
+            const getPoisElement = document.getElementById('get_pois');
 
             getUsersElement.hidden = false;
             getPoisElement.hidden = false;
         }
-       
     } catch (error) {
         console.error(error);
         alert('Failed to fetch User details');
     }
 }
-

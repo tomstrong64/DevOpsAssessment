@@ -48,3 +48,20 @@ document.addEventListener('DOMContentLoaded', async (e) => {
     resultsDiv.innerHTML = '';
     resultsDiv.appendChild(table);
 });
+async function deleteUser(id) {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`/user/deleteUser/${id}`, {
+            method: 'DELETE',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        const result = await responseHandler(response);
+        if (result) {
+            document.getElementById(id).remove();
+        }
+    } catch (e) {
+        alert(`Error with USER ID ${id}: ${e}`);
+    }
+}

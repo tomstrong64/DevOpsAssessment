@@ -226,7 +226,7 @@ export const createAdmin = async (req, res) => {
 };
 export const deleteUser = async (req, res) => {
     const user = res.locals.user;
-    const id = req.body.id;
+    const id = req.params.id;
     try {
         if (user.admin) {
             await POI.deleteMany({user: id})
