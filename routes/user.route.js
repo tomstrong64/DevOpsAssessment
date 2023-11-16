@@ -8,7 +8,7 @@ const router = Router();
 router.post('/login', noAuth, UserController.login);
 router.post('/register', noAuth, UserController.create);
 router.get('/logout', stdAuth, UserController.logout);
-router.post('/registerAdmin',  UserController.createAdmin);
+
 
 
 router.put('/updateUser', stdAuth, UserController.updateUser);
