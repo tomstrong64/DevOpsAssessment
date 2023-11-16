@@ -257,3 +257,26 @@ export const deleteUser = async (req, res) => {
         });
     }
 };
+export const updateUserStatus = async (req, res) => {
+    const user = res.locals.user;
+    const id = req.params.id;
+    try {
+        const founduser = await User.findById(id);
+        if (founduser.admin) {
+            return res.status(403).send({
+                message: `cannot update an admin user.`,
+            });
+        } else {
+            await User.findByIdAndUpdate(id, { admin: true });
+            return res.status(200).json({
+                message: 'User Updated successfully',
+                redirect: '/allusers.html',
+            });
+        }
+    } catch (e) {
+        console.log(e);
+        return res.status(404).send({
+            message: `could not update user ${id}.`,
+        });
+    }
+};

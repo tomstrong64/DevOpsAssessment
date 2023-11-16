@@ -65,3 +65,19 @@ async function deleteUser(id) {
         alert(`Error with USER ID ${id}: ${e}`);
     }
 }
+async function UpdateUserStatus(id) {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`/user/updateUser/${id}`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        const result = await responseHandler(response);
+        if (result) {
+        }
+    } catch (e) {
+        alert(`Error with USER ID ${id}: ${e}`);
+    }
+}
