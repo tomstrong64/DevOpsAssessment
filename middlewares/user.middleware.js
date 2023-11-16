@@ -44,6 +44,12 @@ export const stdAuth = async (req, res, next) => {
                 redirect: '/login.html',
             });
         }
+        if (e instanceof jwt.MalformedTokenError) {
+            return res.status(401).json({
+                message: 'Malformed token! Please login again.',
+                redirect: '/login.html',
+            });
+        }
         return res.status(500).json({ message: 'Internal server error' });
     }
 };
