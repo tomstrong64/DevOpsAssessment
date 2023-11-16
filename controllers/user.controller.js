@@ -230,9 +230,7 @@ export const deleteUser = async (req, res) => {
     const id = req.params.id;
     try {
         if (user.admin) {
-            const founduser = await User.findOne({
-                _id: new mongoose.Types.ObjectId(id),
-            });
+            const founduser = await User.findById(id);
             if (founduser.admin) {
                 return res.status(403).send({
                     message: `cannot delete a admin user.`,
@@ -240,14 +238,14 @@ export const deleteUser = async (req, res) => {
             } else {
                 await POI.deleteMany({ user: id });
                 await User.findByIdAndRemove(id);
-                return res.status(200).json({
+                return res.status(500).json({
                     message: 'User Deleted successfully',
                 });
             }
         } else {
             await POI.deleteMany({ user: user.id });
             await User.findByIdAndRemove(user.id);
-            return res.status(200).json({
+            return res.status(500).json({
                 message: 'User Deleted successfully',
                 redirect: '/login.html',
             });
