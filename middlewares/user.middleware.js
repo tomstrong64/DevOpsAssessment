@@ -38,10 +38,19 @@ export const stdAuth = async (req, res, next) => {
         res.locals.user = user;
         return next();
     } catch (e) {
-        if (err instanceof jwt.TokenExpiredError){
-          return  res.redirect('/login.html');
-            
+        if (e instanceof jwt.TokenExpiredError) {
+            return res.status(401).json({
+                message: 'Session expired! Please login again.',
+                redirect: '/login.html',
+            });
         }
+        if (e instanceof jwt.JsonWebTokenError) {
+            return res.status(401).json({
+                message: 'Malformed token! Please login again.',
+                redirect: '/login.html',
+            });
+        }
+        console.log(e);
         return res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -71,6 +80,18 @@ export const adminAuth = async (req, res, next) => {
         res.locals.user = user;
         return next();
     } catch (e) {
+        if (e instanceof jwt.TokenExpiredError) {
+            return res.status(401).json({
+                message: 'Session expired! Please login again.',
+                redirect: '/login.html',
+            });
+        }
+        if (e instanceof jwt.JsonWebTokenError) {
+            return res.status(401).json({
+                message: 'Malformed token! Please login again.',
+                redirect: '/login.html',
+            });
+        }
         console.log(e);
         return res.status(500).json({ message: 'Internal server error' });
     }
