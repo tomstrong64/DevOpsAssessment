@@ -72,13 +72,17 @@ export const deletePoi = async (req, res) => {
             });
 
             if (!poi) return res.status(404).json({ message: 'POI not found' });
-
-            // delete POI
-            await POI.findByIdAndRemove(id);
+            try {
+                // delete POI
+                await POI.findByIdAndRemove(id);
+            } catch (e) {
+                console.log(e);
+                return res.status(404).json({
+                    message:
+                        'Poi was not removed successfully! Please try again',
+                });
+            }
         }
-        return res.status(200).json({
-            message: 'Poi Deleted successfully',
-        });
     } catch (e) {
         console.log(e);
         return res.status(500).json({ message: `could not delete poi ${id}.` });
