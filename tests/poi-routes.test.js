@@ -37,8 +37,8 @@ afterAll(async () => {
         .send();
 
     // Should have some code to close the connection to the database as well!
-    await POI.deleteMany({});
-    await User.deleteMany({});
+    //await POI.deleteMany({});
+    //await User.deleteMany({});
     mongoose.connection.close(); // To close the connection otherwise Jest reports the connection as open which is not good!
 });
 
@@ -51,7 +51,7 @@ describe('POST /pois/addPoi', () => {
             .send({
                 name: 'Swindon',
                 type: 'Test Type',
-                country: 'London',
+                country: 'London1',
                 region: 'Solent',
                 lat: 50.9105,
                 lon: -1.4049,
@@ -100,13 +100,16 @@ describe('DELETE /pois/deletePoi/:id', () => {
             .delete(`/pois/deletePoi/${poi_id}`)
             .set('Authorization', `Bearer ${auth_token}`);
         expect(response.status).toEqual(200);
-        expect(response.body).toEqual({ deleted: true });
+        expect(response.body).toEqual({ message: 'Poi Deleted successfully' });
     });
     it('Should return 404 if the ID does not exist', async () => {
         const invalidPoiId = 'invalid_id';
-        const response = await request(app).delete(
-            `/pois/deletePoi/${invalidPoiId}`
-        );
+        const response = await request(app)
+            .delete(`/pois/deletePoi/${invalidPoiId}`)
+            .set('Authorization', `Bearer ${auth_token}`);
         expect(response.status).toEqual(404);
+        expect(response.body).toEqual({
+            message: 'POI not found',
+        });
     });
 });
