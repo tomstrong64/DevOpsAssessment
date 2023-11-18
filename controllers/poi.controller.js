@@ -1,4 +1,5 @@
 import { POI } from '../models/Poi.js';
+import { User } from '../models/User.js';
 import mongoose from 'mongoose';
 import { User } from '../models/User.js';
 
@@ -63,26 +64,33 @@ export const deletePoi = async (req, res) => {
     const user = res.locals.user;
     const id = req.params.id;
     try {
+        let poi;
         if (user.admin) {
-            await POI.findByIdAndRemove(id);
+            // get POI regardless of user
+            poi = await POI.findById(id).populate('user');
         } else {
-            // check if POI exists and is owned by user
-            const poi = await POI.findOne({
+            // get POI for user
+            poi = await POI.findOne({
                 _id: new mongoose.Types.ObjectId(id),
                 user: new mongoose.Types.ObjectId(user._id),
             });
-
-            if (!poi) return res.status(404).json({ message: 'POI not found' });
-
-            // delete POI
-            await POI.findByIdAndRemove(id);
         }
-        return res.status(200).json({
-            message: 'Poi Deleted successfully',
+        // check if POI was found
+        if (!poi) return res.status(404).json({ message: 'POI not found' });
+
+        // stop admins from deleting other admins POIs
+        if (poi.user._id !== user._id && poi.user.admin)
+            return res.status(403).json({ message: 'Forbidden' });
+
+        // delete POI
+        await POI.findByIdAndRemove(id);
+
+        return res.json({
+            message: 'POI successfully deleted',
         });
     } catch (e) {
         console.log(e);
-        return res.status(500).json({ message: `could not delete poi ${id}.` });
+        return res.status(500).json({ message: 'Internal server error' });
     }
 };
 
