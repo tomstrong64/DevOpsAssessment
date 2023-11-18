@@ -1,4 +1,5 @@
 import { POI } from '../models/Poi.js';
+import { User } from '../models/User.js';
 import mongoose from 'mongoose';
 
 export const getPois = async (req, res) => {
@@ -65,7 +66,7 @@ export const deletePoi = async (req, res) => {
         let poi;
         if (user.admin) {
             // get POI regardless of user
-            poi = await POI.findById(id);
+            poi = await POI.findById(id).populate('user');
         } else {
             // get POI for user
             poi = await POI.findOne({
@@ -75,6 +76,10 @@ export const deletePoi = async (req, res) => {
         }
         // check if POI was found
         if (!poi) return res.status(404).json({ message: 'POI not found' });
+
+        // stop admins from deleting other admins POIs
+        if (poi.user._id !== user._id && poi.user.admin)
+            return res.status(403).json({ message: 'Forbidden' });
 
         // delete POI
         await POI.findByIdAndRemove(id);
