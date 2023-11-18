@@ -15,8 +15,9 @@ export const getUserById = async (req, res) => {
             return res.status(500).json({ message: 'No Users found' });
         }
         res.json(user);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
+    } catch (e) {
+        console.log(e)
+        res.status(500).json({ message: 'Internal server error' });
     }
 };
 export const login = async (req, res) => {
@@ -187,44 +188,7 @@ export const getAllUsers = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
-export const createAdmin = async (req, res) => {
-    try {
-        const email = req.body.email.toLowerCase();
-        const { name, password, admin } = req.body;
 
-        // Check if the password field is not blank
-        if (!password) {
-            return res
-                .status(400)
-                .json({ message: 'Password cannot be blank' });
-        }
-
-        // Check if the email already exists
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            return res.status(400).json({ message: 'Email already exists' });
-        }
-
-        // If email doesn't exist and password is provided, create a new user
-        const user = new User({
-            name,
-            email,
-            password,
-            admin,
-        });
-        await user.save();
-        return res.status(201).json({ message: 'Admin Created' });
-    } catch (e) {
-        if (e.errors) {
-            console.log(e.errors);
-            res.render('register.html', { errors: e.errors });
-            return;
-        }
-        return res.status(400).json({
-            message: JSON.parse(e),
-        });
-    }
-};
 export const deleteUser = async (req, res) => {
     const user = res.locals.user;
     const id = req.params.id;
@@ -238,27 +202,26 @@ export const deleteUser = async (req, res) => {
             } else {
                 await POI.deleteMany({ user: id });
                 await User.findByIdAndRemove(id);
-                return res.status(500).json({
+                return res.status(200).json({
                     message: 'User Deleted successfully',
                 });
             }
         } else {
             await POI.deleteMany({ user: user.id });
             await User.findByIdAndRemove(user.id);
-            return res.status(500).json({
+            return res.status(200).json({
                 message: 'User Deleted successfully',
                 redirect: '/login.html',
             });
         }
     } catch (e) {
         console.log(e);
-        return res.status(404).send({
+        return res.status(500).send({
             message: `could not delete user ${id}.`,
         });
     }
 };
 export const updateUserStatus = async (req, res) => {
-    const user = res.locals.user;
     const id = req.params.id;
     try {
         const founduser = await User.findById(id);
@@ -266,16 +229,15 @@ export const updateUserStatus = async (req, res) => {
             return res.status(403).send({
                 message: `cannot update an admin user.`,
             });
-        } else {
-            await User.findByIdAndUpdate(id, { admin: true });
-            return res.status(200).json({
-                message: 'User Updated successfully',
-                redirect: '/allusers.html',
-            });
         }
+        await User.findByIdAndUpdate(id, { admin: true });
+        return res.status(200).json({
+            message: 'User Updated successfully',
+            redirect: '/allusers.html',
+        });
     } catch (e) {
         console.log(e);
-        return res.status(404).send({
+        return res.status(500).send({
             message: `could not update user ${id}.`,
         });
     }
