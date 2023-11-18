@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const poiId = urlParams.get('id');
 
     try {
-        console.log(poiId)
         const token = localStorage.getItem('token');
         const response = await fetch(`/pois/${poiId}`, {
             headers: {
@@ -11,8 +10,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             },
         });
         const poi = await response.json();
-        console.log(poi)
-        
+
         if (response.status !== 200) {
             throw new Error(poi.message || 'Failed to fetch POI details');
         }
