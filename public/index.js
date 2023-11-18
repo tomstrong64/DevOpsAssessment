@@ -1,3 +1,4 @@
+let userId;
 document.addEventListener('DOMContentLoaded', function () {
     Logincheck();
 });
@@ -79,7 +80,7 @@ async function ajaxSearch(region) {
             Authorization: `Bearer ${token}`,
         },
     });
-    const pois = await ajaxResponse.json();
+    let pois = await ajaxResponse.json();
     if (pois.length == 0) {
         alert('No Pois Found');
         return;
@@ -108,6 +109,12 @@ async function ajaxSearch(region) {
     // Add table rows
     const tbody = document.createElement('tbody');
     table.appendChild(tbody);
+    if (userId) {
+        pois = pois.filter((poi) => {
+            if (poi.user !== userId) return false;
+            return true;
+        });
+    }
     pois.forEach((poi) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
@@ -174,6 +181,8 @@ async function Logincheck() {
 
             getUsersElement.hidden = false;
             getPoisElement.hidden = false;
+
+            userId = data._id;
         }
     } catch (error) {
         console.error(error);

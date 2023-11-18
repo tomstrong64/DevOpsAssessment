@@ -233,7 +233,7 @@ export const deleteUser = async (req, res) => {
             const founduser = await User.findById(id);
             if (founduser.admin) {
                 return res.status(403).send({
-                    message: `cannot delete a admin user.`,
+                    message: `cannot delete an admin user.`,
                 });
             } else {
                 await POI.deleteMany({ user: id });

@@ -25,7 +25,6 @@ document.addEventListener('DOMContentLoaded', async (e) => {
       <th>Longitude</th>
       <th>Latitude</th>
       <th>Description</th>
-      <th>User</th>
       <th>Delete</th>
     `;
     thead.appendChild(trHeadings);
@@ -44,14 +43,12 @@ document.addEventListener('DOMContentLoaded', async (e) => {
         <td>${poi.lon}</td>
         <td>${poi.lat}</td>
         <td>${poi.description}</td>
-        <td>${poi.user.admin}</td>
         <td>
           <button onclick="deletePoi('${poi._id}')">Delete</button>
         </td>
       `;
         tr.id = poi._id;
         tbody.appendChild(tr);
-
     });
 
     resultsDiv.innerHTML = '';

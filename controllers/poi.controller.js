@@ -1,5 +1,6 @@
 import { POI } from '../models/Poi.js';
 import mongoose from 'mongoose';
+import { User } from '../models/User.js';
 
 export const getPois = async (req, res) => {
     try {
