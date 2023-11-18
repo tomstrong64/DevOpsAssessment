@@ -62,30 +62,29 @@ export const deletePoi = async (req, res) => {
     const user = res.locals.user;
     const id = req.params.id;
     try {
+        let poi;
         if (user.admin) {
-            await POI.findByIdAndRemove(id);
+            // get POI regardless of user
+            poi = await POI.findById(id);
         } else {
-            // check if POI exists and is owned by user
-            const poi = await POI.findOne({
+            // get POI for user
+            poi = await POI.findOne({
                 _id: new mongoose.Types.ObjectId(id),
                 user: new mongoose.Types.ObjectId(user._id),
             });
-
-            if (!poi) return res.status(404).json({ message: 'POI not found' });
-            try {
-                // delete POI
-                await POI.findByIdAndRemove(id);
-            } catch (e) {
-                console.log(e);
-                return res.status(404).json({
-                    message:
-                        'Poi was not removed successfully! Please try again',
-                });
-            }
         }
+        // check if POI was found
+        if (!poi) return res.status(404).json({ message: 'POI not found' });
+
+        // delete POI
+        await POI.findByIdAndRemove(id);
+
+        return res.json({
+            message: 'POI successfully deleted',
+        });
     } catch (e) {
         console.log(e);
-        return res.status(500).json({ message: `could not delete poi ${id}.` });
+        return res.status(500).json({ message: 'Internal server error' });
     }
 };
 
