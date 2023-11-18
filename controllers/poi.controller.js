@@ -1,7 +1,6 @@
 import { POI } from '../models/Poi.js';
-import { User } from '../models/User.js';
 import mongoose from 'mongoose';
-import { User } from '../models/User.js';
+
 
 export const getPois = async (req, res) => {
     try {
@@ -79,7 +78,7 @@ export const deletePoi = async (req, res) => {
         if (!poi) return res.status(404).json({ message: 'POI not found' });
 
         // stop admins from deleting other admins POIs
-        if (poi.user._id !== user._id && poi.user.admin)
+        if (poi.user._id.toString() != user._id.toString() && poi.user.admin)
             return res.status(403).json({ message: 'Forbidden' });
 
         // delete POI
