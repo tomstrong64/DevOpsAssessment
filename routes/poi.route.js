@@ -128,6 +128,8 @@ router.post('/addPoi', stdAuth, PoiController.addPoi);
  *         description: Point of Interest deleted successfully
  *       401:
  *         description: Unauthorized. Authentication token is missing or invalid.
+ *       403:
+ *         description: Forbidden.
  *       404:
  *         description: Point of Interest not found
  *       500:
