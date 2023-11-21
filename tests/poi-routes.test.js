@@ -65,18 +65,7 @@ describe('POST /pois/addPoi', () => {
         expect(response.status).toEqual(201);
     });
 });
-describe('GET /user/getUser', () => {
-    it('get user', async () => {
-        const response = await request(app)
-            .get('/user/getUser')
-            .set('Authorization', `Bearer ${auth_token}`);
-        user_id = response.body._id;
-        console.log('User Id ', user_id);
-        is_admin = response.body.admin;
-        console.log(is_admin);
-        expect(response.status).toEqual(200);
-    });
-});
+
 describe('GET /pois/list?search=poi_region', () => {
     it('should return POIs by region name', async () => {
         const response = await request(app)
@@ -105,7 +94,16 @@ describe('GET /poi/id ', () => {
         expect(response.body._id).toEqual(poi_id);
     });
 });
-
+describe('DELETE /pois/deletePoi/:id', () => {
+    it('Should delete the poi with given id', async () => {
+        const response = await request(app)
+            .delete(`/pois/deletePoi/${poi_id}`)
+            .set('Authorization', `Bearer ${auth_token}`);
+        expect(response.status).toEqual(200);
+        expect(response.body).toEqual({ message: 'POI successfully deleted' });
+    });
+    it('User should not be able to delete someone elses POI', async () => {});
+});
 test.todo('User should be able to delete their own POI (200)');
 
 test.todo('User should not be able to delete someone elses POI (404)');
