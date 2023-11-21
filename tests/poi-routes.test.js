@@ -51,6 +51,15 @@ const adminUser = new User({
     password: 'admin1password',
     admin: true,
 });
+// Log in the admin user to get the token
+const adminResponse = await request(app)
+    .post('/user/login')
+    .set('Content-Type', 'application/json')
+    .send({
+        email: 'admin1test.com',
+        password: 'admin1password',
+    });
+const admin1Token = adminResponse.body.token;
 
 describe('POST /pois/addPoi', () => {
     it('should add new POI', async () => {
