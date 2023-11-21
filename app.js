@@ -9,6 +9,8 @@ import { initSwagger } from './swagger.js';
 
 const app = express();
 
+app.set('view engine', 'ejs'); // set up ejs for templating
+
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
