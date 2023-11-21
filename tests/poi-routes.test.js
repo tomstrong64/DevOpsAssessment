@@ -44,6 +44,23 @@ afterAll(async () => {
     mongoose.connection.close(); // To close the connection otherwise Jest reports the connection as open which is not good!
 });
 
+//Create Admin user
+const adminUser = new User({
+    name: 'Admin User1',
+    email: 'admin1@test.com',
+    password: 'admin1password',
+    admin: true,
+});
+
+// Log in the admin user to get the token
+const adminResponse = await request(app)
+    .post('/user/login')
+    .set('Content-Type', 'application/json')
+    .send({
+        email: 'admin@test.com',
+        password: 'adminpassword',
+    });
+
 describe('POST /pois/addPoi', () => {
     it('should add new POI', async () => {
         const response = await request(app)
@@ -104,8 +121,6 @@ describe('DELETE /pois/deletePoi/:id', () => {
     });
     it('User should not be able to delete someone elses POI', async () => {});
 });
-
-
 
 test.todo('User should not be able to delete someone elses POI (404)');
 
