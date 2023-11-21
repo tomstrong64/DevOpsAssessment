@@ -16,7 +16,7 @@ export const getUserById = async (req, res) => {
         }
         res.json(user);
     } catch (e) {
-        console.log(e)
+        console.log(e);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -55,7 +55,7 @@ export const login = async (req, res) => {
         return res.status(200).json({
             message: 'Login successful',
             token,
-            redirect: '/index.html',
+            redirect: '/index.ejs',
         });
     } catch (e) {
         console.log(e);
@@ -101,7 +101,7 @@ export const create = async (req, res) => {
         return res.status(201).json({
             message: 'User created successfully',
             token,
-            redirect: '/index.html',
+            redirect: '/index.ejs',
         });
     } catch (e) {
         console.log(e);
@@ -128,7 +128,7 @@ export const logout = async (req, res) => {
         // return success message
         return res.status(200).json({
             message: 'Logout successful',
-            redirect: '/login.html',
+            redirect: '/login.ejs',
         });
     } catch (e) {
         console.log(e);
@@ -170,7 +170,7 @@ export const updateUser = async (req, res) => {
         return res.status(200).json({
             updated: true,
             message: 'Updated successfully',
-            redirect: '/index.html',
+            redirect: '/index.ejs',
         });
     } catch (e) {
         res.status(500).json({ message: 'Internal server error' });
@@ -211,7 +211,7 @@ export const deleteUser = async (req, res) => {
             await User.findByIdAndRemove(user.id);
             return res.status(200).json({
                 message: 'User Deleted successfully',
-                redirect: '/login.html',
+                redirect: '/login.ejs',
             });
         }
     } catch (e) {
@@ -233,7 +233,7 @@ export const updateUserStatus = async (req, res) => {
         await User.findByIdAndUpdate(id, { admin: true });
         return res.status(200).json({
             message: 'User Updated successfully',
-            redirect: '/allusers.html',
+            redirect: '/allusers.ejs',
         });
     } catch (e) {
         console.log(e);
