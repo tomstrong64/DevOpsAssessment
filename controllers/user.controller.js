@@ -2,6 +2,7 @@ import { User } from '../models/User.js';
 import { POI } from '../models/Poi.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
 
 export const getUserById = async (req, res) => {
     try {
@@ -14,8 +15,9 @@ export const getUserById = async (req, res) => {
             return res.status(500).json({ message: 'No Users found' });
         }
         res.json(user);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
+    } catch (e) {
+        console.log(e)
+        res.status(500).json({ message: 'Internal server error' });
     }
 };
 export const login = async (req, res) => {
@@ -181,60 +183,31 @@ export const getAllUsers = async (req, res) => {
     try {
         const users = await User.find({});
         res.json(users);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
-export const createAdmin = async (req, res) => {
-    try {
-        const email = req.body.email.toLowerCase();
-        const { name, password, admin } = req.body;
-
-        // Check if the password field is not blank
-        if (!password) {
-            return res
-                .status(400)
-                .json({ message: 'Password cannot be blank' });
-        }
-
-        // Check if the email already exists
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            return res.status(400).json({ message: 'Email already exists' });
-        }
-
-        // If email doesn't exist and password is provided, create a new user
-        const user = new User({
-            name,
-            email,
-            password,
-            admin,
-        });
-        await user.save();
-        return res.status(201).json({ message: 'User Created' });
     } catch (e) {
-        if (e.errors) {
-            console.log(e.errors);
-            res.render('register.html', { errors: e.errors });
-            return;
-        }
-        return res.status(400).json({
-            message: JSON.parse(e),
-        });
+        console.log(e);
+        res.status(500).json({ message: 'Internal server error' });
     }
 };
+
 export const deleteUser = async (req, res) => {
     const user = res.locals.user;
-    const id = req.body.id;
+    const id = req.params.id;
     try {
         if (user.admin) {
-            await POI.deleteMany({user: id})
-            await User.findByIdAndRemove(id);
-            return res.status(200).json({
-                message: 'User Deleted successfully',
-            });
+            const founduser = await User.findById(id);
+            if (founduser.admin) {
+                return res.status(403).send({
+                    message: `cannot delete an admin user.`,
+                });
+            } else {
+                await POI.deleteMany({ user: id });
+                await User.findByIdAndRemove(id);
+                return res.status(200).json({
+                    message: 'User Deleted successfully',
+                });
+            }
         } else {
-            await POI.deleteMany({user: user.id})
+            await POI.deleteMany({ user: user.id });
             await User.findByIdAndRemove(user.id);
             return res.status(200).json({
                 message: 'User Deleted successfully',
@@ -243,8 +216,29 @@ export const deleteUser = async (req, res) => {
         }
     } catch (e) {
         console.log(e);
-        return res.status(404).send({
+        return res.status(500).send({
             message: `could not delete user ${id}.`,
+        });
+    }
+};
+export const updateUserStatus = async (req, res) => {
+    const id = req.params.id;
+    try {
+        const founduser = await User.findById(id);
+        if (founduser.admin) {
+            return res.status(403).send({
+                message: `cannot update an admin user.`,
+            });
+        }
+        await User.findByIdAndUpdate(id, { admin: true });
+        return res.status(200).json({
+            message: 'User Updated successfully',
+            redirect: '/allusers.html',
+        });
+    } catch (e) {
+        console.log(e);
+        return res.status(500).send({
+            message: `could not update user ${id}.`,
         });
     }
 };
