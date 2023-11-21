@@ -52,7 +52,7 @@ router.post('/login', noAuth, UserController.login);
  * /users/register:
  *   post:
  *     summary: User registration
- *     description: Register a new user.
+ *     description: Register a new user and generate an access token.
  *     requestBody:
  *       required: true
  *       content:
