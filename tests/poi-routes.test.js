@@ -95,7 +95,7 @@ describe('GET /poi/id ', () => {
     });
 });
 describe('DELETE /pois/deletePoi/:id', () => {
-    it('Should delete the poi with given id', async () => {
+    it('User should be able to delete their own POI (200)', async () => {
         const response = await request(app)
             .delete(`/pois/deletePoi/${poi_id}`)
             .set('Authorization', `Bearer ${auth_token}`);
@@ -104,7 +104,8 @@ describe('DELETE /pois/deletePoi/:id', () => {
     });
     it('User should not be able to delete someone elses POI', async () => {});
 });
-test.todo('User should be able to delete their own POI (200)');
+
+
 
 test.todo('User should not be able to delete someone elses POI (404)');
 
