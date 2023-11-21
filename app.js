@@ -17,6 +17,7 @@ app.use(express.urlencoded({ extended: false }));
 initSwagger(app);
 
 app.get('/', IndexRouter);
+app.get('/addpoi', IndexRouter);
 
 app.use('/user', UserRouter);
 
