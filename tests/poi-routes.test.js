@@ -150,7 +150,7 @@ describe('GET /poi/id ', () => {
     });
 });
 describe('DELETE /pois/deletePoi/:id', () => {
-    it('User should be able to delete their own POI (200)', async () => {
+    it('Normal User should be able to delete their own POI (200)', async () => {
         const response = await request(app)
             .delete(`/pois/deletePoi/${poi_id}`)
             .set('Authorization', `Bearer ${auth_token}`);
@@ -226,7 +226,7 @@ describe('DELETE /pois/deletePoi/:id', () => {
         expect(response.status).toEqual(403);
         expect(response.body).toEqual({ message: 'Forbidden' });
     });
-    it('Admin user should not be able to delete invalid poi (403)', async () => {
+    it('Admin user should not be able to delete invalid poi (400)', async () => {
         const invalidID = 'oiuytrfghjkkngf';
         const response = await request(app)
             .delete(`/pois/deletePoi/${invalidID}`)
@@ -234,7 +234,7 @@ describe('DELETE /pois/deletePoi/:id', () => {
         expect(response.status).toEqual(400);
     });
 
-    it('Normal user should not be able to delete invalid poi (404)', async () => {
+    it('Normal user should not be able to delete invalid poi (400)', async () => {
         const invalidIDNormalUser = 'oiuytrfghjkkngf';
         const response = await request(app)
             .delete(`/pois/deletePoi/${invalidIDNormalUser}`)
