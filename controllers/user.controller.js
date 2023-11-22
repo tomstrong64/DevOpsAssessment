@@ -139,8 +139,7 @@ export const logout = async (req, res) => {
 };
 
 export const updateUser = async (req, res) => {
-    const email = req.body.email.toLowerCase();
-    const { name, newpassword, confirmpassword, password } = req.body;
+    const { name, newpassword, confirmpassword, password, email } = req.body;
 
     try {
         // Check if the password field is not blank
@@ -162,7 +161,9 @@ export const updateUser = async (req, res) => {
 
         // If current password is correct, update the user's details
         if (name) user.name = name;
-        if (email) user.email = email;
+        if (email) user.email = email.toLowerCase();
+        if (newpassword !== confirmpassword)
+            return res.status(400).json({ message: 'Passwords do not match' });
         if (newpassword && newpassword === confirmpassword)
             user.password = await bcrypt.hash(newpassword, 10);
         await user.save();
