@@ -141,7 +141,7 @@ async function ajaxSearch(region) {
         <td>${poi.lat}</td>
         <td>${poi.description}</td>
         <td>
-          <a href="updatepoi.html?id=${poi._id}">Update</a>
+          <a href="/updatepoi?id=${poi._id}">Update</a>
         </td>
         <td>
           <button onclick="deletePoi('${poi._id}')">Delete</button>
