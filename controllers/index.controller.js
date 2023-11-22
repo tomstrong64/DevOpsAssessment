@@ -13,3 +13,6 @@ export const allusers = (req, res) => {
 export const updatepoi = (req, res) => {
     res.render('updatepoi');
 };
+export const updateuser = (req, res) => {
+    res.render('updateuser');
+};
