@@ -37,7 +37,7 @@ const router = Router();
 /**
  * @openapi
  * /pois/list:
- *   Tags: [POI]
+ *   tags: [POI]
  *   get:
  *     summary: Get a list of Points of Interest
  *     description: Get a list of Points of Interest. Requires standard authentication.
@@ -57,7 +57,7 @@ router.get('/list', stdAuth, PoiController.getPois);
 /**
  * @openapi
  * /pois/{id}:
- *  Tags: [POI]
+ *  tags: [POI]
  *   get:
  *     summary: Get a Point of Interest by ID
  *     description: Get a Point of Interest by ID. Requires standard authentication.
@@ -86,7 +86,7 @@ router.get('/:id', stdAuth, PoiController.getPoiById);
 /**
  * @openapi
  * /pois/addPoi:
- *  Tags: [POI]
+ *  tags: [POI]
  *   post:
  *     summary: Add a new Point of Interest
  *     description: Add a new Point of Interest. Requires standard authentication.
@@ -114,7 +114,7 @@ router.post('/addPoi', stdAuth, PoiController.addPoi);
 /**
  * @openapi
  * /pois/deletePoi/{id}:
- *  Tags: [POI]
+ *  tags: [POI]
  *   delete:
  *     summary: Delete a Point of Interest by ID
  *     description: Delete a Point of Interest by ID. Requires standard authentication.
@@ -145,7 +145,7 @@ router.delete('/deletePoi/:id', stdAuth, PoiController.deletePoi);
 /**
  * @openapi
  * /pois/updatePoi/{id}:
- * Tags: [POI]
+ * tags: [POI]
  *   put:
  *     summary: Update a Point of Interest by ID
  *     description: Update a Point of Interest by ID. Requires standard authentication.

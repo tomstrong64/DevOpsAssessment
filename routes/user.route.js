@@ -25,7 +25,7 @@ const router = Router();
 /**
  * @openapi
  * /user/login:
- *  Tags: [User]
+ *  tags: [User]
  *   post:
  *     summary: User login
  *     description: Authenticate a user and generate an access token.
@@ -51,7 +51,7 @@ router.post('/login', noAuth, UserController.login);
 /**
  * @openapi
  * /user/register:
- *  Tags: [User]
+ *  tags: [User]
  *   post:
  *     summary: User registration
  *     description: Register a new user and generate an access token.
@@ -77,7 +77,7 @@ router.post('/register', noAuth, UserController.create);
 /**
  * @openapi
  * /user/logout:
- * Tags: [User]
+ * tags: [User]
  *   get:
  *     summary: User logout
  *     description: Invalidate the user's access token.
@@ -96,7 +96,7 @@ router.get('/logout', stdAuth, UserController.logout);
 /**
  * @openapi
  * /user/updateUser:
- * Tags: [User]
+ * tags: [User]
  *   put:
  *     summary: Update user details
  *     description: Update the details of the currently authenticated user.
@@ -123,7 +123,7 @@ router.put('/updateUser', stdAuth, UserController.updateUser);
 /**
  * @openapi
  * /user/getUser:
- * Tags: [User]
+ * tags: [User]
  *   get:
  *     summary: Get user by ID
  *     description: Get user details by ID. Requires standard authentication.
@@ -142,7 +142,7 @@ router.get('/getUser', stdAuth, UserController.getUserById);
 /**
  * @openapi
  * /user/deleteUser/{id}:
- * Tags: [User]
+ * tags: [User]
  *   delete:
  *     summary: Delete user by ID
  *     description: Delete user by ID. Requires admin authentication.
@@ -172,7 +172,7 @@ router.delete('/deleteUser/:id', adminAuth, UserController.deleteUser);
 /**
  * @openapi
  * /user/updateUser/{id}:
- * Tags: [User]
+ * tags: [User]
  *   put:
  *     summary: Update user status by ID
  *     description: Update user status by ID. Requires admin authentication.
@@ -202,7 +202,7 @@ router.put('/updateUser/:id', adminAuth, UserController.updateUserStatus);
 /**
  * @openapi
  * /user/list:
- * Tags: [User]
+ * tags: [User]
  *   get:
  *     summary: Get all users
  *     description: Get a list of all users. Requires admin authentication.
