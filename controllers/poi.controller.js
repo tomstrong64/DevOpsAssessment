@@ -1,7 +1,6 @@
 import { POI } from '../models/Poi.js';
 import mongoose from 'mongoose';
 
-
 export const getPois = async (req, res) => {
     try {
         let pois;
@@ -33,12 +32,15 @@ export const getPois = async (req, res) => {
         return res.json(pois);
     } catch (e) {
         console.log(e);
-        res.status(500).json({ message: 'Internal server error' });
+        return res.status(500).json({ message: 'Internal server error' });
     }
 };
 
 export const getPoiById = async (req, res) => {
     try {
+        if (!mongoose.Types.ObjectId.isValid(req.params.id))
+            return res.status(400).json({ message: 'Invalid ID' });
+
         let poi;
 
         if (res.locals.user.admin) {
@@ -63,7 +65,11 @@ export const deletePoi = async (req, res) => {
     const user = res.locals.user;
     const id = req.params.id;
     try {
+        if (!mongoose.Types.ObjectId.isValid(req.params.id))
+            return res.status(400).json({ message: 'Invalid ID' });
+
         let poi;
+
         if (user.admin) {
             // get POI regardless of user
             poi = await POI.findById(id).populate('user');
@@ -77,8 +83,8 @@ export const deletePoi = async (req, res) => {
         // check if POI was found
         if (!poi) return res.status(404).json({ message: 'POI not found' });
 
-        // stop admins from deleting other admins POIs
-        if (poi.user._id.toString() !== user._id.toString() && poi.user.admin)
+        // stop admins from deleting other users POIs
+        if (poi.user._id.toString() !== user._id.toString())
             return res.status(403).json({ message: 'Forbidden' });
 
         // delete POI
@@ -123,7 +129,7 @@ export const addPoi = async (req, res) => {
         return res.status(201).json({
             poi: poi,
             message: 'Poi Added successfully',
-            redirect: '/index.html',
+            redirect: '/',
         });
     } catch (e) {
         console.log(e);
@@ -132,8 +138,10 @@ export const addPoi = async (req, res) => {
 };
 
 export const updatePoi = async (req, res) => {
+    const id = req.params.id;
     try {
-        const id = req.params.id;
+        if (!mongoose.Types.ObjectId.isValid(req.params.id))
+            return res.status(400).json({ message: 'Invalid ID' });
 
         // check if POI exists and is owned by user
         const poi = await POI.findOne({
@@ -154,7 +162,7 @@ export const updatePoi = async (req, res) => {
 
         return res.json({
             message: 'POI successfully updated',
-            redirect: '/index.html',
+            redirect: '/',
         });
     } catch (e) {
         console.log(e);
