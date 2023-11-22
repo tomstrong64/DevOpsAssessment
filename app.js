@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 initSwagger(app);
 
-app.get('/', IndexRouter);
+app.use(IndexRouter);
 
 app.use('/user', UserRouter);
 
