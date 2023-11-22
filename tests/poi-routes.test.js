@@ -234,6 +234,14 @@ describe('DELETE /pois/deletePoi/:id', () => {
         expect(response.status).toEqual(400);
     });
 
+    it('Normal user should not be able to delete invalid poi (404)', async () => {
+        const invalidIDNormalUser = 'oiuytrfghjkkngf';
+        const response = await request(app)
+            .delete(`/pois/deletePoi/${invalidIDNormalUser}`)
+            .set('Authorization', `Bearer ${admin1Token}`);
+        expect(response.status).toEqual(400);
+    });
+
     it('Admin user should not be able to delete none existing poi id (404)', async () => {
         const NoneExistingID = new mongoose.Types.ObjectId();
         const response = await request(app)
