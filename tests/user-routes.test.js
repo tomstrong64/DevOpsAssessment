@@ -259,3 +259,97 @@ describe('POST /login negative cases', () => {
         expect(response.statusCode).toBe(400);
     }, 15000);
 });
+
+// Testing requests to the updateUser route, both positive and negative
+describe('PUT /user/updateUser', () => {
+    it('Changing the user passord of a user should return an appropriate status code with necessary details', async () => {
+        const loginRequest = await request(app)
+            .post('/user/login')
+            .set('Content-Type', 'application/json')
+            .send({
+                email: 'testingmail44@yahoo.com',
+                password: 'jumjams1234',
+            });
+        auth_token = loginRequest.body.token;
+
+        const response = await request(app)
+            .put('/user/updateUser')
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${auth_token}`)
+            .send({
+                email: 'testingmail44@yahoo.com',
+                newpassword: 'ZmDhg&@GghDV611',
+                confirmpassword: 'ZmDhg&@GghDV611',
+                password: 'jumjams1234',
+            });
+        expect(response.statusCode).toBe(200);
+        expect(response.body['updated']).toBe(true);
+        expect(response.body['message']).toEqual('Updated successfully');
+        expect(response.body['redirect']).toBeDefined();
+    });
+    it('Error response code should be sent back if new password and the same password entered again do not match', async () => {
+        const loginRequest = await request(app)
+            .post('/user/login')
+            .set('Content-Type', 'application/json')
+            .send({
+                email: 'testingmail11@yahoo.com',
+                password: 'adbdfec2891',
+            });
+        auth_token = loginRequest.body.token;
+
+        const response = await request(app)
+            .put('/user/updateUser')
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${auth_token}`)
+            .send({
+                email: 'testingmail11@yahoo.com',
+                newpassword: 'xAio#8ue3N2y!G',
+                confirmpassword: 'xAio#8ue',
+                password: 'adbdfec2891',
+            });
+        expect(response.statusCode).toBe(400);
+    });
+    it('Error response code should be sent if the password field is blank when trying to update the current user details', async () => {
+        const loginRequest = await request(app)
+            .post('/user/login')
+            .set('Content-Type', 'application/json')
+            .send({
+                email: 'dum273@gmail.com',
+                password: 'luo2ry92@a1h',
+            });
+        auth_token = loginRequest.body.token;
+
+        const response = await request(app)
+            .put('/user/updateUser')
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${auth_token}`)
+            .send({
+                email: 'dum273@gmail.com',
+                newpassword: 'DJ#hKbE12dzmdqkoi1ytsv',
+                confirmpassword: 'DJ#hKbE12dzmdqkoi1ytsv',
+            });
+        expect(response.statusCode).toBe(400);
+    });
+    it('Error response code should be sent back if new password matches the old password stored in the database', async () => {
+        const loginRequest = await request(app)
+            .post('/user/login')
+            .set('Content-Type', 'application/json')
+            .send({
+                email: 'test9dummymail@gmail.com',
+                password: 'allu!8yGHdt#@62',
+            });
+        auth_token = loginRequest.body.token;
+
+        const response = await request(app)
+            .put('/user/updateUser')
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${auth_token}`)
+            .send({
+                email: 'test9dummymail@gmail.com',
+                newpassword: 'allu!8yGHdt#@62',
+                confirmpassword: 'allu!8yGHdt#@62',
+                password: 'allu!8yGHdt#@62',
+            });
+        expect(response.statusCode).toBe(400);
+    });
+});
