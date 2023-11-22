@@ -79,7 +79,7 @@ beforeAll(async () => {
     admin2Token = admin2Response.body.token;
     const newsecondUserAdmin = await request(app)
         .get('/user/getUser')
-        .set('Authorization', `Bearer ${admin1Token}`);
+        .set('Authorization', `Bearer ${admin2Token}`);
     const admin2ID = newsecondUserAdmin.body._id;
     //update a user to be an  Admin
     await User.updateOne({ _id: admin2ID }, { admin: true });
@@ -182,36 +182,62 @@ describe('DELETE /pois/deletePoi/:id', () => {
         expect(response.status).toEqual(404);
         expect(response.body).toEqual({ message: 'POI not found' });
     });
-});
+    it('Admin user should not be able to delete someone elses POI (403)', async () => {
+        const normalUserPoiResponse = await request(app)
+            .post('/pois/addPoi')
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${auth_token}`)
+            .send({
+                name: 'normal user POI',
+                type: 'Test Type',
+                country: 'London1',
+                region: 'Solent',
+                lat: 50.9105,
+                lon: -14.4049,
+                description: 'Test Description normal user',
+            });
 
-it('Admin user should not be able to delete someone elses POI (403)', async () => {
-    const normalUserPoiResponse = await request(app)
-        .post('/pois/addPoi')
-        .set('Content-Type', 'application/json')
-        .set('Authorization', `Bearer ${auth_token}`)
-        .send({
-            name: 'normal user POI',
-            type: 'Test Type',
-            country: 'London1',
-            region: 'Solent',
-            lat: 50.9105,
-            lon: -14.4049,
-            description: 'Test Description normal user',
-        });
+        const User_poiID = normalUserPoiResponse.body.poi._id;
+        const response = await request(app)
+            .delete(`/pois/deletePoi/${User_poiID}`)
+            .set('Authorization', `Bearer ${admin1Token}`);
+        expect(response.status).toEqual(403);
+        expect(response.body).toEqual({ message: 'Forbidden' });
+    });
+    it('Admin user should not be able to delete Admin POI (403)', async () => {
+        const Admin1UserPoiResponse = await request(app)
+            .post('/pois/addPoi')
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${admin1Token}`)
+            .send({
+                name: 'normal user POI',
+                type: 'Test Type',
+                country: 'London1',
+                region: 'Solent',
+                lat: 50.9105,
+                lon: -14.4049,
+                description: 'Test Description normal user',
+            });
 
-    const User_poiID = normalUserPoiResponse.body.poi._id;
-    const response = await request(app)
-        .delete(`/pois/deletePoi/${User_poiID}`)
-        .set('Authorization', `Bearer ${admin1Token}`);
-    expect(response.status).toEqual(403);
-    expect(response.body).toEqual({ message: 'Forbidden' });
+        const Admin1_poiID = Admin1UserPoiResponse.body.poi._id;
+        const response = await request(app)
+            .delete(`/pois/deletePoi/${Admin1_poiID}`)
+            .set('Authorization', `Bearer ${admin2Token}`);
+        expect(response.status).toEqual(403);
+        expect(response.body).toEqual({ message: 'Forbidden' });
+    });
+    it('Admin user should not be able to delete invalid poi (403)', async () => {
+        const invalidID = 'oiuytrfghjkkngf';
+        const response = await request(app)
+            .delete(`/pois/deletePoi/${invalidID}`)
+            .set('Authorization', `Bearer ${admin1Token}`);
+        expect(response.status).toEqual(400);
+    });
 });
 
 test.todo('User should not be able to delete non existent POI (404)');
 
 test.todo('User should not be able to delete POI by invalid ID (400)');
-
-test.todo('Admin should be able to delete any Users POI (200)');
 
 test.todo('Admin should not be able to delete another Admins POI (403)');
 
