@@ -118,24 +118,6 @@ router.put('/updateUser', stdAuth, UserController.updateUser);
 
 /**
  * @openapi
- * /user/profile:
- *   get:
- *     summary: Get user profile
- *     description: Get the profile of the currently authenticated user.
- *     security:
- *       - BearerAuth: []
- *     responses:
- *       200:
- *         description: User profile retrieved successfully.
- *       401:
- *         description: Unauthorized. Authentication token is missing or invalid.
- *       500:
- *         description: Internal Server Error.
- */
-router.get('/profile', stdAuth, UserController.profile);
-
-/**
- * @openapi
  * /user/getUser:
  *   get:
  *     summary: Get user by ID
