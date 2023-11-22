@@ -10,6 +10,8 @@ let poi_region;
 let poi_id;
 let user_id;
 let admin1;
+let admin1_poiID;
+let admin1Token;
 
 // SETUP FOR USER TEST
 beforeAll(async () => {
@@ -28,6 +30,23 @@ beforeAll(async () => {
             password: '12345',
         });
     auth_token = response.body.token;
+    //Create Admin user
+    const adminUser = new User({
+        name: 'Admin User1',
+        email: 'admin1@gmail.com',
+        password: 'admin1password',
+        admin: true,
+    });
+    await adminUser.save();
+    // Log in the admin user to get the token
+    const adminResponse = await request(app)
+        .post('/user/login')
+        .set('Content-Type', 'application/json')
+        .send({
+            email: 'admin1@gmail.com',
+            password: 'admin1password',
+        });
+    admin1Token = adminResponse.body.token;
 });
 
 // TEARDOWN
@@ -43,23 +62,6 @@ afterAll(async () => {
     await User.deleteMany({});
     mongoose.connection.close(); // To close the connection otherwise Jest reports the connection as open which is not good!
 });
-
-//Create Admin user
-const adminUser = new User({
-    name: 'Admin User1',
-    email: 'admin1@test.com',
-    password: 'admin1password',
-    admin: true,
-});
-// Log in the admin user to get the token
-const adminResponse = await request(app)
-    .post('/user/login')
-    .set('Content-Type', 'application/json')
-    .send({
-        email: 'admin1test.com',
-        password: 'admin1password',
-    });
-const admin1Token = adminResponse.body.token;
 
 describe('POST /pois/addPoi', () => {
     it('should add new POI', async () => {
@@ -119,10 +121,31 @@ describe('DELETE /pois/deletePoi/:id', () => {
         expect(response.status).toEqual(200);
         expect(response.body).toEqual({ message: 'POI successfully deleted' });
     });
-    it('User should not be able to delete someone elses POI', async () => {});
-});
 
-test.todo('User should not be able to delete someone elses POI (404)');
+    it('User should not be able to delete someone elses POI (403)', async () => {
+        console.log('Token', admin1Token);
+        const admin1PoiResponse = await request(app)
+            .post('/pois/addPoi')
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${admin1Token}`)
+            .send({
+                name: 'Admin 1 POI',
+                type: 'Test Type',
+                country: 'London1',
+                region: 'Solent',
+                lat: 50.9105,
+                lon: -14.4049,
+                description: 'Test Description Admin 1',
+            });
+        const POI1 = admin1PoiResponse.body;
+        console.log('POI:', POI1);
+        admin1_poiID = admin1PoiResponse.body._id;
+        const response = await request(app)
+            .delete(`/pois/deletePoi/${admin1_poiID}`)
+            .set('Authorization', `Bearer ${auth_token}`);
+        expect(response.status).toEqual(403);
+    });
+});
 
 test.todo('User should not be able to delete non existent POI (404)');
 
