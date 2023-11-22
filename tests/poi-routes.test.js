@@ -155,6 +155,29 @@ describe('DELETE /pois/deletePoi/:id', () => {
     });
 });
 
+it('Admin user should not be able to delete someone elses POI (403)', async () => {
+    const normalUserPoiResponse = await request(app)
+        .post('/pois/addPoi')
+        .set('Content-Type', 'application/json')
+        .set('Authorization', `Bearer ${auth_token}`)
+        .send({
+            name: 'normal user POI',
+            type: 'Test Type',
+            country: 'London1',
+            region: 'Solent',
+            lat: 50.9105,
+            lon: -14.4049,
+            description: 'Test Description normal user',
+        });
+
+    const User_poiID = normalUserPoiResponse.body.poi._id;
+    const response = await request(app)
+        .delete(`/pois/deletePoi/${User_poiID}`)
+        .set('Authorization', `Bearer ${admin1Token}`);
+    expect(response.status).toEqual(403);
+    expect(response.body).toEqual({ message: 'Forbidden' });
+});
+
 test.todo('User should not be able to delete non existent POI (404)');
 
 test.todo('User should not be able to delete POI by invalid ID (400)');
