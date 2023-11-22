@@ -22,6 +22,7 @@ app.get('/allpois', IndexRouter);
 app.get('/allusers', IndexRouter);
 app.get('/updatepoi', IndexRouter);
 app.get('/updateuser', IndexRouter);
+app.get('/register', IndexRouter);
 
 app.use('/user', UserRouter);
 

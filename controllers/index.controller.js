@@ -16,3 +16,6 @@ export const updatepoi = (req, res) => {
 export const updateuser = (req, res) => {
     res.render('updateuser');
 };
+export const register = (req, res) => {
+    res.render('register');
+};
