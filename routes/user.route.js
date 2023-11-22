@@ -26,6 +26,7 @@ const router = Router();
  * @openapi
  * /user/login:
  *   post:
+ *     tags: [User]
  *     summary: User login
  *     description: Authenticate a user and generate an access token.
  *     requestBody:
@@ -51,6 +52,7 @@ router.post('/login', noAuth, UserController.login);
  * @openapi
  * /user/register:
  *   post:
+ *     tags: [User]
  *     summary: User registration
  *     description: Register a new user and generate an access token.
  *     requestBody:
@@ -76,6 +78,7 @@ router.post('/register', noAuth, UserController.create);
  * @openapi
  * /user/logout:
  *   get:
+ *     tags: [User]
  *     summary: User logout
  *     description: Invalidate the user's access token.
  *     security:
@@ -94,6 +97,7 @@ router.get('/logout', stdAuth, UserController.logout);
  * @openapi
  * /user/updateUser:
  *   put:
+ *     tags: [User]
  *     summary: Update user details
  *     description: Update the details of the currently authenticated user.
  *     security:
@@ -120,6 +124,7 @@ router.put('/updateUser', stdAuth, UserController.updateUser);
  * @openapi
  * /user/getUser:
  *   get:
+ *     tags: [User]
  *     summary: Get user by ID
  *     description: Get user details by ID. Requires standard authentication.
  *     security:
@@ -138,6 +143,7 @@ router.get('/getUser', stdAuth, UserController.getUserById);
  * @openapi
  * /user/deleteUser/{id}:
  *   delete:
+ *     tags: [User]
  *     summary: Delete user by ID
  *     description: Delete user by ID. Requires admin authentication.
  *     security:
@@ -167,6 +173,7 @@ router.delete('/deleteUser/:id', adminAuth, UserController.deleteUser);
  * @openapi
  * /user/updateUser/{id}:
  *   put:
+ *     tags: [User]
  *     summary: Update user status by ID
  *     description: Update user status by ID. Requires admin authentication.
  *     security:
@@ -196,6 +203,7 @@ router.put('/updateUser/:id', adminAuth, UserController.updateUserStatus);
  * @openapi
  * /user/list:
  *   get:
+ *     tags: [User]
  *     summary: Get all users
  *     description: Get a list of all users. Requires admin authentication.
  *     security:

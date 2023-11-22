@@ -41,13 +41,13 @@ export const stdAuth = async (req, res, next) => {
         if (e instanceof jwt.TokenExpiredError) {
             return res.status(401).json({
                 message: 'Session expired! Please login again.',
-                redirect: '/login.html',
+                redirect: '/login.ejs',
             });
         }
         if (e instanceof jwt.JsonWebTokenError) {
             return res.status(401).json({
                 message: 'Malformed token! Please login again.',
-                redirect: '/login.html',
+                redirect: '/login.ejs',
             });
         }
         console.log(e);
@@ -83,13 +83,13 @@ export const adminAuth = async (req, res, next) => {
         if (e instanceof jwt.TokenExpiredError) {
             return res.status(401).json({
                 message: 'Session expired! Please login again.',
-                redirect: '/login.html',
+                redirect: '/login.ejs',
             });
         }
         if (e instanceof jwt.JsonWebTokenError) {
             return res.status(401).json({
                 message: 'Malformed token! Please login again.',
-                redirect: '/login.html',
+                redirect: '/login.ejs',
             });
         }
         console.log(e);

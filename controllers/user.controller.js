@@ -55,7 +55,7 @@ export const login = async (req, res) => {
         return res.status(200).json({
             message: 'Login successful',
             token,
-            redirect: '/index.html',
+            redirect: '/',
         });
     } catch (e) {
         console.log(e);
@@ -78,7 +78,7 @@ export const create = async (req, res) => {
         if (existing)
             return res.status(401).json({
                 message: 'A user with this email already exists',
-                redirect: '/user/login',
+                redirect: '/login',
             });
 
         // create user
@@ -101,7 +101,7 @@ export const create = async (req, res) => {
         return res.status(201).json({
             message: 'User created successfully',
             token,
-            redirect: '/index.html',
+            redirect: '/',
         });
     } catch (e) {
         console.log(e);
@@ -128,7 +128,7 @@ export const logout = async (req, res) => {
         // return success message
         return res.status(200).json({
             message: 'Logout successful',
-            redirect: '/login.html',
+            redirect: '/login',
         });
     } catch (e) {
         console.log(e);
@@ -139,8 +139,7 @@ export const logout = async (req, res) => {
 };
 
 export const updateUser = async (req, res) => {
-    const email = req.body.email.toLowerCase();
-    const { name, newpassword, confirmpassword, password } = req.body;
+    const { name, newpassword, confirmpassword, password, email } = req.body;
 
     try {
         // Check if the password field is not blank
@@ -162,7 +161,9 @@ export const updateUser = async (req, res) => {
 
         // If current password is correct, update the user's details
         if (name) user.name = name;
-        if (email) user.email = email;
+        if (email) user.email = email.toLowerCase();
+        if (newpassword !== confirmpassword)
+            return res.status(400).json({ message: 'Passwords do not match' });
         if (newpassword && newpassword === confirmpassword)
             user.password = await bcrypt.hash(newpassword, 10);
         await user.save();
@@ -170,7 +171,7 @@ export const updateUser = async (req, res) => {
         return res.status(200).json({
             updated: true,
             message: 'Updated successfully',
-            redirect: '/index.html',
+            redirect: '/',
         });
     } catch (e) {
         return res.status(500).json({ message: 'Internal server error' });
@@ -212,7 +213,7 @@ export const deleteUser = async (req, res) => {
             await User.findByIdAndRemove(user.id);
             return res.status(200).json({
                 message: 'User Deleted successfully',
-                redirect: '/login.html',
+                redirect: '/login',
             });
         }
     } catch (e) {
@@ -237,7 +238,7 @@ export const updateUserStatus = async (req, res) => {
         await User.findByIdAndUpdate(id, { admin: true });
         return res.status(200).json({
             message: 'User Updated successfully',
-            redirect: '/allusers.html',
+            redirect: '/allusers',
         });
     } catch (e) {
         console.log(e);

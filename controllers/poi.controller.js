@@ -32,7 +32,7 @@ export const getPois = async (req, res) => {
         return res.json(pois);
     } catch (e) {
         console.log(e);
-       return res.status(500).json({ message: 'Internal server error' });
+        return res.status(500).json({ message: 'Internal server error' });
     }
 };
 
@@ -83,8 +83,8 @@ export const deletePoi = async (req, res) => {
         // check if POI was found
         if (!poi) return res.status(404).json({ message: 'POI not found' });
 
-        // stop admins from deleting other admins POIs
-        if (poi.user._id.toString() !== user._id.toString() && poi.user.admin)
+        // stop admins from deleting other users POIs
+        if (poi.user._id.toString() !== user._id.toString())
             return res.status(403).json({ message: 'Forbidden' });
 
         // delete POI
@@ -129,7 +129,7 @@ export const addPoi = async (req, res) => {
         return res.status(201).json({
             poi: poi,
             message: 'Poi Added successfully',
-            redirect: '/index.html',
+            redirect: '/',
         });
     } catch (e) {
         console.log(e);
@@ -162,7 +162,7 @@ export const updatePoi = async (req, res) => {
 
         return res.json({
             message: 'POI successfully updated',
-            redirect: '/index.html',
+            redirect: '/',
         });
     } catch (e) {
         console.log(e);
