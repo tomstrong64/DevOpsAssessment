@@ -233,10 +233,18 @@ describe('DELETE /pois/deletePoi/:id', () => {
             .set('Authorization', `Bearer ${admin1Token}`);
         expect(response.status).toEqual(400);
     });
-    it('Admin user should not be able to delete none existing poi id (403)', async () => {
+
+    it('Admin user should not be able to delete none existing poi id (404)', async () => {
         const NoneExistingID = new mongoose.Types.ObjectId();
         const response = await request(app)
             .delete(`/pois/deletePoi/${NoneExistingID}`)
+            .set('Authorization', `Bearer ${admin1Token}`);
+        expect(response.status).toEqual(404);
+    });
+    it('Normal user should not be able to delete none existing poi id (404)', async () => {
+        const NoneExistingIDNormalUser = new mongoose.Types.ObjectId();
+        const response = await request(app)
+            .delete(`/pois/deletePoi/${NoneExistingIDNormalUser}`)
             .set('Authorization', `Bearer ${admin1Token}`);
         expect(response.status).toEqual(404);
     });
