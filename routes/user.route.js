@@ -24,7 +24,7 @@ const router = Router();
 
 /**
  * @openapi
- * /users/login:
+ * /user/login:
  *   post:
  *     summary: User login
  *     description: Authenticate a user and generate an access token.
@@ -49,7 +49,7 @@ router.post('/login', noAuth, UserController.login);
 
 /**
  * @openapi
- * /users/register:
+ * /user/register:
  *   post:
  *     summary: User registration
  *     description: Register a new user and generate an access token.
@@ -74,7 +74,7 @@ router.post('/register', noAuth, UserController.create);
 
 /**
  * @openapi
- * /users/logout:
+ * /user/logout:
  *   get:
  *     summary: User logout
  *     description: Invalidate the user's access token.
@@ -92,7 +92,7 @@ router.get('/logout', stdAuth, UserController.logout);
 
 /**
  * @openapi
- * /users/updateUser:
+ * /user/updateUser:
  *   put:
  *     summary: Update user details
  *     description: Update the details of the currently authenticated user.
@@ -118,7 +118,7 @@ router.put('/updateUser', stdAuth, UserController.updateUser);
 
 /**
  * @openapi
- * /users/profile:
+ * /user/profile:
  *   get:
  *     summary: Get user profile
  *     description: Get the profile of the currently authenticated user.
@@ -136,7 +136,7 @@ router.get('/profile', stdAuth, UserController.profile);
 
 /**
  * @openapi
- * /users/getUser:
+ * /user/getUser:
  *   get:
  *     summary: Get user by ID
  *     description: Get user details by ID. Requires standard authentication.
@@ -154,7 +154,7 @@ router.get('/getUser', stdAuth, UserController.getUserById);
 
 /**
  * @openapi
- * /users/deleteUser/{id}:
+ * /user/deleteUser/{id}:
  *   delete:
  *     summary: Delete user by ID
  *     description: Delete user by ID. Requires admin authentication.
@@ -183,7 +183,7 @@ router.delete('/deleteUser/:id', adminAuth, UserController.deleteUser);
 
 /**
  * @openapi
- * /users/updateUser/{id}:
+ * /user/updateUser/{id}:
  *   put:
  *     summary: Update user status by ID
  *     description: Update user status by ID. Requires admin authentication.
@@ -212,7 +212,7 @@ router.put('/updateUser/:id', adminAuth, UserController.updateUserStatus);
 
 /**
  * @openapi
- * /users/list:
+ * /user/list:
  *   get:
  *     summary: Get all users
  *     description: Get a list of all users. Requires admin authentication.
