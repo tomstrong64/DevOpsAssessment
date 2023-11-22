@@ -17,6 +17,12 @@ let userId;
 let Lat;
 let Lon;
 let map;
+const customIcon = L.icon({
+    iconUrl: 'currentlocationicon.png',
+    iconSize: [32, 32], // Adjust the size as needed
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -32],
+});
 document.addEventListener('DOMContentLoaded', function () {
     Logincheck();
     getLocation();
@@ -74,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         body: JSON.stringify(poi),
                     });
 
-                    await responseHandler(response);
+                    await responseHandler(response, true);
                     const pos = [lat, lon];
                     const marker = L.marker(pos).addTo(map);
                     marker
@@ -210,7 +216,7 @@ async function Logincheck() {
 }
 function getLocation() {
     if (navigator.geolocation) {
-        navigator.geolocation.watchPosition(showPosition);
+        navigator.geolocation.watchPosition(showPosition, showError);
     } else {
         alert('Geolocation is not supported by this browser.');
     }
@@ -219,4 +225,24 @@ function showPosition(position) {
     Lat = position.coords.latitude;
     Lon = position.coords.longitude;
     map.setView([Lat, Lon], 14);
+    L.marker([Lat, Lon], { icon: customIcon }).addTo(map);
+}
+function showError(error) {
+    switch (error.code) {
+        case error.PERMISSION_DENIED:
+            alert('User denied the request for Geolocation.');
+            const currrentLocation = [51.51, -0.1];
+            map.setView(currrentLocation, 14);
+
+            break;
+        case error.POSITION_UNAVAILABLE:
+            alert('Location information is unavailable.');
+            break;
+        case error.TIMEOUT:
+            alert('The request to get user location timed out.');
+            break;
+        case error.UNKNOWN_ERROR:
+            alert('An unknown error occurred.');
+            break;
+    }
 }
