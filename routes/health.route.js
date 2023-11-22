@@ -8,7 +8,7 @@ const router = Router();
  * @openapi
  * /healthcheck:
  *   get:
- *   tags: [Health]
+ *     tags: [Health]
  *     summary: Check the health of the API
  *     description: Check the health of the API
  *     responses:
