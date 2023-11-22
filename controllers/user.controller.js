@@ -178,9 +178,7 @@ export const updateUser = async (req, res) => {
         return res.status(500).json({ message: 'Internal server error' });
     }
 };
-export const profile = async (req, res) => {
-    return res.render('updateuser');
-};
+
 export const getAllUsers = async (req, res) => {
     try {
         const users = await User.find({});
