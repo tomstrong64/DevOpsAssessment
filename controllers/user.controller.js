@@ -19,7 +19,7 @@ export const getUserById = async (req, res) => {
         res.json(user);
     } catch (e) {
         console.log(e);
-        res.status(500).json({ message: 'Internal server error' });
+       return res.status(500).json({ message: 'Internal server error' });
     }
 };
 export const login = async (req, res) => {
@@ -175,19 +175,19 @@ export const updateUser = async (req, res) => {
             redirect: '/index.html',
         });
     } catch (e) {
-        res.status(500).json({ message: 'Internal server error' });
+        return res.status(500).json({ message: 'Internal server error' });
     }
 };
 export const profile = async (req, res) => {
-    res.render('updateuser');
+    return res.render('updateuser');
 };
 export const getAllUsers = async (req, res) => {
     try {
         const users = await User.find({});
-        res.json(users);
+        return res.json(users);
     } catch (e) {
         console.log(e);
-        res.status(500).json({ message: 'Internal server error' });
+        return res.status(500).json({ message: 'Internal server error' });
     }
 };
 

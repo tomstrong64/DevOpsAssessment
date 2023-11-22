@@ -32,7 +32,7 @@ export const getPois = async (req, res) => {
         return res.json(pois);
     } catch (e) {
         console.log(e);
-        res.status(500).json({ message: 'Internal server error' });
+       return res.status(500).json({ message: 'Internal server error' });
     }
 };
 
