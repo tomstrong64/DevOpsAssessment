@@ -96,6 +96,33 @@ describe('POST /register', () => {
         expect(profileResponse.body['admin']).toBe(false);
         // This test will need to be rewritten.
     }, 25000);
+
+    it('The admin property of a registered admin user should be true after the document is edited in the database.', async () => {
+        const response = await request(app)
+            .post('/user/register')
+            .set('Content-Type', 'application/json')
+            .send({
+                name: 'testAdminDummy1',
+                email: 'dummyAdmins82@outlook.com',
+                password: 'Akn#Rcjy7!',
+            });
+        let ADauth_user_token = response.body.token;
+
+        // Request to getUser route to get this newly registered user
+        const checkResponse = await request(app)
+            .get('/user/getUser')
+            .set('Authorization', `Bearer ${ADauth_user_token}`)
+            .send();
+        let ad_user_id = checkResponse.body['_id'];
+        await User.updateOne({ _id: ad_user_id }, { admin: true });
+
+        const adResponse = await request(app)
+            .get('/user/getUser')
+            .set('Authorization', `Bearer ${ADauth_user_token}`)
+            .send();
+        expect(adResponse.statusCode).toBe(200);
+        expect(adResponse.body['admin']).toBe(true);
+    });
 });
 
 describe('POST /register negative cases', () => {
