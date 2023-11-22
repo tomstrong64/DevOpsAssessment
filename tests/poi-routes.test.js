@@ -31,13 +31,15 @@ beforeAll(async () => {
         });
     auth_token = response.body.token;
     //Create Admin user
-    const adminUser = new User({
-        name: 'Admin User1',
-        email: 'admin1@gmail.com',
-        password: 'admin1password',
-        admin: true,
-    });
-    await adminUser.save();
+    const RegisterNewUserResponse = await request(app)
+        .post('/user/register')
+        .set('Content-Type', 'application/json')
+        .send({
+            name: 'Admin',
+            email: 'admin1@gmail.com',
+            password: 'admin1password',
+        });
+
     // Log in the admin user to get the token
     const adminResponse = await request(app)
         .post('/user/login')
@@ -47,6 +49,11 @@ beforeAll(async () => {
             password: 'admin1password',
         });
     admin1Token = adminResponse.body.token;
+    const newUserAdmin = await request(app)
+        .get('/user/getUser')
+        .set('Authorization', `Bearer ${admin1Token}`);
+    const adminID = newUserAdmin.body._id;
+    await User.updateOne({ _id: adminID }, { admin: true });
 });
 
 // TEARDOWN
@@ -122,8 +129,7 @@ describe('DELETE /pois/deletePoi/:id', () => {
         expect(response.body).toEqual({ message: 'POI successfully deleted' });
     });
 
-    it('User should not be able to delete someone elses POI (403)', async () => {
-        console.log('Token', admin1Token);
+    it('Normal User should not be able to delete someone elses POI (404)', async () => {
         const admin1PoiResponse = await request(app)
             .post('/pois/addPoi')
             .set('Content-Type', 'application/json')
@@ -139,11 +145,13 @@ describe('DELETE /pois/deletePoi/:id', () => {
             });
         const POI1 = admin1PoiResponse.body;
         console.log('POI:', POI1);
-        admin1_poiID = admin1PoiResponse.body._id;
+        admin1_poiID = admin1PoiResponse.body.poi._id;
+        console.log(admin1_poiID);
         const response = await request(app)
             .delete(`/pois/deletePoi/${admin1_poiID}`)
             .set('Authorization', `Bearer ${auth_token}`);
-        expect(response.status).toEqual(403);
+        expect(response.status).toEqual(404);
+        expect(response.body).toEqual({ message: 'POI not found' });
     });
 });
 
