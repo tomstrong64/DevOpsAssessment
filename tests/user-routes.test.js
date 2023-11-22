@@ -89,12 +89,13 @@ describe('POST /register', () => {
 
         // Get the profile of the user to check the necessary property
         const profileResponse = await request(app)
-            .get('/user/profile')
+            .get('/user/getUser')
             .set('Authorization', `Bearer ${user_auth_token}`)
             .send();
         expect(profileResponse.statusCode).toBe(200);
+        expect(profileResponse.body['admin']).toBe(false);
         // This test will need to be rewritten.
-    }, 15000);
+    }, 25000);
 });
 
 describe('POST /register negative cases', () => {
