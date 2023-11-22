@@ -14,10 +14,10 @@ export const getUserById = async (req, res) => {
         } else {
             return res.status(500).json({ message: 'No Users found' });
         }
-        res.json(user);
+        return res.json(user);
     } catch (e) {
-        console.log(e)
-        res.status(500).json({ message: 'Internal server error' });
+        console.log(e);
+        return res.status(500).json({ message: 'Internal server error' });
     }
 };
 export const login = async (req, res) => {
@@ -55,7 +55,7 @@ export const login = async (req, res) => {
         return res.status(200).json({
             message: 'Login successful',
             token,
-            redirect: '/index.html',
+            redirect: '/',
         });
     } catch (e) {
         console.log(e);
@@ -78,7 +78,7 @@ export const create = async (req, res) => {
         if (existing)
             return res.status(401).json({
                 message: 'A user with this email already exists',
-                redirect: '/user/login',
+                redirect: '/login',
             });
 
         // create user
@@ -101,7 +101,7 @@ export const create = async (req, res) => {
         return res.status(201).json({
             message: 'User created successfully',
             token,
-            redirect: '/index.html',
+            redirect: '/',
         });
     } catch (e) {
         console.log(e);
@@ -128,7 +128,7 @@ export const logout = async (req, res) => {
         // return success message
         return res.status(200).json({
             message: 'Logout successful',
-            redirect: '/login.html',
+            redirect: '/login',
         });
     } catch (e) {
         console.log(e);
@@ -170,22 +170,20 @@ export const updateUser = async (req, res) => {
         return res.status(200).json({
             updated: true,
             message: 'Updated successfully',
-            redirect: '/index.html',
+            redirect: '/',
         });
     } catch (e) {
-        res.status(500).json({ message: 'Internal server error' });
+        return res.status(500).json({ message: 'Internal server error' });
     }
 };
-export const profile = async (req, res) => {
-    res.render('updateuser');
-};
+
 export const getAllUsers = async (req, res) => {
     try {
         const users = await User.find({});
-        res.json(users);
+        return res.json(users);
     } catch (e) {
         console.log(e);
-        res.status(500).json({ message: 'Internal server error' });
+        return res.status(500).json({ message: 'Internal server error' });
     }
 };
 
@@ -193,6 +191,9 @@ export const deleteUser = async (req, res) => {
     const user = res.locals.user;
     const id = req.params.id;
     try {
+        if (!mongoose.Types.ObjectId.isValid(req.params.id))
+            return res.status(400).json({ message: 'Invalid ID' });
+
         if (user.admin) {
             const founduser = await User.findById(id);
             if (founduser.admin) {
@@ -211,7 +212,7 @@ export const deleteUser = async (req, res) => {
             await User.findByIdAndRemove(user.id);
             return res.status(200).json({
                 message: 'User Deleted successfully',
-                redirect: '/login.html',
+                redirect: '/login',
             });
         }
     } catch (e) {
@@ -224,6 +225,9 @@ export const deleteUser = async (req, res) => {
 export const updateUserStatus = async (req, res) => {
     const id = req.params.id;
     try {
+        if (!mongoose.Types.ObjectId.isValid(req.params.id))
+            return res.status(400).json({ message: 'Invalid ID' });
+
         const founduser = await User.findById(id);
         if (founduser.admin) {
             return res.status(403).send({
@@ -233,7 +237,7 @@ export const updateUserStatus = async (req, res) => {
         await User.findByIdAndUpdate(id, { admin: true });
         return res.status(200).json({
             message: 'User Updated successfully',
-            redirect: '/allusers.html',
+            redirect: '/allusers',
         });
     } catch (e) {
         console.log(e);
