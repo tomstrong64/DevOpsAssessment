@@ -55,7 +55,7 @@ export const login = async (req, res) => {
         return res.status(200).json({
             message: 'Login successful',
             token,
-            redirect: '/index.ejs',
+            redirect: '/index',
         });
     } catch (e) {
         console.log(e);
@@ -78,7 +78,7 @@ export const create = async (req, res) => {
         if (existing)
             return res.status(401).json({
                 message: 'A user with this email already exists',
-                redirect: '/user/login',
+                redirect: '/login',
             });
 
         // create user
@@ -101,7 +101,7 @@ export const create = async (req, res) => {
         return res.status(201).json({
             message: 'User created successfully',
             token,
-            redirect: '/index.ejs',
+            redirect: '/index',
         });
     } catch (e) {
         console.log(e);
@@ -128,7 +128,7 @@ export const logout = async (req, res) => {
         // return success message
         return res.status(200).json({
             message: 'Logout successful',
-            redirect: '/login.ejs',
+            redirect: '/login',
         });
     } catch (e) {
         console.log(e);
@@ -170,7 +170,7 @@ export const updateUser = async (req, res) => {
         return res.status(200).json({
             updated: true,
             message: 'Updated successfully',
-            redirect: '/index.ejs',
+            redirect: '/index',
         });
     } catch (e) {
         res.status(500).json({ message: 'Internal server error' });
@@ -211,7 +211,7 @@ export const deleteUser = async (req, res) => {
             await User.findByIdAndRemove(user.id);
             return res.status(200).json({
                 message: 'User Deleted successfully',
-                redirect: '/login.ejs',
+                redirect: '/login',
             });
         }
     } catch (e) {
@@ -233,7 +233,7 @@ export const updateUserStatus = async (req, res) => {
         await User.findByIdAndUpdate(id, { admin: true });
         return res.status(200).json({
             message: 'User Updated successfully',
-            redirect: '/allusers.ejs',
+            redirect: '/allusers',
         });
     } catch (e) {
         console.log(e);
