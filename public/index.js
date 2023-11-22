@@ -18,10 +18,9 @@ let Lat;
 let Lon;
 let map;
 document.addEventListener('DOMContentLoaded', function () {
-    console.log(Lat)
     Logincheck();
     getLocation();
-console.log(Lat)
+
     map = L.map('map1');
 
     const attrib =
@@ -31,7 +30,6 @@ console.log(Lat)
         'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         { attribution: attrib }
     ).addTo(map);
-    
 
     map.on('click', async (e) => {
         const lat = `${e.latlng.lat}`;
@@ -221,5 +219,4 @@ function showPosition(position) {
     Lat = position.coords.latitude;
     Lon = position.coords.longitude;
     map.setView([Lat, Lon], 14);
-    console.log(Lat);
 }
