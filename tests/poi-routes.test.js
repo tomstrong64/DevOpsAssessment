@@ -8,8 +8,6 @@ import { POI } from '../models/Poi.js';
 let auth_token;
 let poi_region;
 let poi_id;
-let user_id;
-let admin1;
 let admin1_poiID;
 let admin1Token;
 let admin2Token;
