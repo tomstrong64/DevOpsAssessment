@@ -7,3 +7,6 @@ export const addpoi = (req, res) => {
 export const allpois = (req, res) => {
     res.render('allpois');
 };
+export const allusers = (req, res) => {
+    res.render('allusers');
+};

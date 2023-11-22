@@ -7,4 +7,5 @@ const router = Router();
 router.get('/', IndexController.home);
 router.get('/addpoi', IndexController.addpoi);
 router.get('/allpois', IndexController.allpois);
+router.get('/allusers', IndexController.allusers);
 export default router;

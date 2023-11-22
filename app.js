@@ -19,6 +19,7 @@ initSwagger(app);
 app.get('/', IndexRouter);
 app.get('/addpoi', IndexRouter);
 app.get('/allpois', IndexRouter);
+app.get('/allusers', IndexRouter);
 
 app.use('/user', UserRouter);
 
