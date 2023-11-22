@@ -1,7 +1,6 @@
 import { POI } from '../models/Poi.js';
 import mongoose from 'mongoose';
 
-
 export const getPois = async (req, res) => {
     try {
         let pois;
@@ -123,7 +122,7 @@ export const addPoi = async (req, res) => {
         return res.status(201).json({
             poi: poi,
             message: 'Poi Added successfully',
-            redirect: '/index.ejs',
+            redirect: '/index',
         });
     } catch (e) {
         console.log(e);
@@ -154,7 +153,7 @@ export const updatePoi = async (req, res) => {
 
         return res.json({
             message: 'POI successfully updated',
-            redirect: '/index.ejs',
+            redirect: '/index',
         });
     } catch (e) {
         console.log(e);
