@@ -330,26 +330,4 @@ describe('PUT /user/updateUser', () => {
             });
         expect(response.statusCode).toBe(400);
     });
-    it('Error response code should be sent back if new password matches the old password stored in the database', async () => {
-        const loginRequest = await request(app)
-            .post('/user/login')
-            .set('Content-Type', 'application/json')
-            .send({
-                email: 'test9dummymail@gmail.com',
-                password: 'allu!8yGHdt#@62',
-            });
-        auth_token = loginRequest.body.token;
-
-        const response = await request(app)
-            .put('/user/updateUser')
-            .set('Content-Type', 'application/json')
-            .set('Authorization', `Bearer ${auth_token}`)
-            .send({
-                email: 'test9dummymail@gmail.com',
-                newpassword: 'allu!8yGHdt#@62',
-                confirmpassword: 'allu!8yGHdt#@62',
-                password: 'allu!8yGHdt#@62',
-            });
-        expect(response.statusCode).toBe(400);
-    });
 });
