@@ -16,7 +16,7 @@ export const getUserById = async (req, res) => {
         } else {
             return res.status(500).json({ message: 'No Users found' });
         }
-        res.json(user);
+       return res.json(user);
     } catch (e) {
         console.log(e);
        return res.status(500).json({ message: 'Internal server error' });
