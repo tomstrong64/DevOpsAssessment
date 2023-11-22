@@ -8,6 +8,8 @@ export const getUserById = async (req, res) => {
     try {
         let user;
         const userId = res.locals.user._id;
+        if (!mongoose.Types.ObjectId.isValid(req.params.id))
+            return res.status(400).json({ message: 'Invalid ID' });
 
         if (userId) {
             user = await User.findById(userId);
@@ -16,7 +18,7 @@ export const getUserById = async (req, res) => {
         }
         res.json(user);
     } catch (e) {
-        console.log(e)
+        console.log(e);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
@@ -193,6 +195,9 @@ export const deleteUser = async (req, res) => {
     const user = res.locals.user;
     const id = req.params.id;
     try {
+        if (!mongoose.Types.ObjectId.isValid(req.params.id))
+            return res.status(400).json({ message: 'Invalid ID' });
+
         if (user.admin) {
             const founduser = await User.findById(id);
             if (founduser.admin) {
@@ -224,6 +229,9 @@ export const deleteUser = async (req, res) => {
 export const updateUserStatus = async (req, res) => {
     const id = req.params.id;
     try {
+        if (!mongoose.Types.ObjectId.isValid(req.params.id))
+            return res.status(400).json({ message: 'Invalid ID' });
+
         const founduser = await User.findById(id);
         if (founduser.admin) {
             return res.status(403).send({

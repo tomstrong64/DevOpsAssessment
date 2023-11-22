@@ -1,7 +1,6 @@
 import { POI } from '../models/Poi.js';
 import mongoose from 'mongoose';
 
-
 export const getPois = async (req, res) => {
     try {
         let pois;
@@ -39,6 +38,9 @@ export const getPois = async (req, res) => {
 
 export const getPoiById = async (req, res) => {
     try {
+        if (!mongoose.Types.ObjectId.isValid(req.params.id))
+            return res.status(400).json({ message: 'Invalid ID' });
+
         let poi;
 
         if (res.locals.user.admin) {
@@ -63,7 +65,11 @@ export const deletePoi = async (req, res) => {
     const user = res.locals.user;
     const id = req.params.id;
     try {
+        if (!mongoose.Types.ObjectId.isValid(req.params.id))
+            return res.status(400).json({ message: 'Invalid ID' });
+
         let poi;
+
         if (user.admin) {
             // get POI regardless of user
             poi = await POI.findById(id).populate('user');
@@ -132,8 +138,10 @@ export const addPoi = async (req, res) => {
 };
 
 export const updatePoi = async (req, res) => {
+    const id = req.params.id;
     try {
-        const id = req.params.id;
+        if (!mongoose.Types.ObjectId.isValid(req.params.id))
+            return res.status(400).json({ message: 'Invalid ID' });
 
         // check if POI exists and is owned by user
         const poi = await POI.findOne({
