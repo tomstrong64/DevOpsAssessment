@@ -12,6 +12,7 @@ let user_id;
 let admin1;
 let admin1_poiID;
 let admin1Token;
+let admin2Token;
 
 // SETUP FOR USER TEST
 beforeAll(async () => {
@@ -30,7 +31,7 @@ beforeAll(async () => {
             password: '12345',
         });
     auth_token = response.body.token;
-    //Create Admin user
+    //Create newuser
     const RegisterNewUserResponse = await request(app)
         .post('/user/register')
         .set('Content-Type', 'application/json')
@@ -40,7 +41,7 @@ beforeAll(async () => {
             password: 'admin1password',
         });
 
-    // Log in the admin user to get the token
+    // Log in the user to get the token
     const adminResponse = await request(app)
         .post('/user/login')
         .set('Content-Type', 'application/json')
@@ -53,7 +54,35 @@ beforeAll(async () => {
         .get('/user/getUser')
         .set('Authorization', `Bearer ${admin1Token}`);
     const adminID = newUserAdmin.body._id;
+    //update a user to be an  Admin
     await User.updateOne({ _id: adminID }, { admin: true });
+
+    //creating another user to assign it as second admin
+    //Create newuser
+    const RegistersecondNewUserResponse = await request(app)
+        .post('/user/register')
+        .set('Content-Type', 'application/json')
+        .send({
+            name: 'Admin',
+            email: 'admin2@gmail.com',
+            password: 'admin2password',
+        });
+
+    // Log in the user to get the token
+    const admin2Response = await request(app)
+        .post('/user/login')
+        .set('Content-Type', 'application/json')
+        .send({
+            email: 'admin2@gmail.com',
+            password: 'admin2password',
+        });
+    admin2Token = admin2Response.body.token;
+    const newsecondUserAdmin = await request(app)
+        .get('/user/getUser')
+        .set('Authorization', `Bearer ${admin1Token}`);
+    const admin2ID = newsecondUserAdmin.body._id;
+    //update a user to be an  Admin
+    await User.updateOne({ _id: admin2ID }, { admin: true });
 });
 
 // TEARDOWN
