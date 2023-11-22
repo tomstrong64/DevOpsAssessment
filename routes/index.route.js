@@ -11,4 +11,5 @@ router.get('/allusers', IndexController.allusers);
 router.get('/updatepoi', IndexController.updatepoi);
 router.get('/updateuser', IndexController.updateuser);
 router.get('/register', IndexController.register);
+router.get('/login', IndexController.login);
 export default router;
