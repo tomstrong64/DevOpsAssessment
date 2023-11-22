@@ -14,26 +14,30 @@
  * limitations under the License.
  */
 let userId;
+let Lat;
+let Lon;
+let map;
 document.addEventListener('DOMContentLoaded', function () {
+    console.log(Lat)
     Logincheck();
-});
+    getLocation();
+console.log(Lat)
+    map = L.map('map1');
 
-const map = L.map('map1');
+    const attrib =
+        'Map data copyright OpenStreetMap contributors, Open Database Licence';
 
-const attrib =
-    'Map data copyright OpenStreetMap contributors, Open Database Licence';
+    const tileLayer = L.tileLayer(
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        { attribution: attrib }
+    ).addTo(map);
+    
 
-const tileLayer = L.tileLayer(
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    { attribution: attrib }
-).addTo(map);
-map.setView([51.51, -0.1], 14);
-
-map.on('click', async (e) => {
-    const lat = `${e.latlng.lat}`;
-    const lon = `${e.latlng.lng}`;
-    const addpoi = document.getElementById('addpoi');
-    addpoi.innerHTML = `
+    map.on('click', async (e) => {
+        const lat = `${e.latlng.lat}`;
+        const lon = `${e.latlng.lng}`;
+        const addpoi = document.getElementById('addpoi');
+        addpoi.innerHTML = `
   <h2>Add a Point Of Interest</h2>
   <p>
   Name: <br />
@@ -48,46 +52,48 @@ map.on('click', async (e) => {
   <input id="new_des" /><br />
   <input type="button" value="go" id="sendPOI" />`;
 
-    document.getElementById('sendPOI').addEventListener('click', async () => {
-        const poi = {
-            name: document.getElementById('new_name').value,
-            type: document.getElementById('new_type').value,
-            country: document.getElementById('new_country').value,
-            region: document.getElementById('new_region').value,
-            lat: lat,
-            lon: lon,
-            description: document.getElementById('new_des').value,
-        };
+        document
+            .getElementById('sendPOI')
+            .addEventListener('click', async () => {
+                const poi = {
+                    name: document.getElementById('new_name').value,
+                    type: document.getElementById('new_type').value,
+                    country: document.getElementById('new_country').value,
+                    region: document.getElementById('new_region').value,
+                    lat: lat,
+                    lon: lon,
+                    description: document.getElementById('new_des').value,
+                };
 
-        try {
-            const token = localStorage.getItem('token');
-            const response = await fetch('/pois/addPoi', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify(poi),
+                try {
+                    const token = localStorage.getItem('token');
+                    const response = await fetch('/pois/addPoi', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${token}`,
+                        },
+                        body: JSON.stringify(poi),
+                    });
+
+                    await responseHandler(response);
+                    const pos = [lat, lon];
+                    const marker = L.marker(pos).addTo(map);
+                    marker
+                        .bindPopup(`<b>${poi.name}</b><br>${poi.description}`)
+                        .openPopup();
+                } catch (e) {
+                    alert(`Error: ${e}`);
+                }
             });
+    });
 
-            await responseHandler(response);
-            const pos = [lat, lon];
-            const marker = L.marker(pos).addTo(map);
-            marker
-                .bindPopup(`<b>${poi.name}</b><br>${poi.description}`)
-                .openPopup();
-        } catch (e) {
-            alert(`Error: ${e}`);
-        }
+    document.getElementById('poi_search').addEventListener('click', (e) => {
+        e.preventDefault();
+        const region = document.getElementById('poi_region').value;
+        ajaxSearch(region);
     });
 });
-
-document.getElementById('poi_search').addEventListener('click', (e) => {
-    e.preventDefault();
-    const region = document.getElementById('poi_region').value;
-    ajaxSearch(region);
-});
-
 async function ajaxSearch(region) {
     const token = localStorage.getItem('token');
     const ajaxResponse = await fetch(`/pois/list?search=${region}`, {
@@ -203,4 +209,17 @@ async function Logincheck() {
         console.error(error);
         alert('Failed to fetch User details');
     }
+}
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.watchPosition(showPosition);
+    } else {
+        alert('Geolocation is not supported by this browser.');
+    }
+}
+function showPosition(position) {
+    Lat = position.coords.latitude;
+    Lon = position.coords.longitude;
+    map.setView([Lat, Lon], 14);
+    console.log(Lat);
 }
