@@ -75,7 +75,7 @@ describe('POST /register', () => {
             });
         expect(response.statusCode).toBe(201);
     }, 15000);
-    /*
+
     it('The admin property of a newly registered non-admin user should be set to false by default', async () => {
         const response = await request(app)
             .post('/user/register')
@@ -94,8 +94,7 @@ describe('POST /register', () => {
             .send();
         expect(profileResponse.statusCode).toBe(200);
         // This test will need to be rewritten.
-    });
-    */
+    }, 15000);
 });
 
 describe('POST /register negative cases', () => {
@@ -109,7 +108,7 @@ describe('POST /register negative cases', () => {
                 password: 'apDHe86g^$',
             });
         expect(response.statusCode).toBe(401);
-    });
+    }, 15000);
 
     it('missing the name field for a new user should return an error status code', async () => {
         const response = await request(app)
@@ -120,7 +119,7 @@ describe('POST /register negative cases', () => {
                 password: 'jhriqu#H2t89',
             });
         expect(response.statusCode).toBe(400);
-    });
+    }, 15000);
 
     it('missing the email field for a new user should return an error status code', async () => {
         const response = await request(app)
@@ -131,7 +130,7 @@ describe('POST /register negative cases', () => {
                 password: 'K2y8egh^35gh@',
             });
         expect(response.statusCode).toBe(400);
-    });
+    }, 15000);
 
     it('missing the password field for a new user should return an error status code', async () => {
         const response = await request(app)
@@ -142,7 +141,7 @@ describe('POST /register negative cases', () => {
                 email: 'test8dummail@yahoo.com',
             });
         expect(response.statusCode).toBe(400);
-    });
+    }, 15000);
 });
 
 describe('POST /login positive case', () => {
@@ -155,7 +154,7 @@ describe('POST /login positive case', () => {
                 password: 'adbdfec2891',
             });
         expect(response.statusCode).toBe(200);
-    });
+    }, 15000);
     it("Upon successful login, the message inside the response should equal 'Login successful' ", async () => {
         const response = await request(app)
             .post('/user/login')
@@ -165,7 +164,7 @@ describe('POST /login positive case', () => {
                 password: 'jumjams1234',
             });
         expect(response.body['message']).toEqual('Login successful');
-    });
+    }, 15000);
     it('Check if the token exists in the response body when user successfully logged in', async () => {
         const response = await request(app)
             .post('/user/login')
@@ -176,5 +175,59 @@ describe('POST /login positive case', () => {
                 password: 'luo2ry92@a1h',
             });
         expect(response.body['token']).toBeDefined();
-    });
+    }, 15000);
+});
+
+describe('POST /login negative cases', () => {
+    it('missing email field in request body should return an error code of 400', async () => {
+        const response = await request(app)
+            .post('/user/login')
+            .set('Content-Type', 'application/json')
+            .send({
+                password: 'jumjams1234',
+            });
+        expect(response.statusCode).toBe(400);
+        expect(response.body[['message']]).toEqual(
+            'Email and password required'
+        );
+    }, 15000);
+    it('missing password field in request body should return an error code of 400', async () => {
+        const response = await request(app)
+            .post('/user/login')
+            .set('Content-Type', 'application/json')
+            .send({
+                email: 'testingmail44@yahoo.com',
+            });
+        expect(response.statusCode).toBe(400);
+        expect(response.body['message']).toEqual('Email and password required');
+    }, 15000);
+    it('mismatched email in request body should return error 401', async () => {
+        const response = await request(app)
+            .post('/user/login')
+            .set('Content-Type', 'application/json')
+            .send({
+                email: 'testigmail11@yahoo.com',
+                password: 'adbdfec2891',
+            });
+        expect(response.statusCode).toBe(401);
+        expect(response.body['message']).toEqual('Invalid email or password');
+    }, 15000);
+    it('mismatched password in request body should return error 401', async () => {
+        const response = await request(app)
+            .post('/user/login')
+            .set('Content-Type', 'application/json')
+            .send({
+                email: 'dum273@gmail.com',
+                password: 'luo2ry92@a1',
+            });
+        expect(response.statusCode).toBe(401);
+        expect(response.body['message']).toEqual('Invalid email or password');
+    }, 15000);
+    it('Malformed request to the login route should throw an error code of 400', async () => {
+        const response = await request(app)
+            .post('/user/login')
+            .set('Content-Type', 'application/json')
+            .send({});
+        expect(response.statusCode).toBe(400);
+    }, 15000);
 });
