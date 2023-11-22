@@ -55,7 +55,7 @@ export const login = async (req, res) => {
         return res.status(200).json({
             message: 'Login successful',
             token,
-            redirect: '/index',
+            redirect: '/',
         });
     } catch (e) {
         console.log(e);
@@ -101,7 +101,7 @@ export const create = async (req, res) => {
         return res.status(201).json({
             message: 'User created successfully',
             token,
-            redirect: '/index',
+            redirect: '/',
         });
     } catch (e) {
         console.log(e);
@@ -170,7 +170,7 @@ export const updateUser = async (req, res) => {
         return res.status(200).json({
             updated: true,
             message: 'Updated successfully',
-            redirect: '/index',
+            redirect: '/',
         });
     } catch (e) {
         res.status(500).json({ message: 'Internal server error' });
