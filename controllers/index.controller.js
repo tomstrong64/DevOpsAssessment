@@ -10,3 +10,6 @@ export const allpois = (req, res) => {
 export const allusers = (req, res) => {
     res.render('allusers');
 };
+export const updatepoi = (req, res) => {
+    res.render('updatepoi');
+};
