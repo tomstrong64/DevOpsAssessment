@@ -8,18 +8,16 @@ export const getUserById = async (req, res) => {
     try {
         let user;
         const userId = res.locals.user._id;
-        if (!mongoose.Types.ObjectId.isValid(req.params.id))
-            return res.status(400).json({ message: 'Invalid ID' });
 
         if (userId) {
             user = await User.findById(userId);
         } else {
             return res.status(500).json({ message: 'No Users found' });
         }
-       return res.json(user);
+        return res.json(user);
     } catch (e) {
         console.log(e);
-       return res.status(500).json({ message: 'Internal server error' });
+        return res.status(500).json({ message: 'Internal server error' });
     }
 };
 export const login = async (req, res) => {
