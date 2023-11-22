@@ -129,7 +129,7 @@ export const addPoi = async (req, res) => {
         return res.status(201).json({
             poi: poi,
             message: 'Poi Added successfully',
-            redirect: '/index.html',
+            redirect: '/',
         });
     } catch (e) {
         console.log(e);
@@ -162,7 +162,7 @@ export const updatePoi = async (req, res) => {
 
         return res.json({
             message: 'POI successfully updated',
-            redirect: '/index.html',
+            redirect: '/',
         });
     } catch (e) {
         console.log(e);
