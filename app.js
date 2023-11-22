@@ -24,6 +24,7 @@ app.get('/updatepoi', IndexRouter);
 app.get('/updateuser', IndexRouter);
 app.get('/register', IndexRouter);
 app.get('/login', IndexRouter);
+app.get('/privacypolicy', IndexRouter);
 
 app.use('/user', UserRouter);
 
