@@ -164,7 +164,7 @@ describe('GET /poi/id ', () => {
     });
 });
 describe('PUT /pois/updatePoi/:id', () => {
-    it('Should Update the POI ', async () => {
+    it('Normal User Should Update the POI ', async () => {
         const response = await request(app)
             .put(`/pois/updatePoi/${poi_id}`)
             .set('Content-Type', 'application/json')
@@ -176,6 +176,18 @@ describe('PUT /pois/updatePoi/:id', () => {
                 region: 'Solent update ',
                 lat: 50.9105,
                 lon: -1.4049,
+                description: 'Test Description',
+            });
+        expect(response.status).toEqual(200);
+    });
+    it('Normal User Should Update selected element of the POI ', async () => {
+        const response = await request(app)
+            .put(`/pois/updatePoi/${poi_id}`)
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${auth_token}`)
+            .send({
+                name: 'Update',
+                type: 'Test update ',
                 description: 'Test Description',
             });
         expect(response.status).toEqual(200);
@@ -196,7 +208,7 @@ describe('PUT /pois/updatePoi/:id', () => {
             });
         expect(response.status).toEqual(200);
     });
-    it('Admin User Should Update selected element of the thire own POI ', async () => {
+    it('Admin User Should Update selected element of the thire ownPOI ', async () => {
         const response = await request(app)
             .put(`/pois/updatePoi/${admin1_poiID}`)
             .set('Content-Type', 'application/json')
@@ -204,21 +216,6 @@ describe('PUT /pois/updatePoi/:id', () => {
             .send({
                 name: 'Update Admin',
                 type: 'Test update admin ',
-                description: 'Test Description',
-            });
-        expect(response.status).toEqual(200);
-    });
-});
-
-describe('PUT /pois/updatePoi/:id', () => {
-    it('Should Update selected element of the POI ', async () => {
-        const response = await request(app)
-            .put(`/pois/updatePoi/${poi_id}`)
-            .set('Content-Type', 'application/json')
-            .set('Authorization', `Bearer ${auth_token}`)
-            .send({
-                name: 'Update',
-                type: 'Test update ',
                 description: 'Test Description',
             });
         expect(response.status).toEqual(200);
