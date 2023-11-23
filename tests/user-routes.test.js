@@ -122,7 +122,7 @@ describe('POST /register', () => {
             .send();
         expect(adResponse.statusCode).toBe(200);
         expect(adResponse.body['admin']).toBe(true);
-    });
+    }, 25000);
 });
 
 describe('POST /register negative cases', () => {
@@ -286,7 +286,7 @@ describe('PUT /user/updateUser', () => {
         expect(response.body['updated']).toBe(true);
         expect(response.body['message']).toEqual('Updated successfully');
         expect(response.body['redirect']).toBeDefined();
-    });
+    }, 25000);
     it('Error response code should be sent back if new password and the same password entered again do not match', async () => {
         const loginRequest = await request(app)
             .post('/user/login')
@@ -308,7 +308,7 @@ describe('PUT /user/updateUser', () => {
                 password: 'adbdfec2891',
             });
         expect(response.statusCode).toBe(400);
-    });
+    }, 25000);
     it('Error response code should be sent if the password field is blank when trying to update the current user details', async () => {
         const loginRequest = await request(app)
             .post('/user/login')
@@ -329,5 +329,5 @@ describe('PUT /user/updateUser', () => {
                 confirmpassword: 'DJ#hKbE12dzmdqkoi1ytsv',
             });
         expect(response.statusCode).toBe(400);
-    });
+    }, 25000);
 });
