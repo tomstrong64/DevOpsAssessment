@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 import { User } from '../models/User.js';
 
 let auth_token; //Private authorisation stuff, should not be exposed outside!
+let admin_auth_token; // for admin's authentication
 
 // SETUP FOR USER TEST
 beforeAll(async () => {
@@ -106,12 +107,12 @@ describe('POST /register', () => {
                 email: 'dummyAdmins82@outlook.com',
                 password: 'Akn#Rcjy7!',
             });
-        let ADauth_user_token = response.body.token;
+        admin_auth_token = response.body.token;
 
         // Request to getUser route to get this newly registered user
         const checkResponse = await request(app)
             .get('/user/getUser')
-            .set('Authorization', `Bearer ${ADauth_user_token}`)
+            .set('Authorization', `Bearer ${admin_auth_token}`)
             .send();
         let ad_user_id = checkResponse.body['_id'];
         await User.updateOne({ _id: ad_user_id }, { admin: true });
