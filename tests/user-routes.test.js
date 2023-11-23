@@ -308,6 +308,7 @@ describe('PUT /user/updateUser', () => {
                 password: 'adbdfec2891',
             });
         expect(response.statusCode).toBe(400);
+        expect(response.body['message']).toEqual('Passwords do not match');
     }, 25000);
     it('Error response code should be sent if the password field is blank when trying to update the current user details', async () => {
         const loginRequest = await request(app)
