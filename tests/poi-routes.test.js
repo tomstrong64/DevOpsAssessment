@@ -236,6 +236,22 @@ describe('PUT /pois/updatePoi/:id', () => {
             });
         expect(response.status).toEqual(404);
     });
+    it(' Normal user Should Not be able to Update someone elses POI ', async () => {
+        const response = await request(app)
+            .put(`/pois/updatePoi/${admin1_poiID}`)
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${auth_token}`)
+            .send({
+                name: 'Update admin1',
+                type: 'Test update ',
+                country: 'London update ',
+                region: 'Solent update ',
+                lat: 50.9105,
+                lon: -1.4049,
+                description: 'Test Description',
+            });
+        expect(response.status).toEqual(404);
+    });
 });
 
 describe('DELETE /pois/deletePoi/:id', () => {
