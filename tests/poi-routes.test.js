@@ -196,6 +196,18 @@ describe('PUT /pois/updatePoi/:id', () => {
             });
         expect(response.status).toEqual(200);
     });
+    it('Admin User Should Update selected element of the thire own POI ', async () => {
+        const response = await request(app)
+            .put(`/pois/updatePoi/${admin1_poiID}`)
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${admin1Token}`)
+            .send({
+                name: 'Update Admin',
+                type: 'Test update admin ',
+                description: 'Test Description',
+            });
+        expect(response.status).toEqual(200);
+    });
 });
 
 describe('PUT /pois/updatePoi/:id', () => {
