@@ -332,3 +332,24 @@ describe('PUT /user/updateUser', () => {
         expect(response.statusCode).toBe(400);
     }, 25000);
 });
+
+describe('GET /getUser test', () => {
+    it('When this route is accessed by a login user, the correct data should be sent back to the client in the response', async () => {
+        const loginResponse = await request(app)
+            .post('/user/login')
+            .set('Content-Type', 'application/json')
+            .send({
+                email: 'test9dummymail@gmail.com',
+                password: 'allu!8yGHdt#@62',
+            });
+        auth_token = loginResponse.body.token;
+
+        const response = await request(app)
+            .get('/user/getUser')
+            .set('Authorization', `Bearer ${auth_token}`);
+
+        expect(response.statusCode).toBe(200);
+        expect(response.body['admin']).toBe(false);
+        expect(response.body['token']).toBeDefined();
+    }, 15000);
+});
