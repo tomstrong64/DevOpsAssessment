@@ -119,7 +119,7 @@ describe('POST /register', () => {
 
         const adResponse = await request(app)
             .get('/user/getUser')
-            .set('Authorization', `Bearer ${ADauth_user_token}`)
+            .set('Authorization', `Bearer ${admin_auth_token}`)
             .send();
         expect(adResponse.statusCode).toBe(200);
         expect(adResponse.body['admin']).toBe(true);
