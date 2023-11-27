@@ -1,5 +1,6 @@
 import { POI } from '../models/Poi.js';
 import mongoose from 'mongoose';
+import * as AzureStorage from '../models/AzureStorage.js';
 
 export const getPois = async (req, res) => {
     try {
@@ -114,6 +115,10 @@ export const addPoi = async (req, res) => {
             return res.status(400).json({ message: 'Missing fields' });
         }
 
+        let image = null;
+
+        if (req.file) image = await AzureStorage.UploadImage(req.file);
+
         // create POI
         const poi = new POI({
             name: req.body.name,
@@ -123,6 +128,7 @@ export const addPoi = async (req, res) => {
             lat: req.body.lat,
             lon: req.body.lon,
             description: req.body.description,
+            image: image,
             user: res.locals.user._id,
         });
         await poi.save();
@@ -158,12 +164,55 @@ export const updatePoi = async (req, res) => {
         if (req.body.lat) poi.lat = req.body.lat;
         if (req.body.lon) poi.lon = req.body.lon;
         if (req.body.description) poi.description = req.body.description;
+        if (req.file) {
+            // delete old image
+            if (poi.image) await AzureStorage.DeleteImage(poi.image);
+            // upload new image
+            poi.image = await AzureStorage.UploadImage(req.file);
+        }
         await poi.save();
 
         return res.json({
             message: 'POI successfully updated',
             redirect: '/',
         });
+    } catch (e) {
+        console.log(e);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+export const getImage = async (req, res) => {
+    try {
+        if (!mongoose.Types.ObjectId.isValid(req.params.id))
+            return res.status(400).json({ message: 'Invalid ID' });
+
+        const id = req.params.id;
+        const user = res.locals.user;
+
+        let poi;
+
+        if (user.admin) {
+            // get POI regardless of user
+            poi = await POI.findById(id);
+        } else {
+            // get POI for user
+            poi = await POI.findOne({
+                _id: new mongoose.Types.ObjectId(id),
+                user: new mongoose.Types.ObjectId(user._id),
+            });
+        }
+
+        if (!poi) return res.status(404).json({ message: 'POI not found' });
+        if (!poi.image)
+            return res.status(404).json({ message: 'Image not found' });
+
+        const image = await AzureStorage.GetImage(poi.image);
+
+        // send image to client
+        res.setHeader('Content-Type', 'image/jpeg');
+        image.readableStreamBody.pipe(res);
+        return;
     } catch (e) {
         console.log(e);
         return res.status(500).json({ message: 'Internal server error' });

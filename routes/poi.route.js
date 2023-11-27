@@ -180,4 +180,34 @@ router.delete('/deletePoi/:id', stdAuth, PoiController.deletePoi);
  */
 router.put('/updatePoi/:id', stdAuth, PoiController.updatePoi);
 
+/**
+ * @openapi
+ * /pois/image/{id}:
+ *   get:
+ *     tags: [POI]
+ *     summary: Get a Point of Interest image by POI ID
+ *     description: Get a Point of Interest image by POI ID. Requires standard authentication.
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID of the Point of Interest
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Point of Interest image
+ *       400:
+ *         description: Bad request. Invalid ID.
+ *       401:
+ *         description: Unauthorized. Authentication token is missing or invalid.
+ *       404:
+ *         description: Point of Interest or image not found
+ *       500:
+ *         description: Internal Server Error
+ */
+router.get('/image/:id', stdAuth, PoiController.getImage);
+
 export default router;
