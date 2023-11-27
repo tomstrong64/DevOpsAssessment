@@ -88,6 +88,9 @@ export const deletePoi = async (req, res) => {
         if (poi.user._id.toString() !== user._id.toString())
             return res.status(403).json({ message: 'Forbidden' });
 
+        // delete image
+        if (poi.image) await AzureStorage.DeleteImage(poi.image);
+
         // delete POI
         await POI.findByIdAndRemove(id);
 
