@@ -17,6 +17,9 @@ let userId;
 let Lat;
 let Lon;
 let map;
+let watchId;
+const geoBtn = document.getElementById('enableGeolocation');
+const revokeBtn = document.getElementById('revokeGeolocation');
 const customIcon = L.icon({
     iconUrl: 'currentlocationicon.png',
     iconSize: [32, 32], // Adjust the size as needed
@@ -226,6 +229,7 @@ function showPosition(position) {
     Lon = position.coords.longitude;
     map.setView([Lat, Lon], 14);
     L.marker([Lat, Lon], { icon: customIcon }).addTo(map);
+    geoBtn.style.display = 'none';
 }
 function showError(error) {
     switch (error.code) {
@@ -233,7 +237,8 @@ function showError(error) {
             alert('User denied the request for Geolocation.');
             const currrentLocation = [51.51, -0.1];
             map.setView(currrentLocation, 14);
-
+            revokeBtn.style.display = 'none';
+            geoBtn.style.display = 'inline';
             break;
         case error.POSITION_UNAVAILABLE:
             alert('Location information is unavailable.');
@@ -246,3 +251,21 @@ function showError(error) {
             break;
     }
 }
+
+function revokePermission() {
+    if (navigator.geolocation) {
+        navigator.geolocation.clearWatch(watchId);
+        alert('Geolocation permission revoked.');
+        geoBtn.style.display = 'inline-block';
+        revokeBtn.style.display = 'none';
+    } else {
+        alert('Geolocation is not supported by this browser.');
+    }
+}
+
+geoBtn.onclick = function () {
+    getLocation();
+};
+revokeBtn.onclick = function () {
+    revokePermission();
+};
