@@ -219,7 +219,7 @@ async function Logincheck() {
 }
 function getLocation() {
     if (navigator.geolocation) {
-        navigator.geolocation.watchPosition(showPosition, showError);
+     watchId = navigator.geolocation.watchPosition(showPosition, showError);
     } else {
         alert('Geolocation is not supported by this browser.');
     }
@@ -234,7 +234,7 @@ function showPosition(position) {
 function showError(error) {
     switch (error.code) {
         case error.PERMISSION_DENIED:
-            alert('User denied the request for Geolocation.');
+            alert('Permission denied for Geolocation.');
             const currrentLocation = [51.51, -0.1];
             map.setView(currrentLocation, 14);
             revokeBtn.style.display = 'none';
@@ -253,19 +253,39 @@ function showError(error) {
 }
 
 function revokePermission() {
-    if (navigator.geolocation) {
+    if (watchId !== null) {
         navigator.geolocation.clearWatch(watchId);
-        alert('Geolocation permission revoked.');
-        geoBtn.style.display = 'inline-block';
-        revokeBtn.style.display = 'none';
-    } else {
-        alert('Geolocation is not supported by this browser.');
     }
+    alert('Geolocation permission revoked.');
+    geoBtn.style.display = 'inline-block';
+    revokeBtn.style.display = 'none';
 }
 
+
 geoBtn.onclick = function () {
-    getLocation();
+    requestLocation();
 };
 revokeBtn.onclick = function () {
     revokePermission();
 };
+function requestLocation() {
+    if (navigator.permissions) {
+        navigator.permissions.query({ name: 'geolocation' })
+            .then(permissionStatus => {
+                if (permissionStatus.state === 'denied') {
+                    alert('Geolocation permission is denied. Please enable it in your browser settings.');
+                } else {
+                    alert('Geolocation permission is already granted.');
+                    geoBtn.style.display = 'none';
+                    revokeBtn.style.display = 'inline-block';
+                }
+            })
+            .catch(error => {
+                console.error('Error querying geolocation permission:', error);
+            });
+    } else if (navigator.geolocation) {
+        getLocation();
+    } else {
+        alert('Geolocation is not supported by this browser.');
+    }
+}
