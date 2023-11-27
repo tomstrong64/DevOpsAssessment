@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import * as PoiController from '../controllers/poi.controller.js';
 import { stdAuth, noAuth, adminAuth } from '../middlewares/user.middleware.js';
+import { upload } from '../middlewares/file.middleware.js';
 
 const router = Router();
 
@@ -109,7 +110,7 @@ router.get('/:id', stdAuth, PoiController.getPoiById);
  *         description: Internal Server Error
 
  */
-router.post('/addPoi', stdAuth, PoiController.addPoi);
+router.post('/addPoi', stdAuth, upload.single('image'), PoiController.addPoi);
 
 /**
  * @openapi
