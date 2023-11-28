@@ -46,7 +46,8 @@ export const login = async (req, res) => {
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
             expiresIn: '1d',
         });
-
+        // Set the auth token as a cookie
+        res.cookie('token', token);
         // save token to user document
         user.token = token;
         await user.save();
@@ -92,6 +93,8 @@ export const create = async (req, res) => {
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
             expiresIn: '1d',
         });
+        // Set the auth token as a cookie
+        res.cookie('token', token);
 
         // save token to user document
         user.token = token;
