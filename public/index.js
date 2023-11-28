@@ -46,6 +46,8 @@ map.on('click', async (e) => {
   <input id="new_region" /><br />
   Description: <br />
   <input id="new_des" /><br />
+  Image: <br />
+  <input type="file" id="new_image" accept=".jpg, .jpeg" /><br />
   <input type="button" value="go" id="sendPOI" />`;
 
     document.getElementById('sendPOI').addEventListener('click', async () => {
@@ -61,13 +63,22 @@ map.on('click', async (e) => {
 
         try {
             const token = localStorage.getItem('token');
+            const formData = new FormData();
+            formData.append('name', poi.name);
+            formData.append('type', poi.type);
+            formData.append('country', poi.country);
+            formData.append('region', poi.region);
+            formData.append('lat', poi.lat);
+            formData.append('lon', poi.lon);
+            formData.append('description', poi.description);
+            formData.append('image', document.getElementById('new_image').files[0]);
+
             const response = await fetch('/pois/addPoi', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`,
                 },
-                body: JSON.stringify(poi),
+                body: formData,
             });
 
             await responseHandler(response);
