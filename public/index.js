@@ -71,7 +71,10 @@ map.on('click', async (e) => {
             formData.append('lat', poi.lat);
             formData.append('lon', poi.lon);
             formData.append('description', poi.description);
-            formData.append('image', document.getElementById('new_image').files[0]);
+            formData.append(
+                'image',
+                document.getElementById('new_image').files[0]
+            );
 
             const response = await fetch('/pois/addPoi', {
                 method: 'POST',
@@ -128,6 +131,7 @@ async function ajaxSearch(region) {
       <th>Description</th>
       <th>Update</th>
       <th>Delete</th>
+      <th>Image</th>
     `;
     thead.appendChild(trHeadings);
     table.appendChild(thead);
@@ -156,7 +160,9 @@ async function ajaxSearch(region) {
         </td>
         <td>
           <button onclick="deletePoi('${poi._id}')">Delete</button>
-        </td>
+        </td><td>
+        <button onclick="getPoiImage('${poi._id}', '${poi.name}', ${poi.lat}, ${poi.lon})">Image</button>
+         </td>
       `;
         tr.id = poi._id;
         tbody.appendChild(tr);
@@ -214,4 +220,31 @@ async function Logincheck() {
         console.error(error);
         alert('Failed to fetch User details');
     }
+}
+async function getPoiImage(id, name, lat, lon) {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`/pois/image/${id}`, {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        const image = await response.blob();
+        blobToDataURL(image, function (dataurl) {
+            const imgsrc = dataurl;
+            const pos = [lat, lon];
+            const marker = L.marker(pos).addTo(map);
+            marker.bindPopup(`<b>${name}</b><br><img src=${imgsrc} style="max-width: 100%; max-height: 100%;"/>`).openPopup();
+        });
+    } catch (e) {
+        alert(`Error with POI ID ${id}: ${e}`);
+    }
+}
+function blobToDataURL(blob, callback) {
+    var a = new FileReader();
+    a.onload = function (e) {
+        callback(e.target.result);
+    };
+    a.readAsDataURL(blob);
 }
