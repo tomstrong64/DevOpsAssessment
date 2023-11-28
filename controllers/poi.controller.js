@@ -167,13 +167,21 @@ export const updatePoi = async (req, res) => {
         if (req.body.lat) poi.lat = req.body.lat;
         if (req.body.lon) poi.lon = req.body.lon;
         if (req.body.description) poi.description = req.body.description;
+        console.log('File received:', req.file);
         if (req.file) {
+            console.log('File received:', req.file);
+
             // delete old image
             if (poi.image) await AzureStorage.DeleteImage(poi.image);
+            console.log('Deleting old image:', poi.image);
             // upload new image
+            console.log('Uploading new image...');
             poi.image = await AzureStorage.UploadImage(req.file);
+            console.log('New image uploaded:', poi.image);
         }
+        console.log('Saving POI:', poi);
         await poi.save();
+        console.log(' saving POI:', poi);
 
         return res.json({
             message: 'POI successfully updated',

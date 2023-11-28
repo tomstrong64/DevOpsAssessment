@@ -178,7 +178,7 @@ router.delete('/deletePoi/:id', stdAuth, PoiController.deletePoi);
  *         description: Internal Server Error
 
  */
-router.put('/updatePoi/:id', stdAuth, PoiController.updatePoi);
+router.put('/updatePoi/:id', upload.single('image'), stdAuth, PoiController.updatePoi);
 
 /**
  * @openapi
