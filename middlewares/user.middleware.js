@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 // middleware to ensure user is not logged in already
 export const noAuth = async (req, res, next) => {
     try {
-        if (req.headers.authorization || req.cookies.authorization)
+        if (req.headers.authorization || req.cookies.token)
             return res.status(400).json({ message: 'Already logged in' });
         return next();
     } catch (e) {
@@ -18,7 +18,7 @@ export const noAuth = async (req, res, next) => {
 export const stdAuth = async (req, res, next) => {
     try {
         // check if token is provided
-        if (!req.headers.authorization || !req.cookies.authorization)
+        if (!req.headers.authorization || !req.cookies.token)
             return res.status(401).json({ message: 'Unauthorized' });
 
         // decode token
@@ -61,7 +61,7 @@ export const stdAuth = async (req, res, next) => {
 export const adminAuth = async (req, res, next) => {
     try {
         // check if token is provided
-        if (!req.headers.authorization || !req.cookies.authorization)
+        if (!req.headers.authorization || !req.cookies.token)
             return res.status(401).json({ message: 'Unauthorized' });
 
         // decode token
