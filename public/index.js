@@ -57,6 +57,8 @@ document.addEventListener('DOMContentLoaded', function () {
   <input id="new_region" /><br />
   Description: <br />
   <input id="new_des" /><br />
+  Image: <br />
+  <input type="file" id="new_image" accept=".jpg, .jpeg" /><br />
   <input type="button" value="go" id="sendPOI" />`;
 
         document
@@ -74,13 +76,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 try {
                     const token = localStorage.getItem('token');
+                    const formData = new FormData();
+                    formData.append('name', poi.name);
+                    formData.append('type', poi.type);
+                    formData.append('country', poi.country);
+                    formData.append('region', poi.region);
+                    formData.append('lat', poi.lat);
+                    formData.append('lon', poi.lon);
+                    formData.append('description', poi.description);
+                    formData.append(
+                        'image',
+                        document.getElementById('new_image').files[0]
+                    );
+
                     const response = await fetch('/pois/addPoi', {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json',
                             Authorization: `Bearer ${token}`,
                         },
-                        body: JSON.stringify(poi),
+                        body: formData,
                     });
 
                     await responseHandler(response, true);
@@ -130,6 +144,7 @@ async function ajaxSearch(region) {
       <th>Description</th>
       <th>Update</th>
       <th>Delete</th>
+      <th>Image</th>
     `;
     thead.appendChild(trHeadings);
     table.appendChild(thead);
@@ -158,7 +173,9 @@ async function ajaxSearch(region) {
         </td>
         <td>
           <button onclick="deletePoi('${poi._id}')">Delete</button>
-        </td>
+        </td><td>
+        <button onclick="getPoiImage('${poi._id}', '${poi.name}', ${poi.lat}, ${poi.lon})">Image</button>
+         </td>
       `;
         tr.id = poi._id;
         tbody.appendChild(tr);
@@ -217,9 +234,40 @@ async function Logincheck() {
         alert('Failed to fetch User details');
     }
 }
+async function getPoiImage(id, name, lat, lon) {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`/pois/image/${id}`, {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        const image = await response.blob();
+        blobToDataURL(image, function (dataurl) {
+            const imgsrc = dataurl;
+            const pos = [lat, lon];
+            const marker = L.marker(pos).addTo(map);
+            marker
+                .bindPopup(
+                    `<b>${name}</b><br><img src=${imgsrc} style="max-width: 100%; max-height: 100%;"/>`
+                )
+                .openPopup();
+        });
+    } catch (e) {
+        alert(`Error with POI ID ${id}: ${e}`);
+    }
+}
+function blobToDataURL(blob, callback) {
+    var a = new FileReader();
+    a.onload = function (e) {
+        callback(e.target.result);
+    };
+    a.readAsDataURL(blob);
+}
 function getLocation() {
     if (navigator.geolocation) {
-     watchId = navigator.geolocation.watchPosition(showPosition, showError);
+        watchId = navigator.geolocation.watchPosition(showPosition, showError);
     } else {
         alert('Geolocation is not supported by this browser.');
     }
@@ -261,7 +309,6 @@ function revokePermission() {
     revokeBtn.style.display = 'none';
 }
 
-
 geoBtn.onclick = function () {
     requestLocation();
 };
@@ -270,17 +317,20 @@ revokeBtn.onclick = function () {
 };
 function requestLocation() {
     if (navigator.permissions) {
-        navigator.permissions.query({ name: 'geolocation' })
-            .then(permissionStatus => {
+        navigator.permissions
+            .query({ name: 'geolocation' })
+            .then((permissionStatus) => {
                 if (permissionStatus.state === 'denied') {
-                    alert('Geolocation permission is denied. Please enable it in your browser settings.');
+                    alert(
+                        'Geolocation permission is denied. Please enable it in your browser settings.'
+                    );
                 } else {
                     alert('Geolocation permission is already granted.');
                     geoBtn.style.display = 'none';
                     revokeBtn.style.display = 'inline-block';
                 }
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error('Error querying geolocation permission:', error);
             });
     } else if (navigator.geolocation) {

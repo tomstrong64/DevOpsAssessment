@@ -35,7 +35,7 @@
                             <h3 class="text-center">Add Point of Interest</h3>
                         </div>
                         <div class="card-body">
-                            <form>
+                            <form id="addPoiForm">
                                 <div class="mb-3">
                                     <label for="name" class="form-label"
                                         >Name</label
@@ -79,7 +79,7 @@
                                         class="form-control"
                                         id="region"
                                         name="region"
-                                    />
+                                    />     
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
@@ -118,6 +118,20 @@
                                         rows="4"
                                     ></textarea>
                                 </div>
+                                <div class="mb-3">
+                                    <label for="image" class="form-label"
+                                        >Image</label
+                                    >
+                                    <input
+                                        type="file"
+                                        class="form-control"
+                                        id="image"
+                                        name="image"
+                                        accept=".jpg, .jpeg"
+                                    />
+                                    <small class="form-text text-muted">
+                                        Please upload only JPEG images.
+                                    </small>
                                 <div class="text-center">
                                     <button
                                         type="submit"

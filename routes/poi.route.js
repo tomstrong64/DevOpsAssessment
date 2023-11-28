@@ -16,6 +16,7 @@
 import { Router } from 'express';
 import * as PoiController from '../controllers/poi.controller.js';
 import { stdAuth, noAuth, adminAuth } from '../middlewares/user.middleware.js';
+import { upload } from '../middlewares/file.middleware.js';
 
 const router = Router();
 
@@ -124,7 +125,7 @@ router.get('/:id', stdAuth, PoiController.getPoiById);
  *         description: Internal Server Error
 
  */
-router.post('/addPoi', stdAuth, PoiController.addPoi);
+router.post('/addPoi', stdAuth, upload.single('image'), PoiController.addPoi);
 
 /**
  * @openapi
@@ -192,6 +193,36 @@ router.delete('/deletePoi/:id', stdAuth, PoiController.deletePoi);
  *         description: Internal Server Error
 
  */
-router.put('/updatePoi/:id', stdAuth, PoiController.updatePoi);
+router.put('/updatePoi/:id', upload.single('image'), stdAuth, PoiController.updatePoi);
+
+/**
+ * @openapi
+ * /pois/image/{id}:
+ *   get:
+ *     tags: [POI]
+ *     summary: Get a Point of Interest image by POI ID
+ *     description: Get a Point of Interest image by POI ID. Requires standard authentication.
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID of the Point of Interest
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Point of Interest image
+ *       400:
+ *         description: Bad request. Invalid ID.
+ *       401:
+ *         description: Unauthorized. Authentication token is missing or invalid.
+ *       404:
+ *         description: Point of Interest or image not found
+ *       500:
+ *         description: Internal Server Error
+ */
+router.get('/image/:id', stdAuth, PoiController.getImage);
 
 export default router;
