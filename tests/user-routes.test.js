@@ -374,3 +374,91 @@ describe('GET /list test using admin account', () => {
         expect(response.body).toHaveLength(6);
     }, 25000);
 });
+
+describe('PUT /updateUser/:id tests', () => {
+    it('Updating a user status to admin should return a HTTP status code of 200 and other associated data', async () => {
+        // Register a new user first and set it to admin using the admin's route
+        const response = await request(app)
+            .post('/user/register')
+            .set('Content-Type', 'application/json')
+            .send({
+                name: 'testAdminDummy2',
+                email: 'dummyAdmin93@outlook.com',
+                password: 'janfhb*@ybd37G!',
+            });
+        auth_token = response.body.token;
+
+        const checkResponse = await request(app)
+            .get('/user/getUser')
+            .set('Authorization', `Bearer ${auth_token}`);
+        let dummy_user_id = checkResponse.body['_id'];
+
+        const ad_loginResponse = await request(app)
+            .post('/user/login')
+            .set('Content-Type', 'application/json')
+            .send({
+                email: 'dummyAdmins82@outlook.com',
+                password: 'Akn#Rcjy7!',
+            });
+        admin_auth_token = ad_loginResponse.body.token;
+
+        const adResponse = await request(app)
+            .put(`/user/updateUser/${dummy_user_id}`)
+            .set('Authorization', `Bearer ${admin_auth_token}`)
+            .send();
+        expect(adResponse.statusCode).toBe(200);
+        expect(adResponse.body['message']).toEqual('User Updated successfully');
+        expect(adResponse.body['redirect']).toBeDefined();
+    }, 25000);
+
+    it('Attempting to update an already admin user should send back status code 403', async () => {
+        const adUser_response = await request(app)
+            .post('/user/login')
+            .set('Content-Type', 'application/json')
+            .send({
+                email: 'dummyAdmin93@outlook.com',
+                password: 'janfhb*@ybd37G!',
+            });
+        admin_auth_token = adUser_response.body.token;
+
+        const listResponse = await request(app)
+            .get('/user/list')
+            .set('Authorization', `Bearer ${admin_auth_token}`);
+        let admin_check_id = listResponse.body[5]['_id'];
+        console.log(admin_check_id);
+
+        const adResponse = await request(app)
+            .put(`/user/updateUser/${admin_check_id}`)
+            .set('Authorization', `Bearer ${admin_auth_token}`)
+            .send();
+        expect(adResponse.statusCode).toBe(403);
+        expect(adResponse.body['message']).toEqual(
+            'cannot update an admin user.'
+        );
+    }, 25000);
+
+    it('Attempting to the update the status of a user with an invalid id should return a status code of 400', async () => {
+        const ad_loginResponse = await request(app)
+            .post('/user/login')
+            .set('Content-Type', 'application/json')
+            .send({
+                email: 'dummyAdmins82@outlook.com',
+                password: 'Akn#Rcjy7!',
+            });
+        admin_auth_token = ad_loginResponse.body.token;
+
+        const listResponse = await request(app)
+            .get('/user/list')
+            .set('Authorization', `Bearer ${admin_auth_token}`);
+        let checkUser_id = listResponse.body[3]['_id'];
+        let strConcat = 'znxbvc28';
+        let invalid_id = checkUser_id.concat(strConcat); // Having an invalid string to check response from the server
+
+        const adResponse = await request(app)
+            .put(`/user/updateUser/${invalid_id}`)
+            .set('Authorization', `Bearer ${admin_auth_token}`)
+            .send();
+        expect(adResponse.statusCode).toBe(400);
+        expect(adResponse.body['message']).toEqual('Invalid ID');
+    }, 25000);
+});
