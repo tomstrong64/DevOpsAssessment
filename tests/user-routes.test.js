@@ -354,3 +354,23 @@ describe('GET /getUser test', () => {
         expect(response.body['token']).toBeDefined();
     }, 15000);
 });
+
+describe('GET /list test using admin account', () => {
+    it('Check that the method returns a list of users, whether it is an empty list or whether it contains some users', async () => {
+        const login_response = await request(app)
+            .post('/user/login')
+            .set('Content-Type', 'application/json')
+            .send({
+                email: 'dummyAdmins82@outlook.com',
+                password: 'Akn#Rcjy7!',
+            });
+        admin_auth_token = login_response.body.token;
+
+        const response = await request(app)
+            .get('/user/list')
+            .set('Authorization', `Bearer ${admin_auth_token}`);
+        console.log(response);
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toHaveLength(6);
+    }, 25000);
+});
