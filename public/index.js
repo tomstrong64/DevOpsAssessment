@@ -14,26 +14,37 @@
  * limitations under the License.
  */
 let userId;
+let Lat;
+let Lon;
+let map;
+let watchId;
+const geoBtn = document.getElementById('enableGeolocation');
+const revokeBtn = document.getElementById('revokeGeolocation');
+const customIcon = L.icon({
+    iconUrl: 'currentlocationicon.png',
+    iconSize: [32, 32], // Adjust the size as needed
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -32],
+});
 document.addEventListener('DOMContentLoaded', function () {
     Logincheck();
-});
+    getLocation();
 
-const map = L.map('map1');
+    map = L.map('map1');
 
-const attrib =
-    'Map data copyright OpenStreetMap contributors, Open Database Licence';
+    const attrib =
+        'Map data copyright OpenStreetMap contributors, Open Database Licence';
 
-const tileLayer = L.tileLayer(
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    { attribution: attrib }
-).addTo(map);
-map.setView([51.51, -0.1], 14);
+    const tileLayer = L.tileLayer(
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        { attribution: attrib }
+    ).addTo(map);
 
-map.on('click', async (e) => {
-    const lat = `${e.latlng.lat}`;
-    const lon = `${e.latlng.lng}`;
-    const addpoi = document.getElementById('addpoi');
-    addpoi.innerHTML = `
+    map.on('click', async (e) => {
+        const lat = `${e.latlng.lat}`;
+        const lon = `${e.latlng.lng}`;
+        const addpoi = document.getElementById('addpoi');
+        addpoi.innerHTML = `
   <h2>Add a Point Of Interest</h2>
   <p>
   Name: <br />
@@ -48,46 +59,48 @@ map.on('click', async (e) => {
   <input id="new_des" /><br />
   <input type="button" value="go" id="sendPOI" />`;
 
-    document.getElementById('sendPOI').addEventListener('click', async () => {
-        const poi = {
-            name: document.getElementById('new_name').value,
-            type: document.getElementById('new_type').value,
-            country: document.getElementById('new_country').value,
-            region: document.getElementById('new_region').value,
-            lat: lat,
-            lon: lon,
-            description: document.getElementById('new_des').value,
-        };
+        document
+            .getElementById('sendPOI')
+            .addEventListener('click', async () => {
+                const poi = {
+                    name: document.getElementById('new_name').value,
+                    type: document.getElementById('new_type').value,
+                    country: document.getElementById('new_country').value,
+                    region: document.getElementById('new_region').value,
+                    lat: lat,
+                    lon: lon,
+                    description: document.getElementById('new_des').value,
+                };
 
-        try {
-            const token = localStorage.getItem('token');
-            const response = await fetch('/pois/addPoi', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify(poi),
+                try {
+                    const token = localStorage.getItem('token');
+                    const response = await fetch('/pois/addPoi', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${token}`,
+                        },
+                        body: JSON.stringify(poi),
+                    });
+
+                    await responseHandler(response, true);
+                    const pos = [lat, lon];
+                    const marker = L.marker(pos).addTo(map);
+                    marker
+                        .bindPopup(`<b>${poi.name}</b><br>${poi.description}`)
+                        .openPopup();
+                } catch (e) {
+                    alert(`Error: ${e}`);
+                }
             });
+    });
 
-            await responseHandler(response);
-            const pos = [lat, lon];
-            const marker = L.marker(pos).addTo(map);
-            marker
-                .bindPopup(`<b>${poi.name}</b><br>${poi.description}`)
-                .openPopup();
-        } catch (e) {
-            alert(`Error: ${e}`);
-        }
+    document.getElementById('poi_search').addEventListener('click', (e) => {
+        e.preventDefault();
+        const region = document.getElementById('poi_region').value;
+        ajaxSearch(region);
     });
 });
-
-document.getElementById('poi_search').addEventListener('click', (e) => {
-    e.preventDefault();
-    const region = document.getElementById('poi_region').value;
-    ajaxSearch(region);
-});
-
 async function ajaxSearch(region) {
     const token = localStorage.getItem('token');
     const ajaxResponse = await fetch(`/pois/list?search=${region}`, {
@@ -202,5 +215,77 @@ async function Logincheck() {
     } catch (error) {
         console.error(error);
         alert('Failed to fetch User details');
+    }
+}
+function getLocation() {
+    if (navigator.geolocation) {
+     watchId = navigator.geolocation.watchPosition(showPosition, showError);
+    } else {
+        alert('Geolocation is not supported by this browser.');
+    }
+}
+function showPosition(position) {
+    Lat = position.coords.latitude;
+    Lon = position.coords.longitude;
+    map.setView([Lat, Lon], 14);
+    L.marker([Lat, Lon], { icon: customIcon }).addTo(map);
+    geoBtn.style.display = 'none';
+}
+function showError(error) {
+    switch (error.code) {
+        case error.PERMISSION_DENIED:
+            alert('Permission denied for Geolocation.');
+            const currrentLocation = [51.51, -0.1];
+            map.setView(currrentLocation, 14);
+            revokeBtn.style.display = 'none';
+            geoBtn.style.display = 'inline';
+            break;
+        case error.POSITION_UNAVAILABLE:
+            alert('Location information is unavailable.');
+            break;
+        case error.TIMEOUT:
+            alert('The request to get user location timed out.');
+            break;
+        case error.UNKNOWN_ERROR:
+            alert('An unknown error occurred.');
+            break;
+    }
+}
+
+function revokePermission() {
+    if (watchId !== null) {
+        navigator.geolocation.clearWatch(watchId);
+    }
+    alert('Geolocation permission revoked.');
+    geoBtn.style.display = 'inline-block';
+    revokeBtn.style.display = 'none';
+}
+
+
+geoBtn.onclick = function () {
+    requestLocation();
+};
+revokeBtn.onclick = function () {
+    revokePermission();
+};
+function requestLocation() {
+    if (navigator.permissions) {
+        navigator.permissions.query({ name: 'geolocation' })
+            .then(permissionStatus => {
+                if (permissionStatus.state === 'denied') {
+                    alert('Geolocation permission is denied. Please enable it in your browser settings.');
+                } else {
+                    alert('Geolocation permission is already granted.');
+                    geoBtn.style.display = 'none';
+                    revokeBtn.style.display = 'inline-block';
+                }
+            })
+            .catch(error => {
+                console.error('Error querying geolocation permission:', error);
+            });
+    } else if (navigator.geolocation) {
+        getLocation();
+    } else {
+        alert('Geolocation is not supported by this browser.');
     }
 }
