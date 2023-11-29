@@ -21,9 +21,11 @@ import HealthRouter from './routes/health.route.js';
 import IndexRouter from './routes/index.route.js';
 
 import { initSwagger } from './swagger.js';
+import i18n from './i18n.js';
 import cookieParser from 'cookie-parser';
 
 const app = express();
+
 
 app.set('view engine', 'ejs'); // set up ejs for templating
 
@@ -32,6 +34,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 initSwagger(app);
+app.use(i18n.init);
 
 app.use(IndexRouter);
 

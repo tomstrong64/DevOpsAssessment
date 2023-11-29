@@ -49,14 +49,15 @@
     <body>
         <!-- Header Section -->
         <nav class="navbar navbar-dark bg-primary">
-            <a class="navbar-brand" href="#">Home</a>
-            <a class="navbar-brand" href="/addpoi">Add POI</a>
+            <a class="navbar-brand" href="#" data-i18n="Home"></a>
+            <a class="navbar-brand" href="/addpoi" > <%= i18n.__("AddPoi") %></a>
             <a class="navbar-brand" id="get_users" hidden href="/allusers"
                 >Users</a
             >
             <a class="navbar-brand" id="get_pois" hidden href="/allpois"
                 >Pois</a
             >
+            <p><%= i18n %></p>
 
             <form class="form-inline">
                 <input
@@ -75,8 +76,20 @@
                 </button>
             </form>
             <div class="ml-2">
-                <button class="btn btn-light my-2 my-sm-0" id="enableGeolocation" type="button">Enable Geolocation</button>
-                <button class="btn btn-light my-2 my-sm-0" id="revokeGeolocation" type="button">Revoke Geolocation</button>
+                <button
+                    class="btn btn-light my-2 my-sm-0"
+                    id="enableGeolocation"
+                    type="button"
+                >
+                    Enable Geolocation
+                </button>
+                <button
+                    class="btn btn-light my-2 my-sm-0"
+                    id="revokeGeolocation"
+                    type="button"
+                >
+                    Revoke Geolocation
+                </button>
             </div>
 
             <a href="/updateuser" class="btn btn-light ml-auto">Profile</a>

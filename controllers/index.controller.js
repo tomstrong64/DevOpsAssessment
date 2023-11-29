@@ -13,8 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import i18n from '../i18n.js';
+
 export const home = (req, res) => {
-    res.render('index');
+    i18n.setLocale('en');
+    return res.render('index', {
+        i18n: res,
+    });
 };
 export const addpoi = (req, res) => {
     res.render('addpoi');
@@ -39,4 +44,4 @@ export const login = (req, res) => {
 };
 export const privacypolicy = (req, res) => {
     res.render('privacypolicy');
-}
+};
