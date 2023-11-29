@@ -20,6 +20,8 @@
         "jsonwebtoken": "^9.0.2",
         "mongoose": "^7.6.4",
         "prettier": "^3.0.3",
+        "puppeteer": "^18.1.0",
+        "puppeteer-core": "^21.5.2",
         "swagger-jsdoc": "^6.2.8",
         "swagger-ui-express": "^5.0.0"
     },
