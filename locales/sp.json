@@ -1,0 +1,18 @@
+{
+    "Home": "Inicio",
+    "AddPoi": "Agregar POI",
+    "AddPoint": "Agregar Puntos de Interés",
+    "Users": "Usuarios",
+    "Pois": "Puntos de Interés",
+    "Search": "Buscar",
+    "Profile": "Perfil",
+    "EnableGPS": "Habilitar Geolocalización",
+    "RevokeGPS": "Revocar Geolocalización",
+    "Name": "Nombre",
+    "Type": "Tipo",
+    "Country": "País",
+    "Region": "Región",
+    "lat": "Latitud",
+    "lon": "Longitud",
+    "Description": "Descripción"
+}
