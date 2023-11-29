@@ -18,6 +18,7 @@ import { POI } from '../models/Poi.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
+import cookieParser from 'cookie-parser';
 
 export const getUserById = async (req, res) => {
     try {
@@ -61,7 +62,8 @@ export const login = async (req, res) => {
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
             expiresIn: '1d',
         });
-
+        // Set the auth token as a cookie
+        res.cookie('token', token);
         // save token to user document
         user.token = token;
         await user.save();
@@ -107,6 +109,8 @@ export const create = async (req, res) => {
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
             expiresIn: '1d',
         });
+        // Set the auth token as a cookie
+        res.cookie('token', token);
 
         // save token to user document
         user.token = token;
@@ -138,6 +142,7 @@ export const logout = async (req, res) => {
 
         // remove token
         user.token = '';
+        res.clearCookie('token');
         await user.save();
 
         // return success message
