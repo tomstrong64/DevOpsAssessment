@@ -28,4 +28,5 @@ router.get('/updateuser', IndexController.updateuser);
 router.get('/register', IndexController.register);
 router.get('/login', IndexController.login);
 router.get('/privacypolicy', IndexController.privacypolicy);
+router.get('/dev-docs', IndexController.devdocs);
 export default router;

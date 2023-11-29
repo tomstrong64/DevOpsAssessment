@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Dev Docs</title>
+    </head>
+    <body>
+        <h1>Dev Docs</h1>
+        <h3>How to run</h3>
+        <div>
+            <p>System Requirements</p>
+            <ul>
+                <li>
+                    <a href="https://www.docker.com/products/docker-desktop/"
+                        >Docker</a
+                    >
+                </li>
+            </ul>
+            <p>
+                First of all create a local MongoDB instance, this can be done
+                in docker with the following command:
+            </p>
+            <code
+                >docker run --name MongoDB -p 27017:27017 -d mongo:latest</code
+            >
+            <p>
+                Then rename the <code>.env.template</code> file to
+                <code>.env</code> the example values will allow the application
+                if you have set up your database as shown above, however the
+                file upload will not work without a valid Azure connection
+                string.
+            </p>
+            <p>
+                Once you have done this, the project includes build scripts for
+                Windows (<code>build.bat</code>) and Linux
+                (<code>build.sh</code>). Running this file will build the docker
+                image, remove any existing containers, ensure the database is
+                running and then run the new image.The app will then be
+                available on port 3000 (<a href="http://localhost:3000"
+                    >http://localhost:3000</a
+                >)
+            </p>
+        </div>
+        <h3>How to test</h3>
+        <div>
+            <p>System Requirements</p>
+            <ul>
+                <li>
+                    <a href="https://nodejs.org/en">NodeJS v20</a>
+                </li>
+            </ul>
+        </div>
+        <h3>How to deploy</h3>
+        <div></div>
+        <h3>Feature Implementation</h3>
+        <h4>1. Secured with SSL</h4>
+        <div></div>
+        <h4>2. ReST API Documentation (OpenAPI)</h4>
+        <div></div>
+        <h4>3. Database</h4>
+        <div></div>
+        <h4>4. Internationalisation</h4>
+        <div></div>
+        <h4>5. Documentation</h4>
+        <div>THIS IS THE DOCUMENTATION</div>
+        <h4>6. GDPR</h4>
+        <div></div>
+        <h4>7. Server hosting and Docker</h4>
+        <div></div>
+        <h4>8. User authentication</h4>
+        <div></div>
+        <h4>9. User privalleges</h4>
+        <div></div>
+        <h4>10. Mobile access</h4>
+        <div></div>
+        <h4>11. Responsiveness</h4>
+        <div></div>
+        <h4>12. Geolocation</h4>
+        <div></div>
+        <h4>13. Client authentication</h4>
+        <div></div>
+    </body>
+</html>

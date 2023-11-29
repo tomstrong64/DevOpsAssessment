@@ -39,4 +39,7 @@ export const login = (req, res) => {
 };
 export const privacypolicy = (req, res) => {
     res.render('privacypolicy');
-}
+};
+export const devdocs = (req, res) => {
+    res.render('dev-docs');
+};
