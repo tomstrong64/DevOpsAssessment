@@ -18,7 +18,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Login User</title>
+        <title><%= i18n.__("LoginUser") %></title>
         <link
             rel="stylesheet"
             href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
@@ -38,7 +38,7 @@
                             <form>
                                 <div class="mb-3">
                                     <label for="email" class="form-label"
-                                        >Email</label
+                                        ><%= i18n.__("Email") %></label
                                     >
                                     <input
                                         type="email"
@@ -50,7 +50,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="password" class="form-label"
-                                        >Password</label
+                                        ><%= i18n.__("Password") %></label
                                     >
                                     <input
                                         type="password"
@@ -65,19 +65,19 @@
                                     type="submit"
                                     class="btn btn-primary"
                                 >
-                                    Login
+                                <%= i18n.__("Login") %>
                                 </button>
                                 <div class="text-center mt-3">
                                     <p>
-                                        Don't have an account?
-                                        <a href="/register">Register here</a>.
+                                        <%= i18n.__("DHAA") %>
+                                        <a href="/register"><%= i18n.__("RH") %></a>.
                                     </p>
                                 </div>
                                 <div class="text-center mt-3">
                                     <p>
-                                        Check our privacy policy page first.
+                                        <%= i18n.__("COPPPF") %>
                                         <a href="/privacypolicy"
-                                            >Privacy Policies</a
+                                            ><%= i18n.__("PP") %></a
                                         >.
                                     </p>
                                 </div>

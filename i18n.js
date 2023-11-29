@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 i18n.configure({
-    locales: ['en', 'pt', 'sp', 'fr'],
+    locales: ['en', 'pt', 'es', 'fr'],
     defaultLocale: 'en',
     directory: path.join(__dirname, 'locales'),
     cookie: 'i18n',
