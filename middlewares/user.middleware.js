@@ -18,13 +18,13 @@ export const noAuth = async (req, res, next) => {
 export const stdAuth = async (req, res, next) => {
     try {
         // check if token is provided
-        if (!req.headers.authorization || !req.cookies.token)
+        if (!req.headers.authorization && !req.cookies.token)
             return res.status(401).json({ message: 'Unauthorized' });
 
         // decode token
         const token = req.headers.authorization
             ? req.headers.authorization.split(' ')[1]
-            : req.cookies.authorization;
+            : req.cookies.token;
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         // get user from db
@@ -61,13 +61,13 @@ export const stdAuth = async (req, res, next) => {
 export const adminAuth = async (req, res, next) => {
     try {
         // check if token is provided
-        if (!req.headers.authorization || !req.cookies.token)
+        if (!req.headers.authorization && !req.cookies.token)
             return res.status(401).json({ message: 'Unauthorized' });
 
         // decode token
         const token = req.headers.authorization
             ? req.headers.authorization.split(' ')[1]
-            : req.cookies.authorization;
+            : req.cookies.token;
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         // get user from db
