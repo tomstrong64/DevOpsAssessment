@@ -26,15 +26,6 @@ export const initSwagger = (app) => {
                 description: 'GeoGuide API',
             },
 
-            securityDefinitions: {
-                bearerAuth: {
-                    type: 'apiKey',
-                    name: 'Authorization',
-                    scheme: 'bearer',
-                    in: 'header',
-                },
-            },
-
             servers: [
                 {
                     url: 'https://coordinated-chaos.uksouth.cloudapp.azure.com',
