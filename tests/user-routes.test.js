@@ -7,6 +7,7 @@ import { User } from '../models/User.js';
 
 let auth_token; //Private authorisation stuff, should not be exposed outside!
 let admin_auth_token; // for admin's authentication
+let glob_user_id_for_del; // For delete user tests
 
 // SETUP FOR USER TEST
 beforeAll(async () => {
@@ -461,4 +462,80 @@ describe('PUT /updateUser/:id tests', () => {
         expect(adResponse.statusCode).toBe(400);
         expect(adResponse.body['message']).toEqual('Invalid ID');
     }, 25000);
+});
+
+describe('DELETE /deleteUser/:id tests', () => {
+    it('An admin user should be able to successfully delete their data from the application by deleting their user account', async () => {
+        const loginresponse = await request(app)
+            .post('/user/login')
+            .set('Content-Type', 'application/json')
+            .send({
+                email: 'dummyAdmins82@outlook.com',
+                password: 'Akn#Rcjy7!',
+            });
+        admin_auth_token = loginresponse.body.token;
+
+        const checkResponse = await request(app)
+            .get('/user/list')
+            .set('Authorization', `Bearer ${admin_auth_token}`)
+            .send();
+        glob_user_id_for_del = checkResponse.body[1]['_id'];
+
+        const deleteResponse = await request(app)
+            .delete(`/user/deleteUser/${glob_user_id_for_del}`)
+            .set('Authorization', `Bearer ${admin_auth_token}`);
+        expect(deleteResponse.statusCode).toBe(200);
+        expect(deleteResponse.body['message']).toEqual(
+            'User Deleted successfully'
+        );
+    }, 20000);
+    it('If an admin user tries to delete another admin user, server should respond with status code 403', async () => {
+        const logResponse = await request(app)
+            .post('/user/login')
+            .set('Content-Type', 'application/json')
+            .send({
+                email: 'dummyAdmin93@outlook.com',
+                password: 'janfhb*@ybd37G!',
+            });
+        admin_auth_token = logResponse.body.token;
+
+        const checkResponse = await request(app)
+            .get('/user/list')
+            .set('Authorization', `Bearer ${admin_auth_token}`)
+            .send();
+        // Get other admin's user id for testing
+        glob_user_id_for_del = checkResponse.body[5]['_id'];
+
+        const delresponse = await request(app)
+            .delete(`/user/deleteUser/${glob_user_id_for_del}`)
+            .set('Authorization', `Bearer ${admin_auth_token}`);
+        expect(delresponse.statusCode).toBe(403);
+    }, 20000);
+    it('If an invalid ID is sent to this route, the server should respond with a status code of 400', async () => {
+        const login_response = await request(app)
+            .post('/user/login')
+            .set('Content-Type', 'application/json')
+            .send({
+                email: 'dummyAdmins82@outlook.com',
+                password: 'Akn#Rcjy7!',
+            });
+        admin_auth_token = login_response.body.token;
+
+        const idresponse = await request(app)
+            .get('/user/list')
+            .set('Authorization', `Bearer ${admin_auth_token}`);
+        glob_user_id_for_del = idresponse.body[2]['_id'];
+        let addString = 'nccbwgy26';
+        let invalid_userID = glob_user_id_for_del.concat(addString);
+
+        const delresponse = await request(app)
+            .delete(`/user/deleteUser/${invalid_userID}`)
+            .set('Authorization', `Bearer ${admin_auth_token}`);
+        expect(delresponse.statusCode).toBe(400);
+        expect(delresponse.body['message']).toEqual('Invalid ID');
+    }, 20000);
+    test.todo(
+        'If an user tries to delete their own account, the server should send status code 200 with a redirect'
+    );
+    // This last test doesn't work if implemented. A user cannot delete their own account off of the application as code 401 is returned
 });
