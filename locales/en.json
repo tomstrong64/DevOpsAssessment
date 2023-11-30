@@ -43,5 +43,6 @@
     "CurrentPassword": "Current Password",
     "UpdtDtls": "Update Details",
     "DltPass": "Delete Password",
-    "Logout": "Logout"
+    "Logout": "Logout",
+    "Delete": "Delete"
 }

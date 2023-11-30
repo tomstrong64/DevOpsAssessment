@@ -43,5 +43,6 @@
     "CurrentPassword": "Senha Atual",
     "UpdtDtls": "Atualizar Detalhes",
     "DltPass": "Excluir Senha",
-    "Logout": "Sair"
+    "Logout": "Sair",
+    "Delete": "Excluir"
 }

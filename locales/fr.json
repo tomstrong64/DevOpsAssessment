@@ -43,5 +43,6 @@
     "CurrentPassword": "Mot de passe actuel",
     "UpdtDtls": "Mettre à jour les détails",
     "DltPass": "Supprimer le mot de passe",
-    "Logout": "Se déconnecter"
+    "Logout": "Se déconnecter",
+    "Delete": "Supprimer"
 }
