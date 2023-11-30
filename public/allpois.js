@@ -40,8 +40,7 @@ document.addEventListener('DOMContentLoaded', async (e) => {
       <th>Longitude</th>
       <th>Latitude</th>
       <th>Description</th>
-      <th>Delete</th>
-    `;
+      `;
     thead.appendChild(trHeadings);
     table.appendChild(thead);
 
@@ -58,10 +57,7 @@ document.addEventListener('DOMContentLoaded', async (e) => {
         <td>${poi.lon}</td>
         <td>${poi.lat}</td>
         <td>${poi.description}</td>
-        <td>
-          <button onclick="deletePoi('${poi._id}')">Delete</button>
-        </td>
-      `;
+    `;
         tr.id = poi._id;
         tbody.appendChild(tr);
     });
@@ -69,20 +65,3 @@ document.addEventListener('DOMContentLoaded', async (e) => {
     resultsDiv.innerHTML = '';
     resultsDiv.appendChild(table);
 });
-async function deletePoi(id) {
-    try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`/pois/deletePoi/${id}`, {
-            method: 'DELETE',
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        const result = await responseHandler(response);
-        if (result) {
-            document.getElementById(id).remove();
-        }
-    } catch (e) {
-        alert(`Error with POI ID ${id}: ${e}`);
-    }
-}
