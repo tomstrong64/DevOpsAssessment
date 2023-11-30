@@ -534,6 +534,29 @@ describe('DELETE /deleteUser/:id tests', () => {
         expect(delresponse.statusCode).toBe(400);
         expect(delresponse.body['message']).toEqual('Invalid ID');
     }, 20000);
+    it('If no authentication token is provided in the request, the server should send back a status code of 401', async () => {
+        const logResponse = await request(app)
+            .post('/user/login')
+            .set('Content-Type', 'application/json')
+            .send({
+                email: 'dummyAdmin93@outlook.com',
+                password: 'janfhb*@ybd37G!',
+            });
+        admin_auth_token = logResponse.body.token;
+
+        const checkResponse = await request(app)
+            .get('/user/list')
+            .set('Authorization', `Bearer ${admin_auth_token}`)
+            .send();
+        // Get other admin's user id for testing
+        glob_user_id_for_del = checkResponse.body[4]['_id'];
+
+        const deleteResponse = await request(app).delete(
+            `/user/deleteUser/${glob_user_id_for_del}`
+        );
+        expect(deleteResponse.statusCode).toBe(401);
+        expect(deleteResponse.body['message']).toEqual('Unauthorized');
+    }, 20000);
     test.todo(
         'If an user tries to delete their own account, the server should send status code 200 with a redirect'
     );
