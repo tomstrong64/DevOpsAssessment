@@ -539,3 +539,41 @@ describe('DELETE /deleteUser/:id tests', () => {
     );
     // This last test doesn't work if implemented. A user cannot delete their own account off of the application as code 401 is returned
 });
+
+describe('GET /logout test', () => {
+    it('A user should be able to successfully log out once they are logged in, with status code 200 being returned', async () => {
+        const loginresponse = await request(app)
+            .post('/user/login')
+            .set('Content-Type', 'application/json')
+            .send({
+                email: 'user@test.com',
+                password: '12345',
+            });
+        auth_token = loginresponse.body.token;
+
+        const logoutResponse = await request(app)
+            .get('/user/logout')
+            .set('Authorization', `Bearer ${auth_token}`);
+        expect(logoutResponse.statusCode).toBe(200);
+        expect(logoutResponse.body['message']).toEqual('Logout successful');
+        expect(logoutResponse.body['redirect']).toBeDefined();
+    }, 15000);
+
+    it('An admin user should also be able to successfully log out after they are logged in, with status code 200 being returned', async () => {
+        const loginResponse = await request(app)
+            .post('/user/login')
+            .set('Content-Type', 'application/json')
+            .send({
+                email: 'dummyAdmins82@outlook.com',
+                password: 'Akn#Rcjy7!',
+            });
+        admin_auth_token = loginResponse.body.token;
+
+        const logoutresponse = await request(app)
+            .get('/user/logout')
+            .set('Authorization', `Bearer ${admin_auth_token}`);
+        expect(logoutresponse.statusCode).toBe(200);
+        expect(logoutresponse.body['message']).toEqual('Logout successful');
+        expect(logoutresponse.body['redirect']).toBeDefined();
+    }, 20000);
+});
