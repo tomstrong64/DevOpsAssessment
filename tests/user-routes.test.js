@@ -576,4 +576,19 @@ describe('GET /logout test', () => {
         expect(logoutresponse.body['message']).toEqual('Logout successful');
         expect(logoutresponse.body['redirect']).toBeDefined();
     }, 20000);
+
+    it('If no authentication token is provided in the request, the server should send back a status code of 401', async () => {
+        const loginresponse = await request(app)
+            .post('/user/login')
+            .set('Content-Type', 'application/json')
+            .send({
+                email: 'testingmail11@yahoo.com',
+                password: 'adbdfec2891',
+            });
+        auth_token = loginresponse.body.token;
+
+        const logoutResponse = await request(app).get('/user/logout');
+        expect(logoutResponse.statusCode).toBe(401);
+        expect(logoutResponse.body['message']).toEqual('Unauthorized');
+    }, 15000);
 });
