@@ -19,8 +19,10 @@ import UserRouter from './routes/user.route.js';
 import PoiRouter from './routes/poi.route.js';
 import HealthRouter from './routes/health.route.js';
 import IndexRouter from './routes/index.route.js';
+import languageRouter from './routes/language.route.js';
 
 import { initSwagger } from './swagger.js';
+import i18n from './i18n.js';
 import cookieParser from 'cookie-parser';
 
 const app = express();
@@ -32,9 +34,10 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 initSwagger(app);
+app.use(i18n.init);
 
 app.use(IndexRouter);
-
+app.use('/lang', languageRouter);
 app.use('/user', UserRouter);
 
 app.use('/pois', PoiRouter);
