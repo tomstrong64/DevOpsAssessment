@@ -111,17 +111,24 @@
         <h3>1. Secured with SSL</h3>
         <div></div>
         <h3>2. ReST API Documentation (OpenAPI)</h3>
-        <div> <p>
-            OpenAPI, formerly known as Swagger, is a specification for
-            building APIs (Application Programming Interfaces).For this
-            project, the comments with @openapi annotations are using the
-            OpenAPI Specification to document the RESTful API for both
-            Points of Interest (POI) and user management, which provide
-            details about the available endpoints, expected request and
-            response formats, authentication requirements, and potential
-            error scenarios, making it easier for developers to understand
-            and use the API.
-        </p></div>
+        <div>
+            <p>
+                OpenAPI, formerly known as Swagger, is a specification for
+                building APIs (Application Programming Interfaces).For this
+                project, the comments with @openapi annotations are using the
+                OpenAPI Specification to document the RESTful API for both
+                Points of Interest (POI) and user management, which provide
+                details about the available endpoints, expected request and
+                response formats, authentication requirements, and potential
+                error scenarios, making it easier for developers to understand
+                and use the API. The URL for genrated documentation is
+                <a
+                    href="https://coordinated-chaos.uksouth.cloudapp.azure.com/api-docs/"
+                >
+                    https://coordinated-chaos.uksouth.cloudapp.azure.com/api-docs/</a
+                >
+            </p>
+        </div>
         <h3>3. Database</h3>
         <div>
             <p>
@@ -190,7 +197,23 @@
         <h3>11. Responsiveness</h3>
         <div></div>
         <h3>12. Geolocation</h3>
-        <div></div>
+        <div>
+            <p>
+                The geolocation is implemented using the
+                <a
+                    href="https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API"
+                >
+                    Geolocation API</a
+                >. The user can choose to share their location with the app,
+                this will then be used to show the location of the user on the
+                map.<br />
+                And if the user does not want to share their location, they can
+                still use the map, but the map will show the default location,
+                and if the user moves the point on the map, the coordinates will
+                not be updated. And for user who allow the app to use their location, the Revoke Geolocation button will be shown, 
+                and they can click it to revoke the permission. and that will stop the the user's location from moving on the map.
+            </p>
+        </div>
         <h3>13. Client authentication</h3>
         <div></div>
     </body>
