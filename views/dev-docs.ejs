@@ -204,16 +204,17 @@
                     href="https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API"
                 >
                     Geolocation API</a
-                >. The user can choose to share their location with the app,
-                this will then be used to show the location of the user on the
-                map.<br />
-                And if the user does not want to share their location, they can
-                still use the map, but the map will show the default location,
-                and if the user moves the point on the map, the coordinates will
-                not be updated. And for user who allow the app to use their
-                location, the Revoke Geolocation button will be shown, and they
-                can click it to revoke the permission. and that will stop the
-                the user's location from moving on the map.
+                >. When a user accesses the web application, they are prompted to share their location with the app.
+                    If the user chooses to share their location, the Geolocation API retrieves data from the device's GPS hardware,
+                        providing accurate latitude and longitude coordinates. These coordinates are then used to display the user's
+                            current location on the map. The map is configured using Leaflet, a popular open-source JavaScript library for interactive maps.</br>
+
+                If the user opts not to share their location, the map defaults to a predetermined location. In this case, the map remains static, and if the user
+                    interacts with it by moving the point on the map, the coordinates will not be updated since geolocation data is not available.</br>
+                
+                For users who grant permission to use their location, a "Revoke Geolocation" button is displayed. Clicking this button allows users to revoke
+                        the application's access to their location, effectively stopping the user's location marker from updating on the map. The Geolocation 
+                        API provides a mechanism for users to control their privacy preferences, either by allowing or revoking access to their geographical information.</br>
             </p>
         </div>
         <h3>13. Client authentication</h3>
