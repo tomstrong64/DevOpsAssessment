@@ -193,7 +193,29 @@
                         </div>
                    
         </div>
-        <div style="margin-top: 20px" id="poi_results"></div>
+        <div style="margin-top: 20px" id="poi_results" hidden>
+            <div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th><%= i18n.__("Name") %></th>
+                            <th><%= i18n.__("Type") %></th>
+                            <th><%= i18n.__("Country") %></th>
+                            <th><%= i18n.__("Region") %></th>
+                            <th><%= i18n.__("Longitude") %></th>
+                            <th><%= i18n.__("Latitude") %></th>
+                            <th><%= i18n.__("Description") %></th>
+                            <th id="transUpdate"><%= i18n.__("Update") %></th>
+                            <th id="transDelete"><%= i18n.__("Delete") %></th>
+                            <th id="transImage"><%= i18n.__("Image") %></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Table rows will be dynamically added here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.7.2/dist/umd/popper.min.js"></script>

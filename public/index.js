@@ -100,31 +100,21 @@ async function ajaxSearch(region) {
     let pois = await ajaxResponse.json();
     if (pois.length == 0) {
         alert('No Pois Found');
+
         return;
     }
     const resultsDiv = document.getElementById('poi_results');
-    resultsDiv.innerHTML = '';
+    const UpdateBtn = document.getElementById('transUpdate').innerText;
+    const DeleteBtn = document.getElementById('transDelete').innerText;
+    const ImageBtn = document.getElementById('transImage').innerText;
+    resultsDiv.hidden = false;
+    
 
-    // Create table and table headings
+    // Create a table
     const table = document.createElement('table');
-    const thead = document.createElement('thead');
-    const trHeadings = document.createElement('tr');
-    trHeadings.innerHTML = `
-      <th>Name</th>
-      <th>Type</th>
-      <th>Country</th>
-      <th>Region</th>
-      <th>Longitude</th>
-      <th>Latitude</th>
-      <th>Description</th>
-      <th>Update</th>
-      <th>Delete</th>
-      <th>Image</th>
-    `;
-    thead.appendChild(trHeadings);
-    table.appendChild(thead);
+    table.classList.add('table');
 
-    // Add table rows
+    // Create table body
     const tbody = document.createElement('tbody');
     table.appendChild(tbody);
     if (userId) {
@@ -144,12 +134,12 @@ async function ajaxSearch(region) {
         <td>${poi.lat}</td>
         <td>${poi.description}</td>
         <td>
-          <a href="/updatepoi?id=${poi._id}">Update</a>
+          <a href="/updatepoi?id=${poi._id}" class="btn btn-primary btn-sm">${UpdateBtn}</a>
         </td>
         <td>
-          <button onclick="deletePoi('${poi._id}')">Delete</button>
+          <button onclick="deletePoi('${poi._id}')" class="btn btn-danger btn-sm">${DeleteBtn}</button>
         </td><td>
-        <button onclick="getPoiImage('${poi._id}', '${poi.name}', ${poi.lat}, ${poi.lon})">Image</button>
+        <button onclick="getPoiImage('${poi._id}', '${poi.name}', ${poi.lat}, ${poi.lon})" class="btn btn-info btn-sm">${ImageBtn}</button>
          </td>
       `;
         tr.id = poi._id;
@@ -162,7 +152,7 @@ async function ajaxSearch(region) {
             .openPopup();
     });
 
-    resultsDiv.innerHTML = '';
+    
     resultsDiv.appendChild(table);
 }
 
