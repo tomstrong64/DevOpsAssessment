@@ -14,3 +14,7 @@ export const fr = (req, res) => {
     res.cookie('i18n', 'fr');
     res.redirect('/');
 };
+export const tr = (req, res) => {
+    res.cookie('i18n', 'tr');
+    res.redirect('/');
+};
