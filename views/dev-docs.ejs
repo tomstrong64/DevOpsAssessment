@@ -175,6 +175,8 @@
                 strings and values of the translation that are used to translate
                 the ejs pages. Each ejs page has String keys that will retrieve
                 the values related to each key.
+                For example, in the index.ejs file, the following string key is used to retrieve the value for the "Home" attribute: "i18n.__("Home") ".
+                This key is defined in the en.json file, which contains the English translation for the "Home" string. If the user's preferred language is Portuguese, the  i18n.__ function will retrieve the value for the "Home" string from the pt.json file, which contains the Portuguese translation for the "title" string.
             </p>
         </div>
         <h3>5. Documentation</h3>
