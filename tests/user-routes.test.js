@@ -41,8 +41,9 @@ afterAll(async () => {
     mongoose.connection.close(); // To close the connection otherwise Jest reports the connection as open which is not good!
 });
 
-describe('POST /register', () => {
-    it('should save the new user to the database', async () => {
+// Tests for registering a new user, both positive and negative
+describe('POST /user/register', () => {
+    it('A new user should be saved to the database', async () => {
         const response = await request(app)
             .post('/user/register')
             .set('Content-Type', 'application/json')
@@ -54,7 +55,7 @@ describe('POST /register', () => {
         expect(response.status).toBe(201); // returns 302, which is known as 'Found', it means that the URI of the requested URI has been changed temporarily
     }, 15000);
 
-    it('the headers should be defined', async () => {
+    it('The headers should be defined in the response from the server when a user is registered for the first time', async () => {
         const response = await request(app)
             .post('/user/register')
             .set('Content-Type', 'application/json')
@@ -66,7 +67,7 @@ describe('POST /register', () => {
         expect(response.headers).toBeDefined();
     }, 15000);
 
-    it("the response code should be appropriate for this request' ", async () => {
+    it('A newly-registered user should be redirected to the login page after registration', async () => {
         const response = await request(app)
             .post('/user/register')
             .set('Content-Type', 'application/json')
@@ -76,6 +77,7 @@ describe('POST /register', () => {
                 password: 'luo2ry92@a1h',
             });
         expect(response.statusCode).toBe(201);
+        expect(response.body['redirect']).toEqual('/');
     }, 15000);
 
     it('The admin property of a newly registered non-admin user should be set to false by default', async () => {
@@ -92,8 +94,7 @@ describe('POST /register', () => {
         // Get the profile of the user to check the necessary property
         const profileResponse = await request(app)
             .get('/user/getUser')
-            .set('Authorization', `Bearer ${user_auth_token}`)
-            .send();
+            .set('Authorization', `Bearer ${user_auth_token}`);
         expect(profileResponse.statusCode).toBe(200);
         expect(profileResponse.body['admin']).toBe(false);
         // This test will need to be rewritten.
@@ -125,9 +126,7 @@ describe('POST /register', () => {
         expect(adResponse.statusCode).toBe(200);
         expect(adResponse.body['admin']).toBe(true);
     }, 25000);
-});
 
-describe('POST /register negative cases', () => {
     it('A new user registering with an existing email address should return an error status code', async () => {
         const response = await request(app)
             .post('/user/register')
@@ -140,7 +139,7 @@ describe('POST /register negative cases', () => {
         expect(response.statusCode).toBe(401);
     }, 15000);
 
-    it('missing the name field for a new user should return an error status code', async () => {
+    it('Missing the name field for a new user should return an error status code', async () => {
         const response = await request(app)
             .post('/user/register')
             .set('Content-Type', 'application/json')
@@ -151,7 +150,7 @@ describe('POST /register negative cases', () => {
         expect(response.statusCode).toBe(400);
     }, 15000);
 
-    it('missing the email field for a new user should return an error status code', async () => {
+    it('Missing the email field for a new user should return an error status code', async () => {
         const response = await request(app)
             .post('/user/register')
             .set('Content-Type', 'application/json')
@@ -162,7 +161,7 @@ describe('POST /register negative cases', () => {
         expect(response.statusCode).toBe(400);
     }, 15000);
 
-    it('missing the password field for a new user should return an error status code', async () => {
+    it('Missing the password field for a new user should return an error status code', async () => {
         const response = await request(app)
             .post('/user/register')
             .set('Content-Type', 'application/json')
@@ -174,7 +173,8 @@ describe('POST /register negative cases', () => {
     }, 15000);
 });
 
-describe('POST /login positive case', () => {
+// Tests for the login route by both admins and non-admins, both positive and negative
+describe('POST /user/login tests', () => {
     it('The user should be able to successfully login to the app with status code 200', async () => {
         const response = await request(app)
             .post('/user/login')
@@ -185,6 +185,7 @@ describe('POST /login positive case', () => {
             });
         expect(response.statusCode).toBe(200);
     }, 15000);
+
     it("Upon successful login, the message inside the response should equal 'Login successful' ", async () => {
         const response = await request(app)
             .post('/user/login')
@@ -195,6 +196,7 @@ describe('POST /login positive case', () => {
             });
         expect(response.body['message']).toEqual('Login successful');
     }, 15000);
+
     it('Check if the token exists in the response body when user successfully logged in', async () => {
         const response = await request(app)
             .post('/user/login')
@@ -206,10 +208,8 @@ describe('POST /login positive case', () => {
             });
         expect(response.body['token']).toBeDefined();
     }, 15000);
-});
 
-describe('POST /login negative cases', () => {
-    it('missing email field in request body should return an error code of 400', async () => {
+    it('Missing email field in request body should return an error code of 400', async () => {
         const response = await request(app)
             .post('/user/login')
             .set('Content-Type', 'application/json')
@@ -221,7 +221,8 @@ describe('POST /login negative cases', () => {
             'Email and password required'
         );
     }, 15000);
-    it('missing password field in request body should return an error code of 400', async () => {
+
+    it('Missing password field in request body should return an error code of 400', async () => {
         const response = await request(app)
             .post('/user/login')
             .set('Content-Type', 'application/json')
@@ -231,7 +232,8 @@ describe('POST /login negative cases', () => {
         expect(response.statusCode).toBe(400);
         expect(response.body['message']).toEqual('Email and password required');
     }, 15000);
-    it('mismatched email in request body should return error 401', async () => {
+
+    it('Mismatched email in request body should return error 401', async () => {
         const response = await request(app)
             .post('/user/login')
             .set('Content-Type', 'application/json')
@@ -242,7 +244,8 @@ describe('POST /login negative cases', () => {
         expect(response.statusCode).toBe(401);
         expect(response.body['message']).toEqual('Invalid email or password');
     }, 15000);
-    it('mismatched password in request body should return error 401', async () => {
+
+    it('Mismatched password in request body should return error 401', async () => {
         const response = await request(app)
             .post('/user/login')
             .set('Content-Type', 'application/json')
@@ -253,6 +256,7 @@ describe('POST /login negative cases', () => {
         expect(response.statusCode).toBe(401);
         expect(response.body['message']).toEqual('Invalid email or password');
     }, 15000);
+
     it('Malformed request to the login route should throw an error code of 400', async () => {
         const response = await request(app)
             .post('/user/login')
@@ -289,6 +293,7 @@ describe('PUT /user/updateUser', () => {
         expect(response.body['message']).toEqual('Updated successfully');
         expect(response.body['redirect']).toBeDefined();
     }, 25000);
+
     it('Error response code should be sent back if new password and the same password entered again do not match', async () => {
         const loginRequest = await request(app)
             .post('/user/login')
@@ -312,6 +317,7 @@ describe('PUT /user/updateUser', () => {
         expect(response.statusCode).toBe(400);
         expect(response.body['message']).toEqual('Passwords do not match');
     }, 25000);
+
     it('Error response code should be sent if the password field is blank when trying to update the current user details', async () => {
         const loginRequest = await request(app)
             .post('/user/login')
@@ -333,6 +339,7 @@ describe('PUT /user/updateUser', () => {
             });
         expect(response.statusCode).toBe(400);
     }, 25000);
+
     it('If no auth token is provided in the request, the server should send back a status code of 401', async () => {
         const loginRequest = await request(app)
             .post('/user/login')
@@ -357,7 +364,8 @@ describe('PUT /user/updateUser', () => {
     }, 20000);
 });
 
-describe('GET /getUser test', () => {
+// Tests for a user attempting to view their details, both positive and negative
+describe('GET /user/getUser test', () => {
     it('When this route is accessed by a logged-in user, the correct data should be sent back to the client in the response', async () => {
         const loginResponse = await request(app)
             .post('/user/login')
@@ -376,6 +384,7 @@ describe('GET /getUser test', () => {
         expect(response.body['admin']).toBe(false);
         expect(response.body['token']).toBeDefined();
     }, 15000);
+
     it('If auth token is not sent in the request, the server should send back a status code of 401', async () => {
         const loginresponse = await request(app)
             .post('/user/login')
@@ -393,7 +402,8 @@ describe('GET /getUser test', () => {
     }, 15000);
 });
 
-describe('GET /list test using admin account', () => {
+// Tests for the admin getting a list of users, both positive and negative
+describe('GET /user/list test using admin account', () => {
     it('Check that the method returns a list of users, whether it is an empty list or whether it contains some users', async () => {
         const login_response = await request(app)
             .post('/user/login')
@@ -412,7 +422,7 @@ describe('GET /list test using admin account', () => {
         expect(response.body).toHaveLength(6);
     }, 25000);
 
-    it('If no authentication token is provided to this route, the server should respond back with status code of 401', async () => {
+    it('If no auth token is provided to this route, the server should respond back with status code of 401', async () => {
         const logResponse = await request(app)
             .post('/user/login')
             .set('Content-Type', 'application/json')
@@ -429,7 +439,8 @@ describe('GET /list test using admin account', () => {
     }, 15000);
 });
 
-describe('PUT /updateUser/:id tests', () => {
+// Tests for updating a user to an admin, both positive and negative
+describe('PUT /user/updateUser/:id tests', () => {
     it('Updating a user status to admin should return a HTTP status code of 200 and other associated data', async () => {
         // Register a new user first and set it to admin using the admin's route
         const response = await request(app)
@@ -515,7 +526,8 @@ describe('PUT /updateUser/:id tests', () => {
         expect(adResponse.statusCode).toBe(400);
         expect(adResponse.body['message']).toEqual('Invalid ID');
     }, 25000);
-    it('If no authentication token is provided in the request, the server should send back a status code of 401', async () => {
+
+    it('If no auth token is provided in the request, the server should send back a status code of 401', async () => {
         const ad_loginResponse = await request(app)
             .post('/user/login')
             .set('Content-Type', 'application/json')
@@ -538,7 +550,8 @@ describe('PUT /updateUser/:id tests', () => {
     }, 25000);
 });
 
-describe('DELETE /deleteUser/:id tests', () => {
+// Tests for deleting a user, both positive and negative
+describe('DELETE /user/deleteUser/:id tests', () => {
     it('An admin user should be able to successfully delete their data from the application by deleting their user account', async () => {
         const loginresponse = await request(app)
             .post('/user/login')
@@ -563,6 +576,7 @@ describe('DELETE /deleteUser/:id tests', () => {
             'User Deleted successfully'
         );
     }, 20000);
+
     it('If an admin user tries to delete another admin user, server should respond with status code 403', async () => {
         const logResponse = await request(app)
             .post('/user/login')
@@ -585,6 +599,7 @@ describe('DELETE /deleteUser/:id tests', () => {
             .set('Authorization', `Bearer ${admin_auth_token}`);
         expect(delresponse.statusCode).toBe(403);
     }, 20000);
+
     it('If an invalid ID is sent to this route, the server should respond with a status code of 400', async () => {
         const login_response = await request(app)
             .post('/user/login')
@@ -608,7 +623,8 @@ describe('DELETE /deleteUser/:id tests', () => {
         expect(delresponse.statusCode).toBe(400);
         expect(delresponse.body['message']).toEqual('Invalid ID');
     }, 20000);
-    it('If no authentication token is provided in the request, the server should send back a status code of 401', async () => {
+
+    it('If no auth token is provided in the request, the server should send back a status code of 401', async () => {
         const logResponse = await request(app)
             .post('/user/login')
             .set('Content-Type', 'application/json')
@@ -631,6 +647,7 @@ describe('DELETE /deleteUser/:id tests', () => {
         expect(deleteResponse.statusCode).toBe(401);
         expect(deleteResponse.body['message']).toEqual('Unauthorized');
     }, 20000);
+
     it('If an user tries to delete their own account, the server should send status code 200 with a redirect', async () => {
         const logResponse = await request(app)
             .post('/user/login')
@@ -655,7 +672,8 @@ describe('DELETE /deleteUser/:id tests', () => {
     // This last test doesn't work if implemented. A user cannot delete their own account off of the application as code 401 is returned
 });
 
-describe('GET /logout test', () => {
+// Tests for logging out, both positive and negative
+describe('GET /user/logout test', () => {
     it('A user should be able to successfully log out once they are logged in, with status code 200 being returned', async () => {
         const loginresponse = await request(app)
             .post('/user/login')
@@ -692,7 +710,7 @@ describe('GET /logout test', () => {
         expect(logoutresponse.body['redirect']).toBeDefined();
     }, 20000);
 
-    it('If no authentication token is provided in the request, the server should send back a status code of 401', async () => {
+    it('If no auth token is provided in the request, the server should send back a status code of 401', async () => {
         const loginresponse = await request(app)
             .post('/user/login')
             .set('Content-Type', 'application/json')
