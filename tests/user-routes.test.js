@@ -557,9 +557,27 @@ describe('DELETE /deleteUser/:id tests', () => {
         expect(deleteResponse.statusCode).toBe(401);
         expect(deleteResponse.body['message']).toEqual('Unauthorized');
     }, 20000);
-    test.todo(
-        'If an user tries to delete their own account, the server should send status code 200 with a redirect'
-    );
+    it('If an user tries to delete their own account, the server should send status code 200 with a redirect', async () => {
+        const logResponse = await request(app)
+            .post('/user/login')
+            .set('Content-Type', 'application/json')
+            .send({
+                email: 'testingmail44@yahoo.com',
+                newpassword: 'ZmDhg&@GghDV611',
+            });
+        auth_token = logResponse.body.token;
+
+        const idResponse = await request(app)
+            .get('/user/getUser')
+            .set('Authorization', `Bearer ${auth_token}`);
+        glob_user_id_for_del = idResponse.body['_id'];
+
+        const deleteNormalresponse = await request(app)
+            .delete(`/user/deleteUser/${glob_user_id_for_del}`)
+            .set('Authorization', `Bearer ${auth_token}`);
+        expect(deleteNormalresponse.statusCode).toBe(200);
+        expect(deleteNormalresponse.body['redirect']).toBeDefined();
+    }, 20000);
     // This last test doesn't work if implemented. A user cannot delete their own account off of the application as code 401 is returned
 });
 
