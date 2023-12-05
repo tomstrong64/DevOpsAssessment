@@ -42,7 +42,7 @@
     "ConfirmPassword": "Confirmer le mot de passe",
     "CurrentPassword": "Mot de passe actuel",
     "UpdtDtls": "Mettre à jour les détails",
-    "DltPass": "Supprimer le mot de passe",
+    "DltAcc": "Supprimer le compte",
     "Logout": "Se déconnecter",
     "Delete": "Supprimer"
 }
