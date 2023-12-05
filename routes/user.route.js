@@ -166,27 +166,21 @@ router.get('/getUser', stdAuth, UserController.getUserById);
 
 /**
  * @openapi
- * /user/deleteUser/{id}:
+ * /user/deleteUser:
  *   delete:
  *     tags: [User]
- *     summary: Delete user by ID
- *     description: Delete user by ID. Requires admin authentication.
+ *     summary: Delete the authenticated user (admin or standard user)
+ *     description: >
+ *       Delete the user account. Requires standard authentication.
  *     security:
  *       - BearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: ID of the user
- *         schema:
- *           type: string
  *     responses:
  *       204:
  *         description: User deleted successfully.
  *       401:
  *         description: Unauthorized. Authentication token is missing or invalid.
  *       403:
- *         description: Forbidden. User does not have admin privileges.
+ *         description: Forbidden. User does not have sufficient privileges.
  *       404:
  *         description: User not found.
  *       500:
