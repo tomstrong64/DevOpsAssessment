@@ -36,11 +36,10 @@ export const getPois = async (req, res) => {
         }
         // if admin, return all POIs
         else if (res.locals.user.admin) {
-            pois = await POI.find().populate('user');
+            pois = await POI.find();
         }
-        
         // if not admin, return all POIs owned by user
-        else  {
+        else {
             pois = await POI.find({ user: res.locals.user._id });
         }
 
