@@ -18,7 +18,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Privacy Policy</title>
+        <title><%= i18n.__("PP") %></title>
 
         <!-- Bootstrap CSS -->
         <link
@@ -29,50 +29,25 @@
     <body>
         <!-- Header Section -->
         <nav class="navbar navbar-dark bg-primary">
-            <a class="navbar-brand" href="/login">Login</a>
-            <a class="navbar-brand" href="/register">Register here</a>
+            <a class="navbar-brand" href="/login"><%= i18n.__("Login") %></a>
+            <a class="navbar-brand" href="/register"><%= i18n.__("RH") %></a>
         </nav>
         <div class="container mt-3">
-            <h1>Privacy Policy</h1>
+            <h1><%= i18n.__("PP") %></h1>
 
-            <p>
-                This Privacy Policy governs the manner in which GeoGuide
-                collects, uses, maintains, and discloses information collected
-                from users.
-            </p>
+            <p><%= i18n.__("WhatPPDoes") %></p>
 
-            <h2>Personal Identification Information</h2>
+            <h2><%= i18n.__("PII") %></h2>
 
-            <p>
-                We may collect personal identification information from Users in
-                a variety of ways, including, but not limited to, when Users
-                visit our site, fill out a form, and in connection with other
-                activities, services, features, or resources we make available
-                on our Site. Users may be asked for, as appropriate, name, email
-                address, mailing address, phone number, and other personal
-                information. Users may, however, visit our Site anonymously. We
-                will collect personal identification information from Users only
-                if they voluntarily submit such information to us. Users can
-                always refuse to supply personal identification information,
-                except that it may prevent them from engaging in certain
-                Site-related activities.
-            </p>
+            <p><%= i18n.__("PIIParagraph") %></p>
 
-            <h2>Non-Personal Identification Information</h2>
+            <h2><%= i18n.__("NPII") %></h2>
 
-            <p>
-                We may collect non-personal identification information about
-                Users whenever they interact with our Site. Non-personal
-                identification information may include the browser name, the
-                type of computer, and technical information about Users' means
-                of connection to our Site, such as the operating system and the
-                Internet service providers utilized and other similar
-                information.
-            </p>
+            <p><%= i18n.__("NPIIParagraph") %></p>
 
-            <h2>Web Browser Cookies</h2>
+            <h2><%= i18n.__("WebBrowserCookies") %></h2>
 
-            <p>Our Site may use "cookies" to enhance User experience.</p>
+            <p><%= i18n.__("WBCParagraph") %></p>
         </div>
 
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

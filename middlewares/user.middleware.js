@@ -20,7 +20,7 @@ import mongoose from 'mongoose';
 // middleware to ensure user is not logged in already
 export const noAuth = async (req, res, next) => {
     try {
-        if (req.headers.authorization)
+        if (req.headers.authorization || req.cookies.token)
             return res.status(400).json({ message: 'Already logged in' });
         return next();
     } catch (e) {
@@ -33,11 +33,13 @@ export const noAuth = async (req, res, next) => {
 export const stdAuth = async (req, res, next) => {
     try {
         // check if token is provided
-        if (!req.headers.authorization)
+        if (!req.headers.authorization && !req.cookies.token)
             return res.status(401).json({ message: 'Unauthorized' });
 
         // decode token
-        const token = req.headers.authorization.split(' ')[1];
+        const token = req.headers.authorization
+            ? req.headers.authorization.split(' ')[1]
+            : req.cookies.token;
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         // get user from db
@@ -74,11 +76,13 @@ export const stdAuth = async (req, res, next) => {
 export const adminAuth = async (req, res, next) => {
     try {
         // check if token is provided
-        if (!req.headers.authorization)
+        if (!req.headers.authorization && !req.cookies.token)
             return res.status(401).json({ message: 'Unauthorized' });
 
         // decode token
-        const token = req.headers.authorization.split(' ')[1];
+        const token = req.headers.authorization
+            ? req.headers.authorization.split(' ')[1]
+            : req.cookies.token;
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         // get user from db

@@ -47,32 +47,30 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 document.getElementById('UPDATE POI').addEventListener('click', async (e) => {
     e.preventDefault();
-    const poi = {
-        // Get the values from the form fields
-        _id: document.getElementById('poiId').value,
-        name: document.getElementById('name').value,
-        type: document.getElementById('type').value,
-        country: document.getElementById('country').value,
-        region: document.getElementById('region').value,
-        lat: document.getElementById('lat').value,
-        lon: document.getElementById('lon').value,
-        description: document.getElementById('description').value,
-    };
+    
+    const poiId = document.getElementById('poiId').value;
+
+    const formData = new FormData();
+    formData.append('name', document.getElementById('name').value);
+    formData.append('type', document.getElementById('type').value);
+    formData.append('country', document.getElementById('country').value);
+    formData.append('region', document.getElementById('region').value);
+    formData.append('lat', document.getElementById('lat').value);
+    formData.append('lon', document.getElementById('lon').value);
+    formData.append('description', document.getElementById('description').value);
+    formData.append('image', document.getElementById('image').files[0]);
 
     try {
         const token = localStorage.getItem('token');
-        const response = await fetch(
-            `/pois/updatePoi/${poi._id}`,
+        console.log('FormData:', formData);
 
-            {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify(poi),
-            }
-        );
+        const response = await fetch(`/pois/updatePoi/${poiId}`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            body: formData,
+        });
 
         await responseHandler(response);
     } catch (error) {
@@ -80,3 +78,4 @@ document.getElementById('UPDATE POI').addEventListener('click', async (e) => {
         alert('Failed to update POI');
     }
 });
+
