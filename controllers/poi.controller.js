@@ -16,6 +16,7 @@
 import { POI } from '../models/Poi.js';
 import mongoose from 'mongoose';
 import * as AzureStorage from '../models/AzureStorage.js';
+import e from 'express';
 
 export const getPois = async (req, res) => {
     try {
@@ -37,8 +38,9 @@ export const getPois = async (req, res) => {
         else if (res.locals.user.admin) {
             pois = await POI.find().populate('user');
         }
+        
         // if not admin, return all POIs owned by user
-        else {
+        else  {
             pois = await POI.find({ user: res.locals.user._id });
         }
 

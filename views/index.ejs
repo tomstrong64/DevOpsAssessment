@@ -37,13 +37,20 @@
         <script type="text/javascript" src="/utils.js" defer></script>
         <style>
             #map1 {
-                height: 300px; /* Adjust the height as needed */
-                width: 55%; /* Take up 85% of the container width */
-                margin-top: 20px; /* Add some space between the header and the map */
-                border: 1px solid #ccc; /* Add a border for a neat look */
-                border-radius: 8px; /* Optional: Add rounded corners */
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+                height: 500px; 
+                width: 100%; 
+                margin-top: 30px; 
+                margin-bottom: 30px; 
+                margin-left: 10px;
+                border-radius: 8px; /*rounded corners */
+                
             }
+            #addpoi {
+                height: 200px; 
+                margin-top: 20px;
+                width: 80%;
+            }
+            
         </style>
     </head>
     <body>
@@ -94,10 +101,10 @@
             <a href="/updateuser" class="btn btn-light ml-auto"> <%= i18n.__("Profile") %></a>
         </nav>
 
-        <div class="container" >
+        <div class="container-fluid" >
             <div class="row">
                 <div class="col-md-8">
-                    <div id="map1" style="height: 500px; width: 100%"></div>
+                    <div id="map1" ></div>
                 </div>
                 
                         <div class="col-md-4" hidden id="addpoi">
@@ -193,11 +200,12 @@
                         </div>
                    
         </div>
-        <div style="margin-top: 20px" id="poi_results" hidden>
+        <div class="col-sm-6 col-md-8">
+        <div class="container-fluid" id="poi_results" hidden>
             <div class="card-header bg-primary text-white">
                 <h3 class="text-center"> <%= i18n.__("Pois") %></h3>
             </div>
-            <div>
+            <div id="poi_table">
                 <table class="table">
                     <thead>
                         <tr>
@@ -219,6 +227,7 @@
                 </table>
             </div>
         </div>
+    </div>   
 
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.7.2/dist/umd/popper.min.js"></script>
