@@ -358,7 +358,7 @@ describe('PUT /user/updateUser', () => {
 });
 
 describe('GET /getUser test', () => {
-    it('When this route is accessed by a login user, the correct data should be sent back to the client in the response', async () => {
+    it('When this route is accessed by a logged-in user, the correct data should be sent back to the client in the response', async () => {
         const loginResponse = await request(app)
             .post('/user/login')
             .set('Content-Type', 'application/json')
