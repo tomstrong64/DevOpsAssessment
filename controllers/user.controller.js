@@ -213,16 +213,16 @@ export const deleteUser = async (req, res) => {
     const id = req.query.id;
     try {
         if (id) {
+            // check if user is admin
             if (!user.admin) {
-                return res.status(403).send({
-                    message: `cannot delete an admin user.`,
+                return res.status(404).send({
+                    message: `not found.`,
                 });
             }
+            // check if id is valid
             if (!mongoose.Types.ObjectId.isValid(id))
                 return res.status(400).json({ message: 'Invalid ID' });
-        }
-
-        if (user.admin) {
+            // check if user is admin
             const founduser = await User.findById(id);
             if (founduser.admin) {
                 return res.status(403).send({
@@ -235,16 +235,16 @@ export const deleteUser = async (req, res) => {
                     message: 'User Deleted successfully',
                 });
             }
-        } else {
-            await POI.deleteMany({ user: user._id });
-            await User.findByIdAndRemove(user._id);
-            user.token = '';
-            res.clearCookie('token');
-            return res.status(200).json({
-                message: 'User Deleted successfully',
-                redirect: '/login',
-            });
         }
+        // only allow users to delete their own account
+        await POI.deleteMany({ user: user._id });
+        await User.findByIdAndRemove(user._id);
+        user.token = '';
+        res.clearCookie('token');
+        return res.status(200).json({
+            message: 'User Deleted successfully',
+            redirect: '/login',
+        });
     } catch (e) {
         console.log(e);
         return res.status(500).send({
