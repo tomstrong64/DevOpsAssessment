@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 import { Router } from 'express';
-import { noAuth, stdAuth, adminAuth } from '../middlewares/user.middleware.js';
+import {
+    noAuthAPI,
+    stdAuthAPI,
+    adminAuthAPI,
+} from '../middlewares/user.middleware.js';
 import * as UserController from '../controllers/user.controller.js';
 
 const router = Router();
@@ -71,7 +75,7 @@ const router = Router();
  *         description: Internal Server Error.
 
  */
-router.post('/login', noAuth, UserController.login);
+router.post('/login', noAuthAPI, UserController.login);
 
 /**
  * @openapi
@@ -97,7 +101,7 @@ router.post('/login', noAuth, UserController.login);
  *         description: Internal Server Error.
 
  */
-router.post('/register', noAuth, UserController.create);
+router.post('/register', noAuthAPI, UserController.create);
 
 /**
  * @openapi
@@ -116,7 +120,7 @@ router.post('/register', noAuth, UserController.create);
  *       500:
  *         description: Internal Server Error.
  */
-router.get('/logout', stdAuth, UserController.logout);
+router.get('/logout', stdAuthAPI, UserController.logout);
 
 /**
  * @openapi
@@ -143,7 +147,7 @@ router.get('/logout', stdAuth, UserController.logout);
  *       500:
  *         description: Internal Server Error.
  */
-router.put('/updateUser', stdAuth, UserController.updateUser);
+router.put('/updateUser', stdAuthAPI, UserController.updateUser);
 
 /**
  * @openapi
@@ -162,7 +166,7 @@ router.put('/updateUser', stdAuth, UserController.updateUser);
  *       500:
  *         description: Internal Server Error.
  */
-router.get('/getUser', stdAuth, UserController.getUserById);
+router.get('/getUser', stdAuthAPI, UserController.getUserById);
 
 /**
  * @openapi
@@ -186,7 +190,7 @@ router.get('/getUser', stdAuth, UserController.getUserById);
  *       500:
  *         description: Internal Server Error.
  */
-router.delete('/deleteUser', stdAuth, UserController.deleteUser);
+router.delete('/deleteUser', stdAuthAPI, UserController.deleteUser);
 
 /**
  * @openapi
@@ -216,7 +220,7 @@ router.delete('/deleteUser', stdAuth, UserController.deleteUser);
  *       500:
  *         description: Internal Server Error.
  */
-router.put('/updateUser/:id', adminAuth, UserController.updateUserStatus);
+router.put('/updateUser/:id', adminAuthAPI, UserController.updateUserStatus);
 
 /**
  * @openapi
@@ -237,6 +241,6 @@ router.put('/updateUser/:id', adminAuth, UserController.updateUserStatus);
  *       500:
  *         description: Internal Server Error.
  */
-router.get('/list', adminAuth, UserController.getAllUsers);
+router.get('/list', adminAuthAPI, UserController.getAllUsers);
 
 export default router;
