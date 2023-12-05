@@ -192,7 +192,7 @@ router.get('/getUser', stdAuth, UserController.getUserById);
  *       500:
  *         description: Internal Server Error.
  */
-router.delete('/deleteUser/:id', adminAuth, UserController.deleteUser);
+router.delete('/deleteUser', stdAuth, UserController.deleteUser);
 
 /**
  * @openapi

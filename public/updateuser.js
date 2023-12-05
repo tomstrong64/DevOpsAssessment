@@ -120,6 +120,7 @@ document.getElementById('DELETE USER').addEventListener('click', async (e) => {
         });
         await responseHandler(response);
         localStorage.removeItem('token');
+        
     } catch (e) {
         alert('Failed to delete User');
     }
