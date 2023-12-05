@@ -333,6 +333,28 @@ describe('PUT /user/updateUser', () => {
             });
         expect(response.statusCode).toBe(400);
     }, 25000);
+    it('If no auth token is provided in the request, the server should send back a status code of 401', async () => {
+        const loginRequest = await request(app)
+            .post('/user/login')
+            .set('Content-Type', 'application/json')
+            .send({
+                email: 'dum273@gmail.com',
+                password: 'luo2ry92@a1h',
+            });
+        auth_token = loginRequest.body.token;
+
+        const response = await request(app)
+            .put('/user/updateUser')
+            .set('Content-Type', 'application/json')
+            .send({
+                email: 'dum273@gmail.com',
+                newpassword: 'DJ#hKbE12dzmdqkoi1ytsv',
+                confirmpassword: 'DJ#hKbE12dzmdqkoi1ytsv',
+                password: 'luo2ry92@a1h',
+            });
+        expect(response.statusCode).toBe(401);
+        expect(response.body['message']).toEqual('Unauthorized');
+    }, 20000);
 });
 
 describe('GET /getUser test', () => {
@@ -354,6 +376,21 @@ describe('GET /getUser test', () => {
         expect(response.body['admin']).toBe(false);
         expect(response.body['token']).toBeDefined();
     }, 15000);
+    it('If auth token is not sent in the request, the server should send back a status code of 401', async () => {
+        const loginresponse = await request(app)
+            .post('/user/login')
+            .set('Content-Type', 'application/json')
+            .send({
+                email: 'dum273@gmail.com',
+                password: 'luo2ry92@a1h',
+            });
+        auth_token = loginresponse.body.token;
+
+        const response = await request(app).get('/user/getUser');
+
+        expect(response.statusCode).toBe(401);
+        expect(response.body['message']).toEqual('Unauthorized');
+    }, 15000);
 });
 
 describe('GET /list test using admin account', () => {
@@ -374,6 +411,22 @@ describe('GET /list test using admin account', () => {
         expect(response.statusCode).toBe(200);
         expect(response.body).toHaveLength(6);
     }, 25000);
+
+    it('If no authentication token is provided to this route, the server should respond back with status code of 401', async () => {
+        const logResponse = await request(app)
+            .post('/user/login')
+            .set('Content-Type', 'application/json')
+            .send({
+                email: 'dummyAdmin93@outlook.com',
+                password: 'janfhb*@ybd37G!',
+            });
+        admin_auth_token = logResponse.body.token;
+
+        const failreponse = await request(app).get('/user/list');
+
+        expect(failreponse.statusCode).toBe(401);
+        expect(failreponse.body['message']).toEqual('Unauthorized');
+    }, 15000);
 });
 
 describe('PUT /updateUser/:id tests', () => {
@@ -461,6 +514,27 @@ describe('PUT /updateUser/:id tests', () => {
             .send();
         expect(adResponse.statusCode).toBe(400);
         expect(adResponse.body['message']).toEqual('Invalid ID');
+    }, 25000);
+    it('If no authentication token is provided in the request, the server should send back a status code of 401', async () => {
+        const ad_loginResponse = await request(app)
+            .post('/user/login')
+            .set('Content-Type', 'application/json')
+            .send({
+                email: 'dummyAdmins82@outlook.com',
+                password: 'Akn#Rcjy7!',
+            });
+        admin_auth_token = ad_loginResponse.body.token;
+
+        const listResponse = await request(app)
+            .get('/user/list')
+            .set('Authorization', `Bearer ${admin_auth_token}`);
+        let user_check_id = listResponse.body[0]['_id'];
+
+        const adResponse = await request(app).put(
+            `/user/updateUser/${user_check_id}`
+        );
+        expect(adResponse.statusCode).toBe(401);
+        expect(adResponse.body['message']).toEqual('Unauthorized');
     }, 25000);
 });
 
