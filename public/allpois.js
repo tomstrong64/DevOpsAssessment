@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', async (e) => {
         <td>${poi.lon}</td>
         <td>${poi.lat}</td>
         <td>${poi.description}</td>
-        <td>${poi.user.username}</td> 
+        <td>${poi.user.name}</td> 
     `;
         tr.id = poi._id;
         tbody.appendChild(tr);
