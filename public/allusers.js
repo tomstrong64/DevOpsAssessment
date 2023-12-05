@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', async (e) => {
 async function deleteUser(id) {
     try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`/user/deleteUser/${id}`, {
+        const response = await fetch(`/user/deleteUser?id=${id}`, {
             method: 'DELETE',
             headers: {
                 Authorization: `Bearer ${token}`,
