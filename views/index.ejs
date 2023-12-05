@@ -49,13 +49,13 @@
     <body>
         <!-- Header Section -->
         <nav class="navbar navbar-dark bg-primary">
-            <a class="navbar-brand" href="#" ><%= i18n.__("Home") %></a>
+            <a class="navbar-brand" href="#"><%= i18n.__("Home") %></a>
             <a class="navbar-brand" href="/addpoi"> <%= i18n.__("AddPoi") %></a>
-            <a class="navbar-brand" id="get_users" hidden href="/allusers"
-                > <%= i18n.__("Users") %></a
+            <a class="navbar-brand" id="get_users" hidden href="/allusers">
+                <%= i18n.__("Users") %></a
             >
-            <a class="navbar-brand" id="get_pois" hidden href="/allpois"
-                > <%= i18n.__("Pois") %></a
+            <a class="navbar-brand" id="get_pois" hidden href="/allpois">
+                <%= i18n.__("Pois") %></a
             >
 
             <form class="form-inline">
@@ -71,7 +71,7 @@
                     id="poi_search"
                     type="submit"
                 >
-                <%= i18n.__("Search") %>
+                    <%= i18n.__("Search") %>
                 </button>
             </form>
             <div class="ml-2">
@@ -80,18 +80,20 @@
                     id="enableGeolocation"
                     type="button"
                 >
-                <%= i18n.__("EnableGPS") %>
+                    <%= i18n.__("EnableGPS") %>
                 </button>
                 <button
                     class="btn btn-light my-2 my-sm-0"
                     id="revokeGeolocation"
                     type="button"
                 >
-                <%= i18n.__("RevokeGPS") %>
+                    <%= i18n.__("RevokeGPS") %>
                 </button>
             </div>
 
-            <a href="/updateuser" class="btn btn-light ml-auto"> <%= i18n.__("Profile") %></a>
+            <a href="/updateuser" class="btn btn-light ml-auto">
+                <%= i18n.__("Profile") %></a
+            >
         </nav>
 
         <div class="container">
@@ -105,6 +107,7 @@
             </div>
         </div>
         <div style="margin-top: 20px" id="poi_results"></div>
+        <%- include('footer.ejs') %>
 
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.7.2/dist/umd/popper.min.js"></script>
