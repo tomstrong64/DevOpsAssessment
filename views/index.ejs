@@ -194,6 +194,9 @@
                    
         </div>
         <div style="margin-top: 20px" id="poi_results" hidden>
+            <div class="card-header bg-primary text-white">
+                <h3 class="text-center"> <%= i18n.__("Pois") %></h3>
+            </div>
             <div>
                 <table class="table">
                     <thead>
@@ -210,7 +213,7 @@
                             <th id="transImage"><%= i18n.__("Image") %></th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="TableBody">
                         <!-- Table rows will be dynamically added here -->
                     </tbody>
                 </table>

@@ -104,19 +104,12 @@ async function ajaxSearch(region) {
         return;
     }
     const resultsDiv = document.getElementById('poi_results');
+    const tbody = document.getElementById('TableBody');
     const UpdateBtn = document.getElementById('transUpdate').innerText;
     const DeleteBtn = document.getElementById('transDelete').innerText;
     const ImageBtn = document.getElementById('transImage').innerText;
     resultsDiv.hidden = false;
-    
 
-    // Create a table
-    const table = document.createElement('table');
-    table.classList.add('table');
-
-    // Create table body
-    const tbody = document.createElement('tbody');
-    table.appendChild(tbody);
     if (userId) {
         pois = pois.filter((poi) => {
             if (poi.user !== userId) return false;
@@ -153,7 +146,6 @@ async function ajaxSearch(region) {
     });
 
     
-    resultsDiv.appendChild(table);
 }
 
 async function deletePoi(id) {
