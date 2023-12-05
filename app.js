@@ -28,7 +28,7 @@ import cookieParser from 'cookie-parser';
 const app = express();
 
 app.set('view engine', 'ejs'); // set up ejs for templating
-
+app.use('/public', express.static('public'));
 app.use(express.static('public'));
 app.use(cookieParser());
 app.use(express.json());
