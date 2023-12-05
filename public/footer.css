@@ -16,8 +16,8 @@
 }
 /* Dropdown Button */
 .dropbtn {
-    background-color: #04aa6d;
-    color: white;
+    background-color: #afcac1;
+    color: rgb(12, 11, 11);
     padding: 16px;
     font-size: 16px;
     border: none;
@@ -69,5 +69,12 @@
     margin-top: 10px; /* Adjust margin as needed */
 }
 .copy {
-    margin-left: 520px;
+    justify-content: center; /* Center content vertically */
+    align-items: center;
+    text-align: center;
+}
+footer {
+    background-color: rgb(244, 248, 248);
+    height: 230px;
+    margin: 40px;
 }
