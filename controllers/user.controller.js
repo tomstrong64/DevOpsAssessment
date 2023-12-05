@@ -210,10 +210,17 @@ export const getAllUsers = async (req, res) => {
 
 export const deleteUser = async (req, res) => {
     const user = res.locals.user;
-    const id = req.params.id;
+    const id = req.query.id;
     try {
-        if (!mongoose.Types.ObjectId.isValid(req.params.id))
-            return res.status(400).json({ message: 'Invalid ID' });
+        if (id) {
+            if (!user.admin) {
+                return res.status(403).send({
+                    message: `cannot delete an admin user.`,
+                });
+            }
+            if (!mongoose.Types.ObjectId.isValid(id))
+                return res.status(400).json({ message: 'Invalid ID' });
+        }
 
         if (user.admin) {
             const founduser = await User.findById(id);
@@ -229,8 +236,10 @@ export const deleteUser = async (req, res) => {
                 });
             }
         } else {
-            await POI.deleteMany({ user: user.id });
-            await User.findByIdAndRemove(user.id);
+            await POI.deleteMany({ user: user._id });
+            await User.findByIdAndRemove(user._id);
+            user.token = '';
+            res.clearCookie('token');
             return res.status(200).json({
                 message: 'User Deleted successfully',
                 redirect: '/login',
