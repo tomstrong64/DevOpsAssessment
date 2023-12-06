@@ -2,6 +2,7 @@
     "Home": "Home",
     "AddPoi": "Add POI",
     "AddPoint": "Add Points Of Interest",
+    "Admin": "Admin",
     "Users": "Users",
     "Username": "Username",
     "Password": "Password",
@@ -42,7 +43,7 @@
     "ConfirmPassword": "Confirm Password",
     "CurrentPassword": "Current Password",
     "UpdtDtls": "Update Details",
-    "DltPass": "Delete Password",
+    "DltAcc": "Delete Account",
     "Logout": "Logout",
     "Delete": "Delete"
 }

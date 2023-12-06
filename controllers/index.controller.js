@@ -16,9 +16,7 @@
 import i18n from '../i18n.js';
 
 export const home = (req, res) => {
-    if (!req.cookies.i18n) {
-        res.cookie('i18n', 'en');}
-    i18n.setLocale(req.cookies.i18n);
+    if (req.cookies.i18n) i18n.setLocale(req.cookies.i18n);
     return res.render('index', {
         i18n: res,
     });

@@ -2,6 +2,7 @@
     "Home": "Casa",
     "AddPoi": "Adicionar POI",
     "AddPoint": "Adicionar Pontos de Interesse",
+    "Admin": "Admin",
     "Users": "Usuários",
     "Username": "Nome de usuário",
     "Password": "Senha",
@@ -42,7 +43,7 @@
     "ConfirmPassword": "Confirmar Senha",
     "CurrentPassword": "Senha Atual",
     "UpdtDtls": "Atualizar Detalhes",
-    "DltPass": "Excluir Senha",
+    "DltAcc": "Excluir conta",
     "Logout": "Sair",
     "Delete": "Excluir"
 }
