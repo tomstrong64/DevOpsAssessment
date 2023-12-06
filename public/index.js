@@ -112,7 +112,7 @@ async function ajaxSearch(region) {
 
     if (userId) {
         pois = pois.filter((poi) => {
-            if (poi.user !== userId) return false;
+            if (poi.user._id !== userId) return false;
             return true;
         });
     }
