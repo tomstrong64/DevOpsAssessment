@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+    app:
+        container_name: app
+        image: geoguide.azurecr.io/server:latest
+        depends_on:
+            - MongoDB
+        env_file:
+            - ./app.env
+        networks:
+            - geo_guide
+        restart: always
+
+    MongoDB:
+        container_name: MongoDB
+        image: mongo:7.0.2
+        env_file:
+            - ./mongo.env
+        volumes:
+            - mongo-data:/data/db
+        networks:
+            - geo_guide
+        restart: always
+
+    nginx:
+        container_name: nginx
+        image: nginx:1.25.3-alpine
+        volumes:
+            - ./data/nginx:/etc/nginx/conf.d
+            - ./data/certbot/conf:/etc/letsencrypt
+            - ./data/certbot/www:/var/www/certbot
+        ports:
+            - 80:80
+            - 443:443
+        networks:
+            - geo_guide
+        command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
+        restart: always
+
+    certbot:
+        container_name: certbot
+        image: certbot/certbot:v2.7.3
+        volumes:
+            - ./data/certbot/conf:/etc/letsencrypt
+            - ./data/certbot/www:/var/www/certbot
+        entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+        restart: always
+
+volumes:
+    mongo-data:
+
+networks:
+    geo_guide:
+        name: geo_guide
+        external: true
