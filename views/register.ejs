@@ -14,7 +14,7 @@
   limitations under the License.
  -->
 <!doctype html>
-<html >
+<html>
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -32,7 +32,9 @@
                 <div class="col-md-6 offset-md-3">
                     <div class="card">
                         <div class="card-header bg-primary text-white">
-                            <h3 class="text-center"><%= i18n.__("Register") %></h3>
+                            <h3 class="text-center">
+                                <%= i18n.__("Register") %>
+                            </h3>
                         </div>
                         <div class="card-body">
                             <form>
@@ -72,12 +74,26 @@
                                         required
                                     />
                                 </div>
+                                <div class="mb-3">
+                                    <input
+                                        type="checkbox"
+                                        id="privacy"
+                                        name="privacy"
+                                        required
+                                    />
+                                    <label
+                                        ><%= i18n.__("AcceptPP") %>
+                                        <a href="/privacypolicy"
+                                            ><%= i18n.__("PP") %></a
+                                        ></label
+                                    >
+                                </div>
                                 <button
                                     id="register"
                                     type="submit"
                                     class="btn btn-primary"
                                 >
-                                <%= i18n.__("Register") %>
+                                    <%= i18n.__("Register") %>
                                 </button>
                             </form>
                         </div>
