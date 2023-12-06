@@ -261,6 +261,22 @@
             </p>
         </div>
         <h3>13. Client authentication</h3>
-        <div></div>
+        <div>
+            <p>
+                For client authentication we are using
+                <a href="https://www.npmjs.com/package/jsonwebtoken"
+                    >jsonwebtoken</a
+                >
+                to generate the tokens.
+            </p>
+            <p>
+                When a client login or register, a token is generated and is sent in the authentication header as bearer token.
+                And the browser will store the token in the local storage.
+                When a client logout, the token will be removed from the local storage.
+                When a client wants to access the API, the token will be sent in the header of the request.
+                Also for each page the authentication is checked, if the cookie is not valid, the client will be redirected to the login page.
+                
+            </p>
+        </div>
     </body>
 </html>
