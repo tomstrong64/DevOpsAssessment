@@ -19,12 +19,39 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title><%= i18n.__("Users") %></title>
+        <!-- Bootstrap CSS -->
+        <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        />
+        <link
+            rel="stylesheet"
+            href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        />
 
         <script type="text/javascript" src="/utils.js" defer></script>
         <script type="text/javascript" src="/allusers.js" defer></script>
     </head>
     <body>
-        <h1><%= i18n.__("Users") %></h1>
-        <div id="users_results"></div>
+        <div id="users_results">
+            <div class="card-header bg-primary text-white">
+                <h3 class="text-center"><%= i18n.__("Users") %></h3>
+            </div>
+            <div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th><%= i18n.__("Name") %></th>
+                            <th><%= i18n.__("Email") %></th>
+                            <th id="transAdmin"><%= i18n.__("Admin") %></th>
+                            <th id="transDelete"><%= i18n.__("Delete") %></th>
+                        </tr>
+                    </thead>
+                    <tbody id="TableBody">
+                        <!-- Table rows will be dynamically added here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </body>
 </html>
