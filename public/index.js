@@ -91,6 +91,14 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 async function ajaxSearch(region) {
+    const resultsDiv = document.getElementById('poi_results');
+    const tbody = document.getElementById('TableBody');
+    const UpdateBtn = document.getElementById('transUpdate').innerText;
+    const DeleteBtn = document.getElementById('transDelete').innerText;
+    const ImageBtn = document.getElementById('transImage').innerText;
+
+    tbody.innerHTML = '';
+
     const token = localStorage.getItem('token');
     const ajaxResponse = await fetch(`/pois/list?search=${region}`, {
         headers: {
@@ -100,14 +108,9 @@ async function ajaxSearch(region) {
     let pois = await ajaxResponse.json();
     if (pois.length == 0) {
         alert('No Pois Found');
-
         return;
     }
-    const resultsDiv = document.getElementById('poi_results');
-    const tbody = document.getElementById('TableBody');
-    const UpdateBtn = document.getElementById('transUpdate').innerText;
-    const DeleteBtn = document.getElementById('transDelete').innerText;
-    const ImageBtn = document.getElementById('transImage').innerText;
+
     resultsDiv.hidden = false;
 
     if (userId) {
