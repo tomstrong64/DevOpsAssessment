@@ -168,7 +168,12 @@
             <p>
                 "I18n.js" is used to configure i18n where is defined the default
                 language, the languages supported and a cookie which is going to
-                be used to store the value of the user language option.
+                be used to store the value of the user language option. In the page
+                there is a button which allows the user to change the language. 
+                When the user clicks on the button, it will change the value of the cookie,
+                by linking to /lang/en ,for example, and reload the page. 
+                When the page is reloaded, it will be retrieved the value of the cookie, 
+                which is setted by the route and change the language accordingly, then redirects the user back to index page.   
             </p>
             <p>
                 Inside "locales" folder is stored the json files with the key
