@@ -234,7 +234,19 @@
             </p>
         </div>
         <h3>9. User privalleges</h3>
-        <div></div>
+        <div>
+            <p>
+                We have a user model which has a admin field, this is used to differentiate between normal users and admins.
+                When a user registers, the admin field is set to false by default.
+                When a user logs in, the admin field is checked, if it is true, the user can access all the routes, and 
+                if it is false, the user can only access the routes that are not restricted to admins. 
+                Admin user can see all users and change the admin status of a normal user to admin and also delete a normal user.
+                Admin user can also see all the POIs in the database. Admin user do all the things that a normal user can do.
+                Normal user can only see their own profile and update it, and also see all the POIs.
+                Normal user can delete their own account.
+
+            </p>
+        </div>
         <h3>10. Mobile access</h3>
         <div></div>
         <h3>11. Responsiveness</h3>
