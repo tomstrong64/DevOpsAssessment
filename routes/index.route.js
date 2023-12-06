@@ -33,4 +33,5 @@ router.get('/updateuser', stdAuthPage, IndexController.updateuser);
 router.get('/register', noAuthPage, IndexController.register);
 router.get('/login', noAuthPage, IndexController.login);
 router.get('/privacypolicy', IndexController.privacypolicy);
+router.get('/user-docs', IndexController.userdocs);
 export default router;
