@@ -33,14 +33,11 @@ beforeAll(async () => {
     });
 
     // Register a user first, as Git Actions will create a new database each time!
-    const response = await request(app)
-        .post('/user/register')
-        .set('Content-Type', 'application/json')
-        .send({
-            name: 'User Tests User',
-            email: 'user@test.com',
-            password: '12345',
-        });
+    const response = await request(app).post('/user/register').send({
+        name: 'User Tests User',
+        email: 'user@test.com',
+        password: '12345',
+    });
     auth_token = response.body.token;
 });
 
@@ -60,51 +57,39 @@ afterAll(async () => {
 // Tests for registering a new user, both positive and negative
 describe('POST /user/register', () => {
     it('A new user should be saved to the database', async () => {
-        const response = await request(app)
-            .post('/user/register')
-            .set('Content-Type', 'application/json')
-            .send({
-                name: 'Test Name',
-                email: 'testingmail44@yahoo.com',
-                password: 'jumjams1234',
-            });
+        const response = await request(app).post('/user/register').send({
+            name: 'Test Name',
+            email: 'testingmail44@yahoo.com',
+            password: 'jumjams1234',
+        });
         expect(response.status).toBe(201); // returns 302, which is known as 'Found', it means that the URI of the requested URI has been changed temporarily
     }, 15000);
 
     it('The headers should be defined in the response from the server when a user is registered for the first time', async () => {
-        const response = await request(app)
-            .post('/user/register')
-            .set('Content-Type', 'application/json')
-            .send({
-                name: 'Test Name 2',
-                email: 'testingmail11@yahoo.com',
-                password: 'adbdfec2891',
-            });
+        const response = await request(app).post('/user/register').send({
+            name: 'Test Name 2',
+            email: 'testingmail11@yahoo.com',
+            password: 'adbdfec2891',
+        });
         expect(response.headers).toBeDefined();
     }, 15000);
 
     it('A newly-registered user should be redirected to the login page after registration', async () => {
-        const response = await request(app)
-            .post('/user/register')
-            .set('Content-Type', 'application/json')
-            .send({
-                name: 'DUMMY_Alpha',
-                email: 'dum273@gmail.com',
-                password: 'luo2ry92@a1h',
-            });
+        const response = await request(app).post('/user/register').send({
+            name: 'DUMMY_Alpha',
+            email: 'dum273@gmail.com',
+            password: 'luo2ry92@a1h',
+        });
         expect(response.statusCode).toBe(201);
         expect(response.body['redirect']).toEqual('/');
     }, 15000);
 
     it('The admin property of a newly registered non-admin user should be set to false by default', async () => {
-        const response = await request(app)
-            .post('/user/register')
-            .set('Content-Type', 'application/json')
-            .send({
-                name: 'test9',
-                email: 'test9dummymail@gmail.com',
-                password: 'allu!8yGHdt#@62',
-            });
+        const response = await request(app).post('/user/register').send({
+            name: 'test9',
+            email: 'test9dummymail@gmail.com',
+            password: 'allu!8yGHdt#@62',
+        });
         let user_auth_token = response.body.token;
 
         // Get the profile of the user to check the necessary property
@@ -117,14 +102,11 @@ describe('POST /user/register', () => {
     }, 25000);
 
     it('The admin property of a registered admin user should be true after the document is edited in the database.', async () => {
-        const response = await request(app)
-            .post('/user/register')
-            .set('Content-Type', 'application/json')
-            .send({
-                name: 'testAdminDummy1',
-                email: 'dummyAdmins82@outlook.com',
-                password: 'Akn#Rcjy7!',
-            });
+        const response = await request(app).post('/user/register').send({
+            name: 'testAdminDummy1',
+            email: 'dummyAdmins82@outlook.com',
+            password: 'Akn#Rcjy7!',
+        });
         admin_auth_token = response.body.token;
 
         // Request to getUser route to get this newly registered user
@@ -144,47 +126,35 @@ describe('POST /user/register', () => {
     }, 25000);
 
     it('A new user registering with an existing email address should return an error status code', async () => {
-        const response = await request(app)
-            .post('/user/register')
-            .set('Content-Type', 'application/json')
-            .send({
-                name: 'DUMMY_Alpha2',
-                email: 'dum273@gmail.com',
-                password: 'apDHe86g^$',
-            });
+        const response = await request(app).post('/user/register').send({
+            name: 'DUMMY_Alpha2',
+            email: 'dum273@gmail.com',
+            password: 'apDHe86g^$',
+        });
         expect(response.statusCode).toBe(401);
     }, 15000);
 
     it('Missing the name field for a new user should return an error status code', async () => {
-        const response = await request(app)
-            .post('/user/register')
-            .set('Content-Type', 'application/json')
-            .send({
-                email: 'test7dummail@outlook.com',
-                password: 'jhriqu#H2t89',
-            });
+        const response = await request(app).post('/user/register').send({
+            email: 'test7dummail@outlook.com',
+            password: 'jhriqu#H2t89',
+        });
         expect(response.statusCode).toBe(400);
     }, 15000);
 
     it('Missing the email field for a new user should return an error status code', async () => {
-        const response = await request(app)
-            .post('/user/register')
-            .set('Content-Type', 'application/json')
-            .send({
-                name: 'test7',
-                password: 'K2y8egh^35gh@',
-            });
+        const response = await request(app).post('/user/register').send({
+            name: 'test7',
+            password: 'K2y8egh^35gh@',
+        });
         expect(response.statusCode).toBe(400);
     }, 15000);
 
     it('Missing the password field for a new user should return an error status code', async () => {
-        const response = await request(app)
-            .post('/user/register')
-            .set('Content-Type', 'application/json')
-            .send({
-                name: 'test8',
-                email: 'test8dummail@yahoo.com',
-            });
+        const response = await request(app).post('/user/register').send({
+            name: 'test8',
+            email: 'test8dummail@yahoo.com',
+        });
         expect(response.statusCode).toBe(400);
     }, 15000);
 });
@@ -192,46 +162,34 @@ describe('POST /user/register', () => {
 // Tests for the login route by both admins and non-admins, both positive and negative
 describe('POST /user/login tests', () => {
     it('The user should be able to successfully login to the app with status code 200', async () => {
-        const response = await request(app)
-            .post('/user/login')
-            .set('Content-Type', 'application/json')
-            .send({
-                email: 'testingmail11@yahoo.com',
-                password: 'adbdfec2891',
-            });
+        const response = await request(app).post('/user/login').send({
+            email: 'testingmail11@yahoo.com',
+            password: 'adbdfec2891',
+        });
         expect(response.statusCode).toBe(200);
     }, 15000);
 
     it("Upon successful login, the message inside the response should equal 'Login successful' ", async () => {
-        const response = await request(app)
-            .post('/user/login')
-            .set('Content-Type', 'application/json')
-            .send({
-                email: 'testingmail44@yahoo.com',
-                password: 'jumjams1234',
-            });
+        const response = await request(app).post('/user/login').send({
+            email: 'testingmail44@yahoo.com',
+            password: 'jumjams1234',
+        });
         expect(response.body['message']).toEqual('Login successful');
     }, 15000);
 
     it('Check if the token exists in the response body when user successfully logged in', async () => {
-        const response = await request(app)
-            .post('/user/login')
-            .set('Content-Type', 'application/json')
-            .send({
-                name: 'DUMMY_Alpha',
-                email: 'dum273@gmail.com',
-                password: 'luo2ry92@a1h',
-            });
+        const response = await request(app).post('/user/login').send({
+            name: 'DUMMY_Alpha',
+            email: 'dum273@gmail.com',
+            password: 'luo2ry92@a1h',
+        });
         expect(response.body['token']).toBeDefined();
     }, 15000);
 
     it('Missing email field in request body should return an error code of 400', async () => {
-        const response = await request(app)
-            .post('/user/login')
-            .set('Content-Type', 'application/json')
-            .send({
-                password: 'jumjams1234',
-            });
+        const response = await request(app).post('/user/login').send({
+            password: 'jumjams1234',
+        });
         expect(response.statusCode).toBe(400);
         expect(response.body[['message']]).toEqual(
             'Email and password required'
@@ -239,45 +197,33 @@ describe('POST /user/login tests', () => {
     }, 15000);
 
     it('Missing password field in request body should return an error code of 400', async () => {
-        const response = await request(app)
-            .post('/user/login')
-            .set('Content-Type', 'application/json')
-            .send({
-                email: 'testingmail44@yahoo.com',
-            });
+        const response = await request(app).post('/user/login').send({
+            email: 'testingmail44@yahoo.com',
+        });
         expect(response.statusCode).toBe(400);
         expect(response.body['message']).toEqual('Email and password required');
     }, 15000);
 
     it('Mismatched email in request body should return error 401', async () => {
-        const response = await request(app)
-            .post('/user/login')
-            .set('Content-Type', 'application/json')
-            .send({
-                email: 'testigmail11@yahoo.com',
-                password: 'adbdfec2891',
-            });
+        const response = await request(app).post('/user/login').send({
+            email: 'testigmail11@yahoo.com',
+            password: 'adbdfec2891',
+        });
         expect(response.statusCode).toBe(401);
         expect(response.body['message']).toEqual('Invalid email or password');
     }, 15000);
 
     it('Mismatched password in request body should return error 401', async () => {
-        const response = await request(app)
-            .post('/user/login')
-            .set('Content-Type', 'application/json')
-            .send({
-                email: 'dum273@gmail.com',
-                password: 'luo2ry92@a1',
-            });
+        const response = await request(app).post('/user/login').send({
+            email: 'dum273@gmail.com',
+            password: 'luo2ry92@a1',
+        });
         expect(response.statusCode).toBe(401);
         expect(response.body['message']).toEqual('Invalid email or password');
     }, 15000);
 
     it('Malformed request to the login route should throw an error code of 400', async () => {
-        const response = await request(app)
-            .post('/user/login')
-            .set('Content-Type', 'application/json')
-            .send({});
+        const response = await request(app).post('/user/login').send({});
         expect(response.statusCode).toBe(400);
     }, 15000);
 });
@@ -285,18 +231,14 @@ describe('POST /user/login tests', () => {
 // Testing requests to the updateUser route, both positive and negative
 describe('PUT /user/updateUser', () => {
     it('Changing the user passord of a user should return an appropriate status code with necessary details', async () => {
-        const loginRequest = await request(app)
-            .post('/user/login')
-            .set('Content-Type', 'application/json')
-            .send({
-                email: 'testingmail44@yahoo.com',
-                password: 'jumjams1234',
-            });
+        const loginRequest = await request(app).post('/user/login').send({
+            email: 'testingmail44@yahoo.com',
+            password: 'jumjams1234',
+        });
         auth_token = loginRequest.body.token;
 
         const response = await request(app)
             .put('/user/updateUser')
-            .set('Content-Type', 'application/json')
             .set('Authorization', `Bearer ${auth_token}`)
             .send({
                 email: 'testingmail44@yahoo.com',
@@ -311,18 +253,14 @@ describe('PUT /user/updateUser', () => {
     }, 25000);
 
     it('Error response code should be sent back if new password and the same password entered again do not match', async () => {
-        const loginRequest = await request(app)
-            .post('/user/login')
-            .set('Content-Type', 'application/json')
-            .send({
-                email: 'testingmail11@yahoo.com',
-                password: 'adbdfec2891',
-            });
+        const loginRequest = await request(app).post('/user/login').send({
+            email: 'testingmail11@yahoo.com',
+            password: 'adbdfec2891',
+        });
         auth_token = loginRequest.body.token;
 
         const response = await request(app)
             .put('/user/updateUser')
-            .set('Content-Type', 'application/json')
             .set('Authorization', `Bearer ${auth_token}`)
             .send({
                 email: 'testingmail11@yahoo.com',
@@ -335,18 +273,14 @@ describe('PUT /user/updateUser', () => {
     }, 25000);
 
     it('Error response code should be sent if the password field is blank when trying to update the current user details', async () => {
-        const loginRequest = await request(app)
-            .post('/user/login')
-            .set('Content-Type', 'application/json')
-            .send({
-                email: 'dum273@gmail.com',
-                password: 'luo2ry92@a1h',
-            });
+        const loginRequest = await request(app).post('/user/login').send({
+            email: 'dum273@gmail.com',
+            password: 'luo2ry92@a1h',
+        });
         auth_token = loginRequest.body.token;
 
         const response = await request(app)
             .put('/user/updateUser')
-            .set('Content-Type', 'application/json')
             .set('Authorization', `Bearer ${auth_token}`)
             .send({
                 email: 'dum273@gmail.com',
@@ -357,24 +291,18 @@ describe('PUT /user/updateUser', () => {
     }, 25000);
 
     it('If no auth token is provided in the request, the server should send back a status code of 401', async () => {
-        const loginRequest = await request(app)
-            .post('/user/login')
-            .set('Content-Type', 'application/json')
-            .send({
-                email: 'dum273@gmail.com',
-                password: 'luo2ry92@a1h',
-            });
+        const loginRequest = await request(app).post('/user/login').send({
+            email: 'dum273@gmail.com',
+            password: 'luo2ry92@a1h',
+        });
         auth_token = loginRequest.body.token;
 
-        const response = await request(app)
-            .put('/user/updateUser')
-            .set('Content-Type', 'application/json')
-            .send({
-                email: 'dum273@gmail.com',
-                newpassword: 'DJ#hKbE12dzmdqkoi1ytsv',
-                confirmpassword: 'DJ#hKbE12dzmdqkoi1ytsv',
-                password: 'luo2ry92@a1h',
-            });
+        const response = await request(app).put('/user/updateUser').send({
+            email: 'dum273@gmail.com',
+            newpassword: 'DJ#hKbE12dzmdqkoi1ytsv',
+            confirmpassword: 'DJ#hKbE12dzmdqkoi1ytsv',
+            password: 'luo2ry92@a1h',
+        });
         expect(response.statusCode).toBe(401);
         expect(response.body['message']).toEqual('Unauthorized');
     }, 20000);
@@ -383,13 +311,10 @@ describe('PUT /user/updateUser', () => {
 // Tests for a user attempting to view their details, both positive and negative
 describe('GET /user/getUser test', () => {
     it('When this route is accessed by a logged-in user, the correct data should be sent back to the client in the response', async () => {
-        const loginResponse = await request(app)
-            .post('/user/login')
-            .set('Content-Type', 'application/json')
-            .send({
-                email: 'test9dummymail@gmail.com',
-                password: 'allu!8yGHdt#@62',
-            });
+        const loginResponse = await request(app).post('/user/login').send({
+            email: 'test9dummymail@gmail.com',
+            password: 'allu!8yGHdt#@62',
+        });
         auth_token = loginResponse.body.token;
 
         const response = await request(app)
@@ -402,13 +327,10 @@ describe('GET /user/getUser test', () => {
     }, 15000);
 
     it('If auth token is not sent in the request, the server should send back a status code of 401', async () => {
-        const loginresponse = await request(app)
-            .post('/user/login')
-            .set('Content-Type', 'application/json')
-            .send({
-                email: 'dum273@gmail.com',
-                password: 'luo2ry92@a1h',
-            });
+        const loginresponse = await request(app).post('/user/login').send({
+            email: 'dum273@gmail.com',
+            password: 'luo2ry92@a1h',
+        });
         auth_token = loginresponse.body.token;
 
         const response = await request(app).get('/user/getUser');
@@ -421,13 +343,10 @@ describe('GET /user/getUser test', () => {
 // Tests for the admin getting a list of users, both positive and negative
 describe('GET /user/list test using admin account', () => {
     it('Check that the method returns a list of users, whether it is an empty list or whether it contains some users', async () => {
-        const login_response = await request(app)
-            .post('/user/login')
-            .set('Content-Type', 'application/json')
-            .send({
-                email: 'dummyAdmins82@outlook.com',
-                password: 'Akn#Rcjy7!',
-            });
+        const login_response = await request(app).post('/user/login').send({
+            email: 'dummyAdmins82@outlook.com',
+            password: 'Akn#Rcjy7!',
+        });
         admin_auth_token = login_response.body.token;
 
         const response = await request(app)
@@ -440,13 +359,10 @@ describe('GET /user/list test using admin account', () => {
     }, 25000);
 
     it('If no auth token is provided to this route, the server should respond back with status code of 401', async () => {
-        const logResponse = await request(app)
-            .post('/user/login')
-            .set('Content-Type', 'application/json')
-            .send({
-                email: 'dummyAdmin93@outlook.com',
-                password: 'janfhb*@ybd37G!',
-            });
+        const logResponse = await request(app).post('/user/login').send({
+            email: 'dummyAdmin93@outlook.com',
+            password: 'janfhb*@ybd37G!',
+        });
         admin_auth_token = logResponse.body.token;
 
         const failreponse = await request(app).get('/user/list');
@@ -460,14 +376,11 @@ describe('GET /user/list test using admin account', () => {
 describe('PUT /user/updateUser/:id tests', () => {
     it('Updating a user status to admin should return a HTTP status code of 200 and other associated data', async () => {
         // Register a new user first and set it to admin using the admin's route
-        const response = await request(app)
-            .post('/user/register')
-            .set('Content-Type', 'application/json')
-            .send({
-                name: 'testAdminDummy2',
-                email: 'dummyAdmin93@outlook.com',
-                password: 'janfhb*@ybd37G!',
-            });
+        const response = await request(app).post('/user/register').send({
+            name: 'testAdminDummy2',
+            email: 'dummyAdmin93@outlook.com',
+            password: 'janfhb*@ybd37G!',
+        });
         auth_token = response.body.token;
 
         const checkResponse = await request(app)
@@ -475,13 +388,10 @@ describe('PUT /user/updateUser/:id tests', () => {
             .set('Authorization', `Bearer ${auth_token}`);
         let dummy_user_id = checkResponse.body['_id'];
 
-        const ad_loginResponse = await request(app)
-            .post('/user/login')
-            .set('Content-Type', 'application/json')
-            .send({
-                email: 'dummyAdmins82@outlook.com',
-                password: 'Akn#Rcjy7!',
-            });
+        const ad_loginResponse = await request(app).post('/user/login').send({
+            email: 'dummyAdmins82@outlook.com',
+            password: 'Akn#Rcjy7!',
+        });
         admin_auth_token = ad_loginResponse.body.token;
 
         const adResponse = await request(app)
@@ -494,13 +404,10 @@ describe('PUT /user/updateUser/:id tests', () => {
     }, 25000);
 
     it('Attempting to update an already admin user should send back status code 403', async () => {
-        const adUser_response = await request(app)
-            .post('/user/login')
-            .set('Content-Type', 'application/json')
-            .send({
-                email: 'dummyAdmin93@outlook.com',
-                password: 'janfhb*@ybd37G!',
-            });
+        const adUser_response = await request(app).post('/user/login').send({
+            email: 'dummyAdmin93@outlook.com',
+            password: 'janfhb*@ybd37G!',
+        });
         admin_auth_token = adUser_response.body.token;
 
         const listResponse = await request(app)
@@ -520,13 +427,10 @@ describe('PUT /user/updateUser/:id tests', () => {
     }, 25000);
 
     it('Attempting to the update the status of a user with an invalid id should return a status code of 400', async () => {
-        const ad_loginResponse = await request(app)
-            .post('/user/login')
-            .set('Content-Type', 'application/json')
-            .send({
-                email: 'dummyAdmins82@outlook.com',
-                password: 'Akn#Rcjy7!',
-            });
+        const ad_loginResponse = await request(app).post('/user/login').send({
+            email: 'dummyAdmins82@outlook.com',
+            password: 'Akn#Rcjy7!',
+        });
         admin_auth_token = ad_loginResponse.body.token;
 
         let invalid_id = 'znxbvc28'; // Having an invalid string to check response from the server
@@ -540,13 +444,10 @@ describe('PUT /user/updateUser/:id tests', () => {
     }, 25000);
 
     it('If no auth token is provided in the request, the server should send back a status code of 401', async () => {
-        const ad_loginResponse = await request(app)
-            .post('/user/login')
-            .set('Content-Type', 'application/json')
-            .send({
-                email: 'dummyAdmins82@outlook.com',
-                password: 'Akn#Rcjy7!',
-            });
+        const ad_loginResponse = await request(app).post('/user/login').send({
+            email: 'dummyAdmins82@outlook.com',
+            password: 'Akn#Rcjy7!',
+        });
         admin_auth_token = ad_loginResponse.body.token;
 
         const listResponse = await request(app)
@@ -565,13 +466,10 @@ describe('PUT /user/updateUser/:id tests', () => {
 // Tests for deleting a user, both positive and negative
 describe('DELETE /user/deleteUser/:id tests', () => {
     it('An admin user should be able to successfully delete their data from the application by deleting their user account', async () => {
-        const loginresponse = await request(app)
-            .post('/user/login')
-            .set('Content-Type', 'application/json')
-            .send({
-                email: 'dummyAdmins82@outlook.com',
-                password: 'Akn#Rcjy7!',
-            });
+        const loginresponse = await request(app).post('/user/login').send({
+            email: 'dummyAdmins82@outlook.com',
+            password: 'Akn#Rcjy7!',
+        });
         admin_auth_token = loginresponse.body.token;
 
         const checkResponse = await request(app)
@@ -590,13 +488,10 @@ describe('DELETE /user/deleteUser/:id tests', () => {
     }, 20000);
 
     it('If an admin user tries to delete another admin user, server should respond with status code 403', async () => {
-        const logResponse = await request(app)
-            .post('/user/login')
-            .set('Content-Type', 'application/json')
-            .send({
-                email: 'dummyAdmin93@outlook.com',
-                password: 'janfhb*@ybd37G!',
-            });
+        const logResponse = await request(app).post('/user/login').send({
+            email: 'dummyAdmin93@outlook.com',
+            password: 'janfhb*@ybd37G!',
+        });
         admin_auth_token = logResponse.body.token;
 
         const checkResponse = await request(app)
@@ -613,13 +508,10 @@ describe('DELETE /user/deleteUser/:id tests', () => {
     }, 20000);
 
     it('If a user tries to delete another user, the server should respond with status code 404', async () => {
-        const log_response = await request(app)
-            .post('/user/login')
-            .set('Content-Type', 'application/json')
-            .send({
-                email: 'test9dummymail@gmail.com',
-                password: 'allu!8yGHdt#@62',
-            });
+        const log_response = await request(app).post('/user/login').send({
+            email: 'test9dummymail@gmail.com',
+            password: 'allu!8yGHdt#@62',
+        });
         auth_token = log_response.body.token;
 
         const fail_delResponse = await request(app)
@@ -630,13 +522,10 @@ describe('DELETE /user/deleteUser/:id tests', () => {
     }, 20000);
 
     it('If an invalid ID is sent to this route, the server should respond with a status code of 400', async () => {
-        const login_response = await request(app)
-            .post('/user/login')
-            .set('Content-Type', 'application/json')
-            .send({
-                email: 'dummyAdmins82@outlook.com',
-                password: 'Akn#Rcjy7!',
-            });
+        const login_response = await request(app).post('/user/login').send({
+            email: 'dummyAdmins82@outlook.com',
+            password: 'Akn#Rcjy7!',
+        });
         admin_auth_token = login_response.body.token;
 
         let invalid_userID = 'nccbwgy26';
@@ -649,13 +538,10 @@ describe('DELETE /user/deleteUser/:id tests', () => {
     }, 20000);
 
     it('If no auth token is provided in the request, the server should send back a status code of 401', async () => {
-        const logResponse = await request(app)
-            .post('/user/login')
-            .set('Content-Type', 'application/json')
-            .send({
-                email: 'dummyAdmin93@outlook.com',
-                password: 'janfhb*@ybd37G!',
-            });
+        const logResponse = await request(app).post('/user/login').send({
+            email: 'dummyAdmin93@outlook.com',
+            password: 'janfhb*@ybd37G!',
+        });
         admin_auth_token = logResponse.body.token;
 
         const checkResponse = await request(app)
@@ -673,13 +559,10 @@ describe('DELETE /user/deleteUser/:id tests', () => {
     }, 20000);
 
     it('If an user tries to delete their own account, the server should send status code 200 with a redirect', async () => {
-        const logResponse = await request(app)
-            .post('/user/login')
-            .set('Content-Type', 'application/json')
-            .send({
-                email: 'test9dummymail@gmail.com',
-                password: 'allu!8yGHdt#@62',
-            });
+        const logResponse = await request(app).post('/user/login').send({
+            email: 'test9dummymail@gmail.com',
+            password: 'allu!8yGHdt#@62',
+        });
         auth_token = logResponse.body.token;
 
         const deleteNormalresponse = await request(app)
@@ -694,13 +577,10 @@ describe('DELETE /user/deleteUser/:id tests', () => {
 // Tests for logging out, both positive and negative
 describe('GET /user/logout test', () => {
     it('A user should be able to successfully log out once they are logged in, with status code 200 being returned', async () => {
-        const loginresponse = await request(app)
-            .post('/user/login')
-            .set('Content-Type', 'application/json')
-            .send({
-                email: 'user@test.com',
-                password: '12345',
-            });
+        const loginresponse = await request(app).post('/user/login').send({
+            email: 'user@test.com',
+            password: '12345',
+        });
         auth_token = loginresponse.body.token;
 
         const logoutResponse = await request(app)
@@ -712,13 +592,10 @@ describe('GET /user/logout test', () => {
     }, 15000);
 
     it('An admin user should also be able to successfully log out after they are logged in, with status code 200 being returned', async () => {
-        const loginResponse = await request(app)
-            .post('/user/login')
-            .set('Content-Type', 'application/json')
-            .send({
-                email: 'dummyAdmins82@outlook.com',
-                password: 'Akn#Rcjy7!',
-            });
+        const loginResponse = await request(app).post('/user/login').send({
+            email: 'dummyAdmins82@outlook.com',
+            password: 'Akn#Rcjy7!',
+        });
         admin_auth_token = loginResponse.body.token;
 
         const logoutresponse = await request(app)
@@ -730,13 +607,10 @@ describe('GET /user/logout test', () => {
     }, 20000);
 
     it('If no auth token is provided in the request, the server should send back a status code of 401', async () => {
-        const loginresponse = await request(app)
-            .post('/user/login')
-            .set('Content-Type', 'application/json')
-            .send({
-                email: 'testingmail11@yahoo.com',
-                password: 'adbdfec2891',
-            });
+        const loginresponse = await request(app).post('/user/login').send({
+            email: 'testingmail11@yahoo.com',
+            password: 'adbdfec2891',
+        });
         auth_token = loginresponse.body.token;
 
         const logoutResponse = await request(app).get('/user/logout');
