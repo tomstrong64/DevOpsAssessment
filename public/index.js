@@ -64,30 +64,27 @@ document.addEventListener('DOMContentLoaded', function () {
         document
             .getElementById('sendPOI')
             .addEventListener('click', async () => {
-                const poi = {
-                    name: document.getElementById('new_name').value,
-                    type: document.getElementById('new_type').value,
-                    country: document.getElementById('new_country').value,
-                    region: document.getElementById('new_region').value,
-                    lat: lat,
-                    lon: lon,
-                    description: document.getElementById('new_des').value,
-                };
-
                 try {
                     const token = localStorage.getItem('token');
-                    const formData = new FormData();
-                    formData.append('name', poi.name);
-                    formData.append('type', poi.type);
-                    formData.append('country', poi.country);
-                    formData.append('region', poi.region);
-                    formData.append('lat', poi.lat);
-                    formData.append('lon', poi.lon);
-                    formData.append('description', poi.description);
-                    formData.append(
-                        'image',
-                        document.getElementById('new_image').files[0]
-                    );
+                    const form = document.getElementById('addPoiForm');
+                    const formData = new FormData(form);
+                    formData.append('lat', lat);
+                    formData.append('lon', lon);
+
+                    if (!formData.get('name'))
+                        return alert('Please enter a name for the POI');
+                    if (!formData.get('type'))
+                        return alert('Please enter a type for the POI');
+                    if (!formData.get('country'))
+                        return alert('Please enter a country for the POI');
+                    if (!formData.get('region'))
+                        return alert('Please enter a region for the POI');
+                    if (!formData.get('lat'))
+                        return alert('Failed to get latitude for the POI');
+                    if (!formData.get('lon'))
+                        return alert('Failed to get longitude for the POI');
+                    if (!formData.get('description'))
+                        return alert('Please enter a description for the POI');
 
                     const response = await fetch('/pois/addPoi', {
                         method: 'POST',
