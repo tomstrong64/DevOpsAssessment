@@ -46,5 +46,17 @@
     "DltAcc": "Eliminar cuenta",
     "Logout": "Cerrar sesión",
     "Delete": "Eliminar",
-    "AcceptPP": "He leído y acepto Geo Guide's"
+    "AcceptPP": "He leído y acepto Geo Guide's",
+    "GitHubRepo": "Repositorio de GitHub",
+    "Lang": "Idiomas",
+    "Doc": "Documentación",
+    "UserDoc": "Documentación de Usuario",
+    "Collbrators": "Colaborador",
+    "CopyRight": "2023 GeoGuide. Todos los derechos reservados.",
+    "API": "API",
+    "English": "Inglés",
+    "French": "Francés",
+    "Spanish": "Español",
+    "Portuguese": "Portugués",
+    "Turkish": "Turco"
 }
