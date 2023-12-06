@@ -30,7 +30,7 @@ let Admin1UserPoiResponse;
 
 // SETUP FOR USER TEST
 beforeAll(async () => {
-    mongoose.connect('mongodb://admin:admin@localhost:27017/admin', {
+    mongoose.connect(process.env.MONGODB_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     });
