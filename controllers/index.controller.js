@@ -61,3 +61,8 @@ export const privacypolicy = (req, res) => {
         i18n: res,
     });
 };
+export const userdocs = (req, res) => {
+    return res.render('user-docs', {
+        i18n: res,
+    });
+}

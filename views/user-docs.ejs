@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= i18n.__("Geo Guide User documentation") %></title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+</head>
+
+<body>
+    
+    <nav class="navbar navbar-dark bg-primary">
+        <h1><%= i18n.__("Geo Guide User documentation") %></h1>
+    </nav>
+
+    <div class="container mt-3">
+        <p>
+            <%= i18n.__("Welcome Message") %>
+        </p>
+
+        
+        <h2><%= i18n.__("Table of Contents") %></h2>
+        <ol>
+            <li><a href="#getting-started"><%= i18n.__("Getting Started") %></a>
+                <ul>
+                    <li><a href="#account-registration"><%= i18n.__("Account Registration") %></a></li>
+                    <li><a href="#login"><%= i18n.__("Login") %></a></li>
+                    <li><a href="#logout"><%= i18n.__("Logout") %></a></li>
+                    <li><a href="#delete-account"><%= i18n.__("DltAcc") %></a></li>
+                </ul>
+            </li>
+
+            <li><a href="#exploring-geo-guide"><%= i18n.__("Exploring Geo Guide") %></a>
+                <ul>
+                    <li><a href="#viewing-points-of-interest"><%= i18n.__("Viewing Points of Interest") %></a></li>
+                    <li><a href="#searching-for-pois"><%= i18n.__("Searching for POIs") %></a></li>
+                </ul>
+            </li>
+
+            <li><a href="#adding-your-points-of-interest"><%= i18n.__("Adding Your Points of Interest") %></a>
+                <ul>
+                    <li><a href="#adding-a-point-of-interest"><%= i18n.__("Adding a Point of Interest") %></a></li>
+                    <li><a href="#updating-and-deleting-pois"><%= i18n.__("Up and Del") %></a></li>
+                </ul>
+            </li>
+
+            <li><a href="#managing-your-geo-guide-account"><%= i18n.__("Manage Your Account") %></a>
+                <ul>
+                    <li><a href="#user-profile"><%= i18n.__("User Profile") %></a></li>
+                    <li><a href="#change-password"><%= i18n.__("Change Password") %></a></li>
+                    <li><a href="#logout-from-profile-page"><%= i18n.__("Logout from your profile") %></a></li>
+                </ul>
+            </li>
+        </ol>
+
+        <!-- Sections -->
+
+        <h2 id="getting-started">1. <%= i18n.__("Getting Started") %></h2>
+
+        <h3 id="account-registration"><%= i18n.__("Account Registration") %></h3>
+        <p>
+            <%= i18n.__("To Begin") %>
+        </p>
+        <ol>
+            <li><%= i18n.__("Click register") %></li>
+            <li><%= i18n.__("Provide neccessary") %></li>
+            <li><%= i18n.__("Accept privacy policies") %></li>
+        </ol>
+
+        <h3 id="login"><%= i18n.__("Login") %></h3>
+        <p>
+            <%= i18n.__("Already account") %>
+        </p>
+        <ol>
+            <li><%= i18n.__("Click Login Link") %></li>
+            <li><%= i18n.__("Enter your username and password") %></li>
+            <li><%= i18n.__("Click Login button") %></li>
+        </ol>
+
+        <h3 id="logout"><%= i18n.__("Logout") %></h3>
+        <p>
+            <%= i18n.__("When ready") %>
+        </p>
+        <ol>
+            <li><%= i18n.__("Visit your profile page") %></li>
+            <li><%= i18n.__("Click Logout button") %></li>
+        </ol>
+
+        <h3 id="delete-account"><%= i18n.__("DltAcc") %></h3>
+        <p>
+            <%= i18n.__("To delete your Geo Guide account") %>
+        </p>
+        <ol>
+            <li><%= i18n.__("Visit your profile page") %></li>
+            <li><%= i18n.__("Click Delete Account") %></li>
+            <li><%= i18n.__("Your account will be permanently deleted") %></li>
+        </ol>
+
+        <h2 id="exploring-geo-guide">2. <%= i18n.__("Exploring Geo Guide") %></h2>
+
+        <h3 id="viewing-points-of-interest"><%= i18n.__("Viewing Points of Interest") %></h3>
+        <p>
+            <%= i18n.__("Exploring Points of Interest") %>
+        </p>
+
+        <h3 id="searching-for-pois"><%= i18n.__("Searching for POIs") %></h3>
+        <p>
+            <%= i18n.__("Use the search") %>
+        </p>
+
+        <h2 id="adding-your-points-of-interest">3. <%= i18n.__("Adding Your Points of Interest") %></h2>
+
+        <h3 id="adding-a-point-of-interest"><%= i18n.__("Adding a Point of Interest") %></h3>
+        <p>
+            <%= i18n.__("Share your favorite") %>
+        </p>
+        <ol>
+            <li><%= i18n.__("Click to select a location") %></li>
+            <li><%= i18n.__("Fill in the details") %></li>
+            <li><%= i18n.__("Click 'Add'") %></li>
+        </ol>
+
+        <h3 id="updating-and-deleting-pois"><%= i18n.__("Up and Del") %></h3>
+        <p>
+            <%= i18n.__("Manage") %>
+        </p>
+        <ul>
+            <li><strong>Update:</strong> <%= i18n.__("Click Update") %></li>
+            <li><strong>Delete:</strong> <%= i18n.__("Click Delete") %></li>
+        </ul>
+
+        <h2 id="managing-your-geo-guide-account">4. <%= i18n.__("Manage your Account") %></h2>
+
+        <h3 id="user-profile"><%= i18n.__("User Profile") %></h3>
+        <p>
+            <%= i18n.__("Access and edit") %>
+        </p>
+        <ol>
+            <li><%= i18n.__("Visit your profile page") %></li>
+            <li><%= i18n.__("Update your details") %></li>
+        </ol>
+
+        <h3 id="change-password"><%= i18n.__("Change Password") %></h3>
+        <p>
+            <%= i18n.__("Keep your account secure") %>
+        </p>
+        <ol>
+            <li><%= i18n.__("Visit change password") %></li>
+            <li><%= i18n.__("Enter your current password") %></li>
+            <li><%= i18n.__("Save changes") %></li>
+        </ol>
+
+        <h3 id="logout-from-profile-page"><%= i18n.__("Logout from Profile") %></h3>
+        <p>
+            <%= i18n.__("To logout from your profile") %>
+        </p>
+        <ol>
+            <li><%= i18n.__("Click Logout") %></li>
+            <li><%= i18n.__("Confirm your action") %></li>
+
+        </ol>
+        </div>
+</body>
+</html>
