@@ -82,6 +82,19 @@ This key is defined in the en.json file, which contains the English translation 
 THIS IS THE DOCUMENTATION
 
 ### 6. GDPR
+At GeoGuide, we prioritize user privacy and strictly adhere to the regulations set forth by the General Data Protection Regulation (GDPR). Our commitment to data handling and privacy practices aligns with the stringent requirements of the GDPR, ensuring a transparent, secure, and lawful processing of personal data.
+
+Our measures for GDPR compliance include:
+
+Robust Security Measures: We employ SSL encryption within our systems to safeguard data transmission.
+
+Responsible Data Practices: GeoGuide adheres meticulously to GDPR guidelines, maintaining strict control over data management and storage. Users are empowered with control over their information, and explicit consent is obtained for all data processing activities through the use of cookies.
+
+Transparent Documentation: Our ReST API documentation is compliant with OpenAPI specifications, offering comprehensive insights into data endpoints, authentication requirements, and potential error scenarios. 
+
+Privacy Policy Page: We utilize a dedicated privacy policy page to inform users comprehensively about the data we collect, how we use it, and the purposes behind its collection. This page serves as a vital resource for users, ensuring they are well-informed about their data rights and our commitment to privacy.
+
+Our privacy policy page is designed to be easily accessible, providing clear and understandable information about data practices. We ensure that users have the necessary awareness and understanding of their data's usage and their rights in line with GDPR regulations.
 
 ### 7. Server hosting and Docker
 
