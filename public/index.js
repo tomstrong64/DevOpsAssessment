@@ -144,8 +144,6 @@ async function ajaxSearch(region) {
             .bindPopup(`<b>${poi.name}</b><br>${poi.description}`)
             .openPopup();
     });
-
-    
 }
 
 async function deletePoi(id) {
