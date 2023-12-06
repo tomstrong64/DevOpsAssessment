@@ -1,5 +1,24 @@
+/*
+ * Copyright [2023] [Coordinated Chaos]
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import { Router } from 'express';
-import { noAuth, stdAuth, adminAuth } from '../middlewares/user.middleware.js';
+import {
+    noAuthAPI,
+    stdAuthAPI,
+    adminAuthAPI,
+} from '../middlewares/user.middleware.js';
 import * as UserController from '../controllers/user.controller.js';
 
 const router = Router();
@@ -13,6 +32,16 @@ const router = Router();
  *       properties:
  *         name:
  *           type: string
+ *         email:
+ *           type: string
+ *         password:
+ *           type: string
+ *       required:
+ *         - email
+ *         - password
+ *     UserLogin:
+ *       type: object
+ *       properties:
  *         email:
  *           type: string
  *         password:
@@ -34,7 +63,7 @@ const router = Router();
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/User'
+ *             $ref: '#/components/schemas/UserLogin'
  *     responses:
  *       200:
  *         description: Login successful, returns an access token.
@@ -46,7 +75,7 @@ const router = Router();
  *         description: Internal Server Error.
 
  */
-router.post('/login', noAuth, UserController.login);
+router.post('/login', noAuthAPI, UserController.login);
 
 /**
  * @openapi
@@ -72,7 +101,7 @@ router.post('/login', noAuth, UserController.login);
  *         description: Internal Server Error.
 
  */
-router.post('/register', noAuth, UserController.create);
+router.post('/register', noAuthAPI, UserController.create);
 
 /**
  * @openapi
@@ -91,7 +120,7 @@ router.post('/register', noAuth, UserController.create);
  *       500:
  *         description: Internal Server Error.
  */
-router.get('/logout', stdAuth, UserController.logout);
+router.get('/logout', stdAuthAPI, UserController.logout);
 
 /**
  * @openapi
@@ -118,7 +147,7 @@ router.get('/logout', stdAuth, UserController.logout);
  *       500:
  *         description: Internal Server Error.
  */
-router.put('/updateUser', stdAuth, UserController.updateUser);
+router.put('/updateUser', stdAuthAPI, UserController.updateUser);
 
 /**
  * @openapi
@@ -137,37 +166,31 @@ router.put('/updateUser', stdAuth, UserController.updateUser);
  *       500:
  *         description: Internal Server Error.
  */
-router.get('/getUser', stdAuth, UserController.getUserById);
+router.get('/getUser', stdAuthAPI, UserController.getUserById);
 
 /**
  * @openapi
- * /user/deleteUser/{id}:
+ * /user/deleteUser:
  *   delete:
  *     tags: [User]
- *     summary: Delete user by ID
- *     description: Delete user by ID. Requires admin authentication.
+ *     summary: Delete the authenticated user (admin or standard user)
+ *     description: >
+ *       Delete the user account. Requires standard authentication.
  *     security:
  *       - BearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: ID of the user
- *         schema:
- *           type: string
  *     responses:
  *       204:
  *         description: User deleted successfully.
  *       401:
  *         description: Unauthorized. Authentication token is missing or invalid.
  *       403:
- *         description: Forbidden. User does not have admin privileges.
+ *         description: Forbidden. User does not have sufficient privileges.
  *       404:
  *         description: User not found.
  *       500:
  *         description: Internal Server Error.
  */
-router.delete('/deleteUser/:id', adminAuth, UserController.deleteUser);
+router.delete('/deleteUser', stdAuthAPI, UserController.deleteUser);
 
 /**
  * @openapi
@@ -197,7 +220,7 @@ router.delete('/deleteUser/:id', adminAuth, UserController.deleteUser);
  *       500:
  *         description: Internal Server Error.
  */
-router.put('/updateUser/:id', adminAuth, UserController.updateUserStatus);
+router.put('/updateUser/:id', adminAuthAPI, UserController.updateUserStatus);
 
 /**
  * @openapi
@@ -218,6 +241,6 @@ router.put('/updateUser/:id', adminAuth, UserController.updateUserStatus);
  *       500:
  *         description: Internal Server Error.
  */
-router.get('/list', adminAuth, UserController.getAllUsers);
+router.get('/list', adminAuthAPI, UserController.getAllUsers);
 
 export default router;

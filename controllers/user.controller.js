@@ -1,8 +1,24 @@
+/*
+ * Copyright [2023] [Coordinated Chaos]
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import { User } from '../models/User.js';
 import { POI } from '../models/Poi.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
+import cookieParser from 'cookie-parser';
 
 export const getUserById = async (req, res) => {
     try {
@@ -46,7 +62,8 @@ export const login = async (req, res) => {
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
             expiresIn: '1d',
         });
-
+        // Set the auth token as a cookie
+        res.cookie('token', token);
         // save token to user document
         user.token = token;
         await user.save();
@@ -92,6 +109,8 @@ export const create = async (req, res) => {
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
             expiresIn: '1d',
         });
+        // Set the auth token as a cookie
+        res.cookie('token', token);
 
         // save token to user document
         user.token = token;
@@ -123,6 +142,7 @@ export const logout = async (req, res) => {
 
         // remove token
         user.token = '';
+        res.clearCookie('token');
         await user.save();
 
         // return success message
@@ -190,12 +210,19 @@ export const getAllUsers = async (req, res) => {
 
 export const deleteUser = async (req, res) => {
     const user = res.locals.user;
-    const id = req.params.id;
+    const id = req.query.id;
     try {
-        if (!mongoose.Types.ObjectId.isValid(req.params.id))
-            return res.status(400).json({ message: 'Invalid ID' });
-
-        if (user.admin) {
+        if (id) {
+            // check if user is admin
+            if (!user.admin) {
+                return res.status(404).send({
+                    message: `not found.`,
+                });
+            }
+            // check if id is valid
+            if (!mongoose.Types.ObjectId.isValid(id))
+                return res.status(400).json({ message: 'Invalid ID' });
+            // check if user is admin
             const founduser = await User.findById(id);
             if (founduser.admin) {
                 return res.status(403).send({
@@ -208,14 +235,16 @@ export const deleteUser = async (req, res) => {
                     message: 'User Deleted successfully',
                 });
             }
-        } else {
-            await POI.deleteMany({ user: user.id });
-            await User.findByIdAndRemove(user.id);
-            return res.status(200).json({
-                message: 'User Deleted successfully',
-                redirect: '/login',
-            });
         }
+        // only allow users to delete their own account
+        await POI.deleteMany({ user: user._id });
+        await User.findByIdAndRemove(user._id);
+        user.token = '';
+        res.clearCookie('token');
+        return res.status(200).json({
+            message: 'User Deleted successfully',
+            redirect: '/login',
+        });
     } catch (e) {
         console.log(e);
         return res.status(500).send({

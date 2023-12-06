@@ -1,3 +1,18 @@
+/*
+ * Copyright [2023] [Coordinated Chaos]
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import {} from 'dotenv/config';
 import app from '../app.js';
 import request from 'supertest';
@@ -11,6 +26,7 @@ let poi_id;
 let admin1_poiID;
 let admin1Token;
 let admin2Token;
+let Admin1UserPoiResponse;
 
 // SETUP FOR USER TEST
 beforeAll(async () => {
@@ -81,6 +97,21 @@ beforeAll(async () => {
     const admin2ID = newsecondUserAdmin.body._id;
     //update a user to be an  Admin
     await User.updateOne({ _id: admin2ID }, { admin: true });
+    const Admin1UserPOIResponse = await request(app)
+        .post('/pois/addPoi')
+        .set('Content-Type', 'application/json')
+        .set('Authorization', `Bearer ${admin1Token}`)
+        .send({
+            name: 'normal user POI',
+            type: 'Test Type',
+            country: 'London1',
+            region: 'Solent',
+            lat: 50.9105,
+            lon: -14.4049,
+            description: 'Test Description normal user',
+        });
+    Admin1UserPoiResponse = Admin1UserPOIResponse;
+    admin1_poiID = Admin1UserPoiResponse.body.poi._id;
 });
 
 // TEARDOWN
@@ -148,7 +179,7 @@ describe('GET /poi/id ', () => {
     });
 });
 describe('PUT /pois/updatePoi/:id', () => {
-    it('Should Update the POI ', async () => {
+    it('Normal User Should Update the POI ', async () => {
         const response = await request(app)
             .put(`/pois/updatePoi/${poi_id}`)
             .set('Content-Type', 'application/json')
@@ -164,10 +195,7 @@ describe('PUT /pois/updatePoi/:id', () => {
             });
         expect(response.status).toEqual(200);
     });
-});
-
-describe('PUT /pois/updatePoi/:id', () => {
-    it('Should Update selected element of the POI ', async () => {
+    it('Normal User Should Update selected element of the POI ', async () => {
         const response = await request(app)
             .put(`/pois/updatePoi/${poi_id}`)
             .set('Content-Type', 'application/json')
@@ -178,6 +206,66 @@ describe('PUT /pois/updatePoi/:id', () => {
                 description: 'Test Description',
             });
         expect(response.status).toEqual(200);
+    });
+    it(' Admin user Should Update their own the POI ', async () => {
+        const response = await request(app)
+            .put(`/pois/updatePoi/${admin1_poiID}`)
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${admin1Token}`)
+            .send({
+                name: 'Update admin1',
+                type: 'Test update ',
+                country: 'London update ',
+                region: 'Solent update ',
+                lat: 50.9105,
+                lon: -1.4049,
+                description: 'Test Description',
+            });
+        expect(response.status).toEqual(200);
+    });
+    it('Admin User Should Update selected element of the thire ownPOI ', async () => {
+        const response = await request(app)
+            .put(`/pois/updatePoi/${admin1_poiID}`)
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${admin1Token}`)
+            .send({
+                name: 'Update Admin',
+                type: 'Test update admin ',
+                description: 'Test Description',
+            });
+        expect(response.status).toEqual(200);
+    });
+    it(' Admin user Should Not be able to Update someone elses POI ', async () => {
+        const response = await request(app)
+            .put(`/pois/updatePoi/${poi_id}`)
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${admin1Token}`)
+            .send({
+                name: 'Update admin1',
+                type: 'Test update ',
+                country: 'London update ',
+                region: 'Solent update ',
+                lat: 50.9105,
+                lon: -1.4049,
+                description: 'Test Description',
+            });
+        expect(response.status).toEqual(404);
+    });
+    it(' Normal user Should Not be able to Update someone elses POI ', async () => {
+        const response = await request(app)
+            .put(`/pois/updatePoi/${admin1_poiID}`)
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${auth_token}`)
+            .send({
+                name: 'Update admin1',
+                type: 'Test update ',
+                country: 'London update ',
+                region: 'Solent update ',
+                lat: 50.9105,
+                lon: -1.4049,
+                description: 'Test Description',
+            });
+        expect(response.status).toEqual(404);
     });
 });
 
@@ -191,23 +279,6 @@ describe('DELETE /pois/deletePoi/:id', () => {
     });
 
     it('Normal User should not be able to delete someone elses POI (404)', async () => {
-        const admin1PoiResponse = await request(app)
-            .post('/pois/addPoi')
-            .set('Content-Type', 'application/json')
-            .set('Authorization', `Bearer ${admin1Token}`)
-            .send({
-                name: 'Admin 1 POI',
-                type: 'Test Type',
-                country: 'London1',
-                region: 'Solent',
-                lat: 50.9105,
-                lon: -14.4049,
-                description: 'Test Description Admin 1',
-            });
-        const POI1 = admin1PoiResponse.body;
-        console.log('POI:', POI1);
-        admin1_poiID = admin1PoiResponse.body.poi._id;
-        console.log(admin1_poiID);
         const response = await request(app)
             .delete(`/pois/deletePoi/${admin1_poiID}`)
             .set('Authorization', `Bearer ${auth_token}`);
@@ -237,23 +308,8 @@ describe('DELETE /pois/deletePoi/:id', () => {
         expect(response.body).toEqual({ message: 'Forbidden' });
     });
     it('Admin user should not be able to delete Admin POI (403)', async () => {
-        const Admin1UserPoiResponse = await request(app)
-            .post('/pois/addPoi')
-            .set('Content-Type', 'application/json')
-            .set('Authorization', `Bearer ${admin1Token}`)
-            .send({
-                name: 'normal user POI',
-                type: 'Test Type',
-                country: 'London1',
-                region: 'Solent',
-                lat: 50.9105,
-                lon: -14.4049,
-                description: 'Test Description normal user',
-            });
-
-        const Admin1_poiID = Admin1UserPoiResponse.body.poi._id;
         const response = await request(app)
-            .delete(`/pois/deletePoi/${Admin1_poiID}`)
+            .delete(`/pois/deletePoi/${admin1_poiID}`)
             .set('Authorization', `Bearer ${admin2Token}`);
         expect(response.status).toEqual(403);
         expect(response.body).toEqual({ message: 'Forbidden' });
@@ -270,7 +326,7 @@ describe('DELETE /pois/deletePoi/:id', () => {
         const invalidIDNormalUser = 'oiuytrfghjkkngf';
         const response = await request(app)
             .delete(`/pois/deletePoi/${invalidIDNormalUser}`)
-            .set('Authorization', `Bearer ${admin1Token}`);
+            .set('Authorization', `Bearer ${auth_token}`);
         expect(response.status).toEqual(400);
     });
 
@@ -285,16 +341,7 @@ describe('DELETE /pois/deletePoi/:id', () => {
         const NoneExistingIDNormalUser = new mongoose.Types.ObjectId();
         const response = await request(app)
             .delete(`/pois/deletePoi/${NoneExistingIDNormalUser}`)
-            .set('Authorization', `Bearer ${admin1Token}`);
+            .set('Authorization', `Bearer ${auth_token}`);
         expect(response.status).toEqual(404);
     });
 });
-
-test.todo('User should not be able to delete non existent POI (404)');
-
-test.todo('User should not be able to delete POI by invalid ID (400)');
-
-test.todo('Admin should not be able to delete another Admins POI (403)');
-
-test.todo('User should not be able to delete non existent POI (404)');
-test.todo('Admin should not be able to delete POI by invalid ID (400)');

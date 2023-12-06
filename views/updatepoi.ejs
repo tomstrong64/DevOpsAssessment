@@ -1,19 +1,30 @@
+<!--
+  Copyright [2023] [Coordinated Chaos]
+ 
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+ 
+      http://www.apache.org/licenses/LICENSE-2.0
+ 
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ -->
 <!doctype html>
 <html>
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Update Point of Interest</title>
+        <title><%= i18n.__("UPOI") %></title>
         <link
             rel="stylesheet"
             href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
         />
         <script type="text/javascript" src="/utils.js" defer></script>
-        <script
-            type="text/javascript"
-            src="/updatepoi.js"
-            defer
-        ></script>
+        <script type="text/javascript" src="/updatepoi.js" defer></script>
     </head>
     <body>
         <div class="container mt-5">
@@ -22,7 +33,7 @@
                     <div class="card">
                         <div class="card-header bg-primary text-white">
                             <h3 class="text-center">
-                                Update Point of Interest
+                                <%= i18n.__("UPOI") %>
                             </h3>
                         </div>
                         <div class="card-body">
@@ -34,7 +45,7 @@
                                         value="Id"
                                     />
                                     <label for="name" class="form-label"
-                                        >Name</label
+                                        ><%= i18n.__("Name") %></label
                                     >
                                     <input
                                         type="text"
@@ -46,7 +57,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="type" class="form-label"
-                                        >Type</label
+                                        ><%= i18n.__("Type") %></label
                                     >
                                     <input
                                         type="text"
@@ -57,7 +68,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="country" class="form-label"
-                                        >Country</label
+                                        ><%= i18n.__("Country") %></label
                                     >
                                     <input
                                         type="text"
@@ -68,7 +79,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="region" class="form-label"
-                                        >Region</label
+                                        ><%= i18n.__("Region") %></label
                                     >
                                     <input
                                         type="text"
@@ -80,7 +91,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label for="lat" class="form-label"
-                                            >Latitude</label
+                                            ><%= i18n.__("lat") %></label
                                         >
                                         <input
                                             type="float"
@@ -92,7 +103,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label for="lon" class="form-label"
-                                            >Longitude</label
+                                            ><%= i18n.__("lon") %></label
                                         >
                                         <input
                                             type="float"
@@ -105,7 +116,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="description" class="form-label"
-                                        >Description</label
+                                        ><%= i18n.__("Description") %></label
                                     >
                                     <textarea
                                         class="form-control"
@@ -114,13 +125,27 @@
                                         rows="4"
                                     ></textarea>
                                 </div>
+                                <div class="mb-3">
+                                    <label for="image" class="form-label"
+                                        ><%= i18n.__("Image") %></label
+                                    >
+                                    <input
+                                        type="file"
+                                        class="form-control"
+                                        id="image"
+                                        name="image"
+                                        accept=".jpg, .jpeg"
+                                    />
+                                    <small class="form-text text-muted">
+                                        <%= i18n.__("PUOJI") %>
+                                    </small>
                                 <div class="text-center">
                                     <button
                                         type="submit"
                                         id="UPDATE POI"
                                         class="btn btn-primary"
                                     >
-                                        UPDATE
+                                    <%= i18n.__("Update") %>
                                     </button>
                                 </div>
                             </form>

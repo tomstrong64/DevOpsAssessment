@@ -103,6 +103,13 @@ document.getElementById('DELETE USER').addEventListener('click', async (e) => {
             alert('Password cannot be blank');
             return;
         }
+        const isConfirmed = confirm(
+            'Are you sure you want to delete your account?'
+        );
+        if (!isConfirmed) {
+            // If the user cancels the confirmation, do nothing
+            return;
+        }
 
         const token = localStorage.getItem('token');
         const response = await fetch('/user/deleteUser', {
@@ -113,6 +120,7 @@ document.getElementById('DELETE USER').addEventListener('click', async (e) => {
         });
         await responseHandler(response);
         localStorage.removeItem('token');
+        
     } catch (e) {
         alert('Failed to delete User');
     }

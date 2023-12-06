@@ -14,81 +14,91 @@
  * limitations under the License.
  */
 let userId;
+let Lat;
+let Lon;
+let map;
+let watchId;
+const geoBtn = document.getElementById('enableGeolocation');
+const revokeBtn = document.getElementById('revokeGeolocation');
+const customIcon = L.icon({
+    iconUrl: 'currentlocationicon.png',
+    iconSize: [32, 32], // Adjust the size as needed
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -32],
+});
 document.addEventListener('DOMContentLoaded', function () {
     Logincheck();
-});
+    getLocation();
 
-const map = L.map('map1');
+    map = L.map('map1');
 
-const attrib =
-    'Map data copyright OpenStreetMap contributors, Open Database Licence';
+    const attrib =
+        'Map data copyright OpenStreetMap contributors, Open Database Licence';
 
-const tileLayer = L.tileLayer(
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    { attribution: attrib }
-).addTo(map);
-map.setView([51.51, -0.1], 14);
+    const tileLayer = L.tileLayer(
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        { attribution: attrib }
+    ).addTo(map);
 
-map.on('click', async (e) => {
-    const lat = `${e.latlng.lat}`;
-    const lon = `${e.latlng.lng}`;
-    const addpoi = document.getElementById('addpoi');
-    addpoi.innerHTML = `
-  <h2>Add a Point Of Interest</h2>
-  <p>
-  Name: <br />
-  <input id="new_name" /><br />
-  Type: <br />
-  <input id="new_type" /><br />
-  Country: <br />
-  <input id="new_country" /><br />
-  Region: <br />
-  <input id="new_region" /><br />
-  Description: <br />
-  <input id="new_des" /><br />
-  <input type="button" value="go" id="sendPOI" />`;
+    map.on('click', async (e) => {
+        const lat = `${e.latlng.lat}`;
+        const lon = `${e.latlng.lng}`;
+        const addpoi = document.getElementById('addpoi');
+        addpoi.hidden = false;
 
-    document.getElementById('sendPOI').addEventListener('click', async () => {
-        const poi = {
-            name: document.getElementById('new_name').value,
-            type: document.getElementById('new_type').value,
-            country: document.getElementById('new_country').value,
-            region: document.getElementById('new_region').value,
-            lat: lat,
-            lon: lon,
-            description: document.getElementById('new_des').value,
-        };
+        document
+            .getElementById('ADD POI')
+            .addEventListener('click', async (e) => {
+                e.preventDefault();
 
-        try {
-            const token = localStorage.getItem('token');
-            const response = await fetch('/pois/addPoi', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify(poi),
+                const form = document.getElementById('addPoiForm');
+
+                const formData = new FormData(form);
+                formData.append('lat', lat);
+                formData.append('lon', lon);
+
+                try {
+                    const token = localStorage.getItem('token');
+                    const response = await fetch('/pois/addPoi', {
+                        method: 'POST',
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                        body: formData,
+                    });
+
+                    const data = await responseHandler(response, true);
+                    if (data === false) return;
+                    addpoi.hidden = true;
+
+                    const pos = [lat, lon];
+                    const marker = L.marker(pos).addTo(map);
+                    marker
+                        .bindPopup(
+                            `<b>${data.poi.name}</b><br>${data.poi.description}`
+                        )
+                        .openPopup();
+                } catch (e) {
+                    alert(`Error: ${e}`);
+                }
             });
+    });
 
-            await responseHandler(response);
-            const pos = [lat, lon];
-            const marker = L.marker(pos).addTo(map);
-            marker
-                .bindPopup(`<b>${poi.name}</b><br>${poi.description}`)
-                .openPopup();
-        } catch (e) {
-            alert(`Error: ${e}`);
-        }
+    document.getElementById('poi_search').addEventListener('click', (e) => {
+        e.preventDefault();
+        const region = document.getElementById('poi_region').value;
+        ajaxSearch(region);
     });
 });
-
-document.getElementById('poi_search').addEventListener('click', (e) => {
-    e.preventDefault();
-    const region = document.getElementById('poi_region').value;
-    ajaxSearch(region);
-});
-
 async function ajaxSearch(region) {
+    const resultsDiv = document.getElementById('poi_results');
+    const tbody = document.getElementById('TableBody');
+    const UpdateBtn = document.getElementById('transUpdate').innerText;
+    const DeleteBtn = document.getElementById('transDelete').innerText;
+    const ImageBtn = document.getElementById('transImage').innerText;
+
+    tbody.innerHTML = '';
+
     const token = localStorage.getItem('token');
     const ajaxResponse = await fetch(`/pois/list?search=${region}`, {
         headers: {
@@ -100,33 +110,12 @@ async function ajaxSearch(region) {
         alert('No Pois Found');
         return;
     }
-    const resultsDiv = document.getElementById('poi_results');
-    resultsDiv.innerHTML = '';
 
-    // Create table and table headings
-    const table = document.createElement('table');
-    const thead = document.createElement('thead');
-    const trHeadings = document.createElement('tr');
-    trHeadings.innerHTML = `
-      <th>Name</th>
-      <th>Type</th>
-      <th>Country</th>
-      <th>Region</th>
-      <th>Longitude</th>
-      <th>Latitude</th>
-      <th>Description</th>
-      <th>Update</th>
-      <th>Delete</th>
-    `;
-    thead.appendChild(trHeadings);
-    table.appendChild(thead);
+    resultsDiv.hidden = false;
 
-    // Add table rows
-    const tbody = document.createElement('tbody');
-    table.appendChild(tbody);
     if (userId) {
         pois = pois.filter((poi) => {
-            if (poi.user !== userId) return false;
+            if (poi.user._id !== userId) return false;
             return true;
         });
     }
@@ -141,11 +130,13 @@ async function ajaxSearch(region) {
         <td>${poi.lat}</td>
         <td>${poi.description}</td>
         <td>
-          <a href="/updatepoi?id=${poi._id}">Update</a>
+          <a href="/updatepoi?id=${poi._id}" class="btn btn-primary btn-sm">${UpdateBtn}</a>
         </td>
         <td>
-          <button onclick="deletePoi('${poi._id}')">Delete</button>
-        </td>
+          <button onclick="deletePoi('${poi._id}')" class="btn btn-danger btn-sm">${DeleteBtn}</button>
+        </td><td>
+        <button onclick="getPoiImage('${poi._id}', '${poi.name}', ${poi.lat}, ${poi.lon})" class="btn btn-info btn-sm">${ImageBtn}</button>
+         </td>
       `;
         tr.id = poi._id;
         tbody.appendChild(tr);
@@ -156,9 +147,6 @@ async function ajaxSearch(region) {
             .bindPopup(`<b>${poi.name}</b><br>${poi.description}`)
             .openPopup();
     });
-
-    resultsDiv.innerHTML = '';
-    resultsDiv.appendChild(table);
 }
 
 async function deletePoi(id) {
@@ -202,5 +190,110 @@ async function Logincheck() {
     } catch (error) {
         console.error(error);
         alert('Failed to fetch User details');
+    }
+}
+async function getPoiImage(id, name, lat, lon) {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`/pois/image/${id}`, {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        const image = await response.blob();
+        blobToDataURL(image, function (dataurl) {
+            const imgsrc = dataurl;
+            const pos = [lat, lon];
+            const marker = L.marker(pos).addTo(map);
+            marker
+                .bindPopup(
+                    `<b>${name}</b><br><img src=${imgsrc} style="max-width: 100%; max-height: 100%;"/>`
+                )
+                .openPopup();
+        });
+    } catch (e) {
+        alert(`Error with POI ID ${id}: ${e}`);
+    }
+}
+function blobToDataURL(blob, callback) {
+    var a = new FileReader();
+    a.onload = function (e) {
+        callback(e.target.result);
+    };
+    a.readAsDataURL(blob);
+}
+function getLocation() {
+    if (navigator.geolocation) {
+        watchId = navigator.geolocation.watchPosition(showPosition, showError);
+    } else {
+        alert('Geolocation is not supported by this browser.');
+    }
+}
+function showPosition(position) {
+    Lat = position.coords.latitude;
+    Lon = position.coords.longitude;
+    map.setView([Lat, Lon], 14);
+    L.marker([Lat, Lon], { icon: customIcon }).addTo(map);
+    geoBtn.style.display = 'none';
+}
+function showError(error) {
+    switch (error.code) {
+        case error.PERMISSION_DENIED:
+            alert('Permission denied for Geolocation.');
+            const currrentLocation = [51.51, -0.1];
+            map.setView(currrentLocation, 14);
+            revokeBtn.style.display = 'none';
+            geoBtn.style.display = 'inline';
+            break;
+        case error.POSITION_UNAVAILABLE:
+            alert('Location information is unavailable.');
+            break;
+        case error.TIMEOUT:
+            alert('The request to get user location timed out.');
+            break;
+        case error.UNKNOWN_ERROR:
+            alert('An unknown error occurred.');
+            break;
+    }
+}
+
+function revokePermission() {
+    if (watchId !== null) {
+        navigator.geolocation.clearWatch(watchId);
+    }
+    alert('Geolocation permission revoked.');
+    geoBtn.style.display = 'inline-block';
+    revokeBtn.style.display = 'none';
+}
+
+geoBtn.onclick = function () {
+    requestLocation();
+};
+revokeBtn.onclick = function () {
+    revokePermission();
+};
+function requestLocation() {
+    if (navigator.permissions) {
+        navigator.permissions
+            .query({ name: 'geolocation' })
+            .then((permissionStatus) => {
+                if (permissionStatus.state === 'denied') {
+                    alert(
+                        'Geolocation permission is denied. Please enable it in your browser settings.'
+                    );
+                } else {
+                    alert('Geolocation permission is already granted.');
+                    geoBtn.style.display = 'none';
+                    revokeBtn.style.display = 'inline-block';
+                }
+            })
+            .catch((error) => {
+                console.error('Error querying geolocation permission:', error);
+            });
+    } else if (navigator.geolocation) {
+        getLocation();
+    } else {
+        alert('Geolocation is not supported by this browser.');
     }
 }

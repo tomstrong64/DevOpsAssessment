@@ -1,5 +1,22 @@
+/*
+ * Copyright [2023] [Coordinated Chaos]
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import { POI } from '../models/Poi.js';
 import mongoose from 'mongoose';
+import * as AzureStorage from '../models/AzureStorage.js';
+import e from 'express';
 
 export const getPois = async (req, res) => {
     try {
@@ -19,7 +36,7 @@ export const getPois = async (req, res) => {
         }
         // if admin, return all POIs
         else if (res.locals.user.admin) {
-            pois = await POI.find();
+            pois = await POI.find().populate('user');
         }
         // if not admin, return all POIs owned by user
         else {
@@ -87,6 +104,9 @@ export const deletePoi = async (req, res) => {
         if (poi.user._id.toString() !== user._id.toString())
             return res.status(403).json({ message: 'Forbidden' });
 
+        // delete image
+        if (poi.image) await AzureStorage.DeleteImage(poi.image);
+
         // delete POI
         await POI.findByIdAndRemove(id);
 
@@ -114,6 +134,10 @@ export const addPoi = async (req, res) => {
             return res.status(400).json({ message: 'Missing fields' });
         }
 
+        let image = null;
+
+        if (req.file) image = await AzureStorage.UploadImage(req.file);
+
         // create POI
         const poi = new POI({
             name: req.body.name,
@@ -123,6 +147,7 @@ export const addPoi = async (req, res) => {
             lat: req.body.lat,
             lon: req.body.lon,
             description: req.body.description,
+            image: image,
             user: res.locals.user._id,
         });
         await poi.save();
@@ -158,12 +183,63 @@ export const updatePoi = async (req, res) => {
         if (req.body.lat) poi.lat = req.body.lat;
         if (req.body.lon) poi.lon = req.body.lon;
         if (req.body.description) poi.description = req.body.description;
+        console.log('File received:', req.file);
+        if (req.file) {
+            console.log('File received:', req.file);
+
+            // delete old image
+            if (poi.image) await AzureStorage.DeleteImage(poi.image);
+            console.log('Deleting old image:', poi.image);
+            // upload new image
+            console.log('Uploading new image...');
+            poi.image = await AzureStorage.UploadImage(req.file);
+            console.log('New image uploaded:', poi.image);
+        }
+        console.log('Saving POI:', poi);
         await poi.save();
+        console.log(' saving POI:', poi);
 
         return res.json({
             message: 'POI successfully updated',
             redirect: '/',
         });
+    } catch (e) {
+        console.log(e);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+export const getImage = async (req, res) => {
+    try {
+        if (!mongoose.Types.ObjectId.isValid(req.params.id))
+            return res.status(400).json({ message: 'Invalid ID' });
+
+        const id = req.params.id;
+        const user = res.locals.user;
+
+        let poi;
+
+        if (user.admin) {
+            // get POI regardless of user
+            poi = await POI.findById(id);
+        } else {
+            // get POI for user
+            poi = await POI.findOne({
+                _id: new mongoose.Types.ObjectId(id),
+                user: new mongoose.Types.ObjectId(user._id),
+            });
+        }
+
+        if (!poi) return res.status(404).json({ message: 'POI not found' });
+        if (!poi.image)
+            return res.status(404).json({ message: 'Image not found' });
+
+        const image = await AzureStorage.GetImage(poi.image);
+
+        // send image to client
+        res.setHeader('Content-Type', 'image/jpeg');
+        image.readableStreamBody.pipe(res);
+        return;
     } catch (e) {
         console.log(e);
         return res.status(500).json({ message: 'Internal server error' });
