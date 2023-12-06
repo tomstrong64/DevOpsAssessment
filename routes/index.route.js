@@ -15,18 +15,22 @@
  */
 import { Router } from 'express';
 import * as IndexController from '../controllers/index.controller.js';
+import {
+    noAuthPage,
+    stdAuthPage,
+    adminAuthPage,
+} from '../middlewares/user.middleware.js';
 
 const router = Router();
 
 // GET request for the index page
-router.get('/', IndexController.home);
-router.get('/addpoi', IndexController.addpoi);
-router.get('/allpois', IndexController.allpois);
-router.get('/allusers', IndexController.allusers);
-router.get('/updatepoi', IndexController.updatepoi);
-router.get('/updateuser', IndexController.updateuser);
-router.get('/register', IndexController.register);
-router.get('/login', IndexController.login);
+router.get('/', stdAuthPage, IndexController.home);
+router.get('/addpoi', stdAuthPage, IndexController.addpoi);
+router.get('/allpois', stdAuthPage, IndexController.allpois);
+router.get('/allusers', adminAuthPage, IndexController.allusers);
+router.get('/updatepoi', stdAuthPage, IndexController.updatepoi);
+router.get('/updateuser', stdAuthPage, IndexController.updateuser);
+router.get('/register', noAuthPage, IndexController.register);
+router.get('/login', noAuthPage, IndexController.login);
 router.get('/privacypolicy', IndexController.privacypolicy);
-router.get('/dev-docs', IndexController.devdocs);
 export default router;

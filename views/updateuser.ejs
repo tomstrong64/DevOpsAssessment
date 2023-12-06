@@ -14,11 +14,11 @@
   limitations under the License.
  -->
 <!doctype html>
-<html lang="en">
+<html>
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Profile</title>
+        <title><%= i18n.__("Profile") %></title>
         <link
             rel="stylesheet"
             href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
@@ -32,13 +32,15 @@
                 <div class="col-md-6 offset-md-3">
                     <div class="card">
                         <div class="card-header bg-primary text-white">
-                            <h3 class="text-center">Profile</h3>
+                            <h3 class="text-center">
+                                <%= i18n.__("Profile") %>
+                            </h3>
                         </div>
                         <div class="card-body">
                             <form>
                                 <div class="mb-3">
                                     <label for="username" class="form-label"
-                                        >Username</label
+                                        ><%= i18n.__("Username") %></label
                                     >
                                     <input
                                         type="text"
@@ -50,7 +52,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="email" class="form-label"
-                                        >Email</label
+                                        ><%= i18n.__("Email") %></label
                                     >
                                     <input
                                         type="email"
@@ -62,7 +64,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="password" class="form-label"
-                                        >New Password</label
+                                        ><%= i18n.__("NewPassword") %></label
                                     >
                                     <input
                                         type="password"
@@ -74,7 +76,8 @@
                                 </div>
                                 <div class="mb-5">
                                     <label for="password2" class="form-label"
-                                        >Confirm Password</label
+                                        ><%= i18n.__("ConfirmPassword")
+                                        %></label
                                     >
                                     <input
                                         type="password"
@@ -86,7 +89,8 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="password" class="form-label"
-                                        >Current Password</label
+                                        ><%= i18n.__("CurrentPassword")
+                                        %></label
                                     >
                                     <input
                                         type="password"
@@ -101,19 +105,19 @@
                                         id="UPDATE USER"
                                         class="btn btn-primary"
                                     >
-                                        Update Details
+                                        <%= i18n.__("UpdtDtls") %>
                                     </button>
                                     <button
                                         id="DELETE USER"
                                         class="btn btn-danger"
                                     >
-                                        Delete Profile
+                                        <%= i18n.__("DltAcc") %>
                                     </button>
                                     <button
                                         id="LOGOUT USER"
                                         class="btn btn-primary"
                                     >
-                                        Logout
+                                        <%= i18n.__("Logout") %>
                                     </button>
                                 </div>
                             </form>

@@ -18,13 +18,45 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Users</title>
-
+        <title><%= i18n.__("Pois") %></title>
+        <!-- Bootstrap CSS -->
+        <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        />
+        <link
+            rel="stylesheet"
+            href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        />
+        
         <script type="text/javascript" src="/utils.js" defer></script>
         <script type="text/javascript" src="/allpois.js" defer></script>
     </head>
     <body>
-        <h1>Users</h1>
-        <div id="pois_results"></div>
+        <div id="pois_results">
+            <div class="card-header bg-primary text-white">
+                <h3 class="text-center"><%= i18n.__("Pois") %></h3>
+            </div>
+            <div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th><%= i18n.__("Name") %></th>
+                            <th><%= i18n.__("Type") %></th>
+                            <th><%= i18n.__("Country") %></th>
+                            <th><%= i18n.__("Region") %></th>
+                            <th><%= i18n.__("Longitude") %></th>
+                            <th><%= i18n.__("Latitude") %></th>
+                            <th><%= i18n.__("Description") %></th>
+                            <th><%= i18n.__("Username") %></th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody id="TableBody">
+                        <!-- Table rows will be dynamically added here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </body>
 </html>

@@ -44,51 +44,21 @@ document.addEventListener('DOMContentLoaded', function () {
         const lat = `${e.latlng.lat}`;
         const lon = `${e.latlng.lng}`;
         const addpoi = document.getElementById('addpoi');
-        addpoi.innerHTML = `
-  <h2>Add a Point Of Interest</h2>
-  <p>
-  Name: <br />
-  <input id="new_name" /><br />
-  Type: <br />
-  <input id="new_type" /><br />
-  Country: <br />
-  <input id="new_country" /><br />
-  Region: <br />
-  <input id="new_region" /><br />
-  Description: <br />
-  <input id="new_des" /><br />
-  Image: <br />
-  <input type="file" id="new_image" accept=".jpg, .jpeg" /><br />
-  <input type="button" value="go" id="sendPOI" />`;
+        addpoi.hidden = false;
 
         document
-            .getElementById('sendPOI')
-            .addEventListener('click', async () => {
-                const poi = {
-                    name: document.getElementById('new_name').value,
-                    type: document.getElementById('new_type').value,
-                    country: document.getElementById('new_country').value,
-                    region: document.getElementById('new_region').value,
-                    lat: lat,
-                    lon: lon,
-                    description: document.getElementById('new_des').value,
-                };
+            .getElementById('ADD POI')
+            .addEventListener('click', async (e) => {
+                e.preventDefault();
+
+                const form = document.getElementById('addPoiForm');
+
+                const formData = new FormData(form);
+                formData.append('lat', lat);
+                formData.append('lon', lon);
 
                 try {
                     const token = localStorage.getItem('token');
-                    const formData = new FormData();
-                    formData.append('name', poi.name);
-                    formData.append('type', poi.type);
-                    formData.append('country', poi.country);
-                    formData.append('region', poi.region);
-                    formData.append('lat', poi.lat);
-                    formData.append('lon', poi.lon);
-                    formData.append('description', poi.description);
-                    formData.append(
-                        'image',
-                        document.getElementById('new_image').files[0]
-                    );
-
                     const response = await fetch('/pois/addPoi', {
                         method: 'POST',
                         headers: {
@@ -97,11 +67,16 @@ document.addEventListener('DOMContentLoaded', function () {
                         body: formData,
                     });
 
-                    await responseHandler(response, true);
+                    const data = await responseHandler(response, true);
+                    if (data === false) return;
+                    addpoi.hidden = true;
+
                     const pos = [lat, lon];
                     const marker = L.marker(pos).addTo(map);
                     marker
-                        .bindPopup(`<b>${poi.name}</b><br>${poi.description}`)
+                        .bindPopup(
+                            `<b>${data.poi.name}</b><br>${data.poi.description}`
+                        )
                         .openPopup();
                 } catch (e) {
                     alert(`Error: ${e}`);
@@ -116,6 +91,14 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 async function ajaxSearch(region) {
+    const resultsDiv = document.getElementById('poi_results');
+    const tbody = document.getElementById('TableBody');
+    const UpdateBtn = document.getElementById('transUpdate').innerText;
+    const DeleteBtn = document.getElementById('transDelete').innerText;
+    const ImageBtn = document.getElementById('transImage').innerText;
+
+    tbody.innerHTML = '';
+
     const token = localStorage.getItem('token');
     const ajaxResponse = await fetch(`/pois/list?search=${region}`, {
         headers: {
@@ -127,34 +110,12 @@ async function ajaxSearch(region) {
         alert('No Pois Found');
         return;
     }
-    const resultsDiv = document.getElementById('poi_results');
-    resultsDiv.innerHTML = '';
 
-    // Create table and table headings
-    const table = document.createElement('table');
-    const thead = document.createElement('thead');
-    const trHeadings = document.createElement('tr');
-    trHeadings.innerHTML = `
-      <th>Name</th>
-      <th>Type</th>
-      <th>Country</th>
-      <th>Region</th>
-      <th>Longitude</th>
-      <th>Latitude</th>
-      <th>Description</th>
-      <th>Update</th>
-      <th>Delete</th>
-      <th>Image</th>
-    `;
-    thead.appendChild(trHeadings);
-    table.appendChild(thead);
+    resultsDiv.hidden = false;
 
-    // Add table rows
-    const tbody = document.createElement('tbody');
-    table.appendChild(tbody);
     if (userId) {
         pois = pois.filter((poi) => {
-            if (poi.user !== userId) return false;
+            if (poi.user._id !== userId) return false;
             return true;
         });
     }
@@ -169,12 +130,12 @@ async function ajaxSearch(region) {
         <td>${poi.lat}</td>
         <td>${poi.description}</td>
         <td>
-          <a href="/updatepoi?id=${poi._id}">Update</a>
+          <a href="/updatepoi?id=${poi._id}" class="btn btn-primary btn-sm">${UpdateBtn}</a>
         </td>
         <td>
-          <button onclick="deletePoi('${poi._id}')">Delete</button>
+          <button onclick="deletePoi('${poi._id}')" class="btn btn-danger btn-sm">${DeleteBtn}</button>
         </td><td>
-        <button onclick="getPoiImage('${poi._id}', '${poi.name}', ${poi.lat}, ${poi.lon})">Image</button>
+        <button onclick="getPoiImage('${poi._id}', '${poi.name}', ${poi.lat}, ${poi.lon})" class="btn btn-info btn-sm">${ImageBtn}</button>
          </td>
       `;
         tr.id = poi._id;
@@ -186,9 +147,6 @@ async function ajaxSearch(region) {
             .bindPopup(`<b>${poi.name}</b><br>${poi.description}`)
             .openPopup();
     });
-
-    resultsDiv.innerHTML = '';
-    resultsDiv.appendChild(table);
 }
 
 async function deletePoi(id) {
