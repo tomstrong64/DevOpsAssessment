@@ -217,17 +217,20 @@
         <h3>8. User authentication</h3>
         <div>
             <p>
-                When a user attempts to log in, they provide their credentials (username and password). This information is typically entered into a form on the website.
-                The login information is then sent to the server through a POST request to the /user/login endpoint. </br>The UserController.login function handles 
-                the login process on the server. It verifies the user's credentials, and if they are valid, it generates an access token.The access token is then 
-                sent back to the client, and the client stores this token locally, typically in the browser's local storage. This token is crucial for subsequent authenticated requests.
-                If a token is found, it means the user is authenticated. The presence of the token is used to make authenticated requests to the server by including the token in the request headers.</br>
-                After successful login, when the user performs actions that require authentication (e.g., updating user details), the client includes the authentication token in the headers of the fetch requests.
-                The server, on its end, has middleware (such as stdAuth and adminAuth) that checks the validity of the provided token. If the token is valid, the server proceeds with the requested action.</br> 
-                If not, it responds with an authentication error.The user can log out by making a GET request to the /user/logout endpoint. This triggers the UserController.logout function on the server.
-                The server may invalidate the user's access token, ensuring that the user needs to log in again for future actions requiring authentication. So, when the user logs out, the client removes the token from local storage.</br>
-                So, the user authentication flow involves logging in, obtaining an access token, storing the token locally, and using it for subsequent authenticated requests. The server validates the token and authorizes or rejects requests accordingly.
-                The user can log out to end the authenticated session.
+                For user authentication we are using
+                <a href="https://www.npmjs.com/package/bcrypt">bcrypt</a> to
+                hash the passwords and
+                <a href="https://www.npmjs.com/package/jsonwebtoken"
+                    >jsonwebtoken</a
+                >
+                to generate the tokens.
+            </p>
+            <p>
+                When a user registers, the password is hashed and stored in the
+                database. When a user logs in, the password is compared to the hashed
+                password stored in the database. If they match, a token is generated using 
+                the user's id and SECRET KEY as the payload with default expiration time of 1 day. 
+                and the token is sent as cookie to the user as response body. The token is then used to authenticate the user when they make requests to the API.
             </p>
         </div>
         <h3>9. User privalleges</h3>
@@ -247,7 +250,7 @@
                 >. When a user accesses the web application, they are prompted to share their location with the app.
                     If the user chooses to share their location, the Geolocation API retrieves data from the device's GPS hardware,
                         providing accurate latitude and longitude coordinates. These coordinates are then used to display the user's
-                            current location on the map. The map is configured using Leaflet, a popular open-source JavaScript library for interactive maps.</br>
+                            current location on the map. The map is configured using<a href="https://leafletjs.com/">Leaflet</a> , a popular open-source JavaScript library for interactive maps.</br>
 
                 If the user opts not to share their location, the map defaults to a predetermined location. In this case, the map remains static, and if the user
                     interacts with it by moving the point on the map, the coordinates will not be updated since geolocation data is not available.</br>
