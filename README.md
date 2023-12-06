@@ -129,7 +129,7 @@ When a client login or register, a token is generated and is sent in the authent
 - [x] all dynamic data will be stored in a database
 - [x] the application will support internationalisation i18n
 - [ ] user documentation will be included on the hosted site
-- [ ] the site will respect GPDR guidelines
+- [x] the site will respect GPDR guidelines
 - [x] the backend server will be hosted in the cloud and use container technology (docker)
 - [x] user authentication will authenticate access to upload to the app
 - [x] the app will support user and administrator roles and the signing up of new users
