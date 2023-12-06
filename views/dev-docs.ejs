@@ -112,7 +112,10 @@
         <div>
             <p>To secure our site will SSL, we upgrade the connection to HTTPS using nginx proxy. Our nginx instance is running on Docker as part of a stack deployement.
             Nginx has two ports open 80 (for HTTP) and 443 (for HTTPS), when a HTTP request comes in to the server, nginx will redirect the request to our app that uses HTTP.</p>
-            <img src="/docs/nginx-config.png" alt="nginx config" />
+            <figure>
+                <img src="/docs/nginx-config.png" alt="nginx config" />
+                <figcaption>nginx config</figcaption>
+            </figure>
             <p>
                 The /.well-known/acme-challenge/ endpoint is used by certbot. Firstly certbot creates a token and stores it in the mentioned directory.
                 Then certbot makes a request for a SSL certificate from the Let's Encrypt Certificate Authority.
@@ -206,8 +209,10 @@
         <div>
             <h4>Azure Server</h4>
             <h4>Docker</h4>
-            <img id="compose-image" src="/docs/compose.png" alt="compose.yml" />
-            <figcaption>compose.yml</figcaption>
+            <figure>
+                <img id="compose-image" src="/docs/compose.png" alt="compose.yml" />
+                <figcaption>compose.yml</figcaption>
+            </figure>
         </div>
         <h3>8. User authentication</h3>
         <div>
