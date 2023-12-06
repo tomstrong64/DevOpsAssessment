@@ -23,10 +23,11 @@ import { User } from '../models/User.js';
 let auth_token; //Private authorisation stuff, should not be exposed outside!
 let admin_auth_token; // for admin's authentication
 let glob_user_id_for_del; // For delete user tests
+let specific_user_id; // for storing the id of a non-admin user for testing deletion by another non-admin user.
 
 // SETUP FOR USER TEST
 beforeAll(async () => {
-    mongoose.connect('mongodb://admin:admin@localhost:27017/admin', {
+    mongoose.connect(process.env.MONGODB_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     });
@@ -432,6 +433,7 @@ describe('GET /user/list test using admin account', () => {
         const response = await request(app)
             .get('/user/list')
             .set('Authorization', `Bearer ${admin_auth_token}`);
+        specific_user_id = response.body[0]['_id']; // This is to be used for deleting one user by another user who isn't an admin
         console.log(response);
         expect(response.statusCode).toBe(200);
         expect(response.body).toHaveLength(6);
@@ -527,12 +529,7 @@ describe('PUT /user/updateUser/:id tests', () => {
             });
         admin_auth_token = ad_loginResponse.body.token;
 
-        const listResponse = await request(app)
-            .get('/user/list')
-            .set('Authorization', `Bearer ${admin_auth_token}`);
-        let checkUser_id = listResponse.body[3]['_id'];
-        let strConcat = 'znxbvc28';
-        let invalid_id = checkUser_id.concat(strConcat); // Having an invalid string to check response from the server
+        let invalid_id = 'znxbvc28'; // Having an invalid string to check response from the server
 
         const adResponse = await request(app)
             .put(`/user/updateUser/${invalid_id}`)
@@ -584,7 +581,7 @@ describe('DELETE /user/deleteUser/:id tests', () => {
         glob_user_id_for_del = checkResponse.body[1]['_id'];
 
         const deleteResponse = await request(app)
-            .delete(`/user/deleteUser/${glob_user_id_for_del}`)
+            .delete(`/user/deleteUser?id=${glob_user_id_for_del}`)
             .set('Authorization', `Bearer ${admin_auth_token}`);
         expect(deleteResponse.statusCode).toBe(200);
         expect(deleteResponse.body['message']).toEqual(
@@ -610,9 +607,26 @@ describe('DELETE /user/deleteUser/:id tests', () => {
         glob_user_id_for_del = checkResponse.body[5]['_id'];
 
         const delresponse = await request(app)
-            .delete(`/user/deleteUser/${glob_user_id_for_del}`)
+            .delete(`/user/deleteUser?id=${glob_user_id_for_del}`)
             .set('Authorization', `Bearer ${admin_auth_token}`);
         expect(delresponse.statusCode).toBe(403);
+    }, 20000);
+
+    it('If a user tries to delete another user, the server should respond with status code 404', async () => {
+        const log_response = await request(app)
+            .post('/user/login')
+            .set('Content-Type', 'application/json')
+            .send({
+                email: 'test9dummymail@gmail.com',
+                password: 'allu!8yGHdt#@62',
+            });
+        auth_token = log_response.body.token;
+
+        const fail_delResponse = await request(app)
+            .delete(`/user/deleteUser?id=${specific_user_id}`)
+            .set('Authorization', `Bearer ${auth_token}`);
+        expect(fail_delResponse.statusCode).toBe(404);
+        expect(fail_delResponse.body['message']).toEqual('not found.');
     }, 20000);
 
     it('If an invalid ID is sent to this route, the server should respond with a status code of 400', async () => {
@@ -625,15 +639,10 @@ describe('DELETE /user/deleteUser/:id tests', () => {
             });
         admin_auth_token = login_response.body.token;
 
-        const idresponse = await request(app)
-            .get('/user/list')
-            .set('Authorization', `Bearer ${admin_auth_token}`);
-        glob_user_id_for_del = idresponse.body[2]['_id'];
-        let addString = 'nccbwgy26';
-        let invalid_userID = glob_user_id_for_del.concat(addString);
+        let invalid_userID = 'nccbwgy26';
 
         const delresponse = await request(app)
-            .delete(`/user/deleteUser/${invalid_userID}`)
+            .delete(`/user/deleteUser?id=${invalid_userID}`)
             .set('Authorization', `Bearer ${admin_auth_token}`);
         expect(delresponse.statusCode).toBe(400);
         expect(delresponse.body['message']).toEqual('Invalid ID');
@@ -654,10 +663,10 @@ describe('DELETE /user/deleteUser/:id tests', () => {
             .set('Authorization', `Bearer ${admin_auth_token}`)
             .send();
         // Get other admin's user id for testing
-        glob_user_id_for_del = checkResponse.body[4]['_id'];
+        glob_user_id_for_del = checkResponse.body[5]['_id'];
 
         const deleteResponse = await request(app).delete(
-            `/user/deleteUser/${glob_user_id_for_del}`
+            `/user/deleteUser?id=${glob_user_id_for_del}`
         );
         expect(deleteResponse.statusCode).toBe(401);
         expect(deleteResponse.body['message']).toEqual('Unauthorized');
@@ -668,18 +677,13 @@ describe('DELETE /user/deleteUser/:id tests', () => {
             .post('/user/login')
             .set('Content-Type', 'application/json')
             .send({
-                email: 'testingmail44@yahoo.com',
-                newpassword: 'ZmDhg&@GghDV611',
+                email: 'test9dummymail@gmail.com',
+                password: 'allu!8yGHdt#@62',
             });
         auth_token = logResponse.body.token;
 
-        const idResponse = await request(app)
-            .get('/user/getUser')
-            .set('Authorization', `Bearer ${auth_token}`);
-        glob_user_id_for_del = idResponse.body['_id'];
-
         const deleteNormalresponse = await request(app)
-            .delete(`/user/deleteUser/${glob_user_id_for_del}`)
+            .delete('/user/deleteUser')
             .set('Authorization', `Bearer ${auth_token}`);
         expect(deleteNormalresponse.statusCode).toBe(200);
         expect(deleteNormalresponse.body['redirect']).toBeDefined();
