@@ -102,6 +102,7 @@ When a user registers, the password is hashed and stored in the database. When a
 We have a user model which has an admin field, this is used to differentiate between normal users and admins. When a user registers, the admin field is set to false by default. When a user logs in, the admin field is checked, if it is true, the user can access all the routes, and if it is false, the user can only access the routes that are not restricted to admins. Admin user can see all users and change the admin status of a normal user to admin and also delete a normal user. Admin user can also see all the POIs in the database. Admin user do all the things that a normal user can do. Normal user can only see their own profile and update it, and also see all the POIs. Normal user can delete their own account.
 
 ### 10. Mobile access
+To access it from a mobile device, it doesn't require any specific permissions or dependencies. This application works on any mobile device as long as the device has access to a browser and the internet. Additionally, the browser needs to have JavaScript enabled, and the user may enable geolocation so the application can access their current location.
 
 ### 11. Responsiveness
 
