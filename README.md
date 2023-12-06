@@ -32,6 +32,10 @@ To install the dependencies needed to run the application and test it outside of
 
 Then you can run `npm test` to run the unit tests. You will see the results in the terminal.
 
+## How to deploy
+
+See the guide on how to deploy [here](https://github.com/TomStrong/DevOpsAssessment/tree/main/deploy/README.md).
+
 ## Requirements
 
 ### Server
