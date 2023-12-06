@@ -93,5 +93,17 @@
     "Click Logout button": "Cliquez sur le bouton 'Se Déconnecter' pour mettre fin à votre session.",
     "Click Delete Account": "Cliquez sur 'Supprimer le Compte' et confirmez votre action.",
     "Your account will be permanently deleted": "Votre compte sera supprimé définitivement.",
-    "To delete your Geo Guide account": "Pour supprimer votre compte Geo Guide :"
+    "To delete your Geo Guide account": "Pour supprimer votre compte Geo Guide :",
+    "GitHubRepo": "Répertoire GitHub",
+    "Lang": "Langues",
+    "Doc": "Documentation",
+    "UserDoc": "Documentation utilisateur",
+    "Collbrators": "Collaborateur",
+    "CopyRight": "2023 GeoGuide. Tous droits réservés.",
+    "API": "API",
+    "English": "Anglais",
+    "French": "Français",
+    "Spanish": "Espagnol",
+    "Portuguese": "Portugais",
+    "Turkish": "Turc"
 }

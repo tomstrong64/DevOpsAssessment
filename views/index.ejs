@@ -56,13 +56,13 @@
     <body>
         <!-- Header Section -->
         <nav class="navbar navbar-dark bg-primary">
-            <a class="navbar-brand" href="#" ><%= i18n.__("Home") %></a>
+            <a class="navbar-brand" href="#"><%= i18n.__("Home") %></a>
             <a class="navbar-brand" href="/addpoi"> <%= i18n.__("AddPoi") %></a>
-            <a class="navbar-brand" id="get_users" hidden href="/allusers"
-                > <%= i18n.__("Users") %></a
+            <a class="navbar-brand" id="get_users" hidden href="/allusers">
+                <%= i18n.__("Users") %></a
             >
-            <a class="navbar-brand" id="get_pois" hidden href="/allpois"
-                > <%= i18n.__("Pois") %></a
+            <a class="navbar-brand" id="get_pois" hidden href="/allpois">
+                <%= i18n.__("Pois") %></a
             >
 
             <form class="form-inline">
@@ -78,7 +78,7 @@
                     id="poi_search"
                     type="submit"
                 >
-                <%= i18n.__("Search") %>
+                    <%= i18n.__("Search") %>
                 </button>
             </form>
             <div class="ml-2">
@@ -87,18 +87,20 @@
                     id="enableGeolocation"
                     type="button"
                 >
-                <%= i18n.__("EnableGPS") %>
+                    <%= i18n.__("EnableGPS") %>
                 </button>
                 <button
                     class="btn btn-light my-2 my-sm-0"
                     id="revokeGeolocation"
                     type="button"
                 >
-                <%= i18n.__("RevokeGPS") %>
+                    <%= i18n.__("RevokeGPS") %>
                 </button>
             </div>
 
-            <a href="/updateuser" class="btn btn-light ml-auto"> <%= i18n.__("Profile") %></a>
+            <a href="/updateuser" class="btn btn-light ml-auto">
+                <%= i18n.__("Profile") %></a
+            >
         </nav>
 
         <div class="container-fluid" >
@@ -201,33 +203,35 @@
                    
         </div>
         <div class="col-sm-6 col-md-8">
-        <div class="container-fluid" id="poi_results" hidden>
-            <div class="card-header bg-primary text-white">
-                <h3 class="text-center"> <%= i18n.__("Pois") %></h3>
-            </div>
-            <div id="poi_table">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th><%= i18n.__("Name") %></th>
-                            <th><%= i18n.__("Type") %></th>
-                            <th><%= i18n.__("Country") %></th>
-                            <th><%= i18n.__("Region") %></th>
-                            <th><%= i18n.__("Longitude") %></th>
-                            <th><%= i18n.__("Latitude") %></th>
-                            <th><%= i18n.__("Description") %></th>
-                            <th id="transUpdate"><%= i18n.__("Update") %></th>
-                            <th id="transDelete"><%= i18n.__("Delete") %></th>
-                            <th id="transImage"><%= i18n.__("Image") %></th>
-                        </tr>
-                    </thead>
-                    <tbody id="TableBody">
-                        <!-- Table rows will be dynamically added here -->
-                    </tbody>
-                </table>
+            <div class="container-fluid" id="poi_results" hidden>
+                <div class="card-header bg-primary text-white">
+                    <h3 class="text-center"> <%= i18n.__("Pois") %></h3>
+                </div>
+                <div id="poi_table">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th><%= i18n.__("Name") %></th>
+                                <th><%= i18n.__("Type") %></th>
+                                <th><%= i18n.__("Country") %></th>
+                                <th><%= i18n.__("Region") %></th>
+                                <th><%= i18n.__("Longitude") %></th>
+                                <th><%= i18n.__("Latitude") %></th>
+                                <th><%= i18n.__("Description") %></th>
+                                <th id="transUpdate"><%= i18n.__("Update") %></th>
+                                <th id="transDelete"><%= i18n.__("Delete") %></th>
+                                <th id="transImage"><%= i18n.__("Image") %></th>
+                            </tr>
+                        </thead>
+                        <tbody id="TableBody">
+                            <!-- Table rows will be dynamically added here -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>   
+    </div>
+    <%- include('footer.ejs') %>
 
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.7.2/dist/umd/popper.min.js"></script>

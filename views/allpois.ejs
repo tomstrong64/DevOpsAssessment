@@ -28,7 +28,7 @@
             rel="stylesheet"
             href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
         />
-        
+
         <script type="text/javascript" src="/utils.js" defer></script>
         <script type="text/javascript" src="/allpois.js" defer></script>
     </head>
@@ -49,7 +49,6 @@
                             <th><%= i18n.__("Latitude") %></th>
                             <th><%= i18n.__("Description") %></th>
                             <th><%= i18n.__("Username") %></th>
-                            
                         </tr>
                     </thead>
                     <tbody id="TableBody">
@@ -58,5 +57,6 @@
                 </table>
             </div>
         </div>
+        <%- include('footer.ejs') %>
     </body>
 </html>
