@@ -79,9 +79,10 @@ This key is defined in the en.json file, which contains the English translation 
 
 ### 5. Documentation
 
-THIS IS THE DOCUMENTATION
+The user documentation is available at `/user-docs` it can be accessed from any page by a link in the footer. The documentation covers all of the features of the site and how you can use them.
 
 ### 6. GDPR
+
 At GeoGuide, we prioritize user privacy and strictly adhere to the regulations set forth by the General Data Protection Regulation (GDPR). Our commitment to data handling and privacy practices aligns with the stringent requirements of the GDPR, ensuring a transparent, secure, and lawful processing of personal data.
 
 Our measures for GDPR compliance include:
@@ -98,11 +99,28 @@ Our privacy policy page is designed to be easily accessible, providing clear and
 
 ### 7. Server hosting and Docker
 
-#### Azure Server
+On Azure we are using multiple services:
 
-#### Docker
+- Virtual Machine
+- Container Registry
+- Blob Storage
 
-![compose.yml](/docs/compose.png)
+On the VM, we installed Docker standalone with the Docker Compose plugin. We have docker set to run on startup using systemctl with the command `sudo systemctl enable --now docker`. In our docker compose file we have our containers to restart unless stopped, this means they will start when docker starts as well. Because of this all we have to do to put our site live is turn the server on.
+The VM has 3 ports open, 80 for HTTP to nginx, 443 for HTTPS to nginx, and 9443 for access to Portainer, our web GUI for managing our Docker instance.
+
+Our container registry requires authentication with username and password to push or pull images from it. This means our docker image for our site is accessible from anywhere as long as we have our credentials.
+
+The blob storage is used to store the images uploaded to our site, it requires authentication to upload or download files from it.
+
+In our deployment on Docker, we have 5 containers running:
+
+- app: uses our docker image built from our NodeJS source code
+- mongodb: uses the mongo image to run a database
+- nginx: uses the nginx image to run an instance of nginx for reverse proxying requests to the app container
+- certbot: uses the certbot image to request SSL certificates
+- portainer: uses the portainer image to run a GUI to manage the docker instance
+
+We have a network in Docker to allow the containers to communicate with each other but restrict which containers are accessible via there ports when going to our domain or public IP.
 
 ### 8. User authentication
 
@@ -115,6 +133,7 @@ When a user registers, the password is hashed and stored in the database. When a
 We have a user model which has an admin field, this is used to differentiate between normal users and admins. When a user registers, the admin field is set to false by default. When a user logs in, the admin field is checked, if it is true, the user can access all the routes, and if it is false, the user can only access the routes that are not restricted to admins. Admin user can see all users and change the admin status of a normal user to admin and also delete a normal user. Admin user can also see all the POIs in the database. Admin user do all the things that a normal user can do. Normal user can only see their own profile and update it, and also see all the POIs. Normal user can delete their own account.
 
 ### 10. Mobile access
+
 To access it from a mobile device, it doesn't require any specific permissions or dependencies. This application works on any mobile device as long as the device has access to a browser and the internet. Additionally, the browser needs to have JavaScript enabled, and the user may enable geolocation so the application can access their current location.
 
 ### 11. Responsiveness
@@ -141,7 +160,7 @@ When a client login or register, a token is generated and is sent in the authent
 - [x] ReST api's will be documented using openAPI (swagger)
 - [x] all dynamic data will be stored in a database
 - [x] the application will support internationalisation i18n
-- [ ] user documentation will be included on the hosted site
+- [x] user documentation will be included on the hosted site
 - [x] the site will respect GPDR guidelines
 - [x] the backend server will be hosted in the cloud and use container technology (docker)
 - [x] user authentication will authenticate access to upload to the app
