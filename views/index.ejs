@@ -59,9 +59,7 @@
                 overflow-y: auto;
             }
 
-            .navbar-custom {
-                background-color: #7fd6f3; /* Light Blue color */
-            }
+            
 
             .custom-input-size {
                 width: 250px; /*To prevent the input field in the 'Search' form being too big to display on mobile devices*/
@@ -75,8 +73,8 @@
     <body class="d-flex flex-column min-vh-100">
         <div id="MainBodyContent" class="container mt-5 flex-grow-1">
             <!-- Header Section -->
-            <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
-                <a class="navbar-brand" href="#"><%= i18n.__("Home") %></a>
+            <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+                <a class="navbar-brand text-white" href="#"><%= i18n.__("Home") %></a>
                 <button
                     type="button"
                     class="navbar-toggler"
@@ -88,13 +86,13 @@
                 <div class="collapse navbar-collapse" id="siteNavbar">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="navbar-brand" href="/addpoi">
+                            <a class="navbar-brand text-white" href="/addpoi">
                                 <%= i18n.__("AddPoi") %></a
                             >
                         </li>
                         <li class="nav-item">
                             <a
-                                class="navbar-brand"
+                                class="navbar-brand text-white"
                                 id="get_users"
                                 hidden
                                 href="/allusers"
@@ -104,7 +102,7 @@
                         </li>
                         <li class="nav-item">
                             <a
-                                class="navbar-brand"
+                                class="navbar-brand text-white"
                                 id="get_pois"
                                 hidden
                                 href="/allpois"
@@ -117,6 +115,7 @@
                                 class="btn btn-light my-2 my-sm-0"
                                 id="enableGeolocation"
                                 type="button"
+                                style="margin-right: 10px;"
                             >
                                 <%= i18n.__("EnableGPS") %>
                             </button>
@@ -126,6 +125,7 @@
                                 class="btn btn-light my-2 my-sm-0"
                                 id="revokeGeolocation"
                                 type="button"
+                                style="margin-right: 10px;"
                             >
                                 <%= i18n.__("RevokeGPS") %>
                             </button>
@@ -141,18 +141,20 @@
             <div class="container mt-5">
                 <div class="row justify-content-center">
                     <div class="col-md-6 navbar-custom">
-                        <form class="form-inline ml-auto">
+                        <form class="form-inline ml-auto" style="margin-bottom: 0;">
                             <input
                                 class="form-control custom-input-size"
                                 id="poi_region"
                                 type="search"
                                 placeholder="Search"
                                 aria-label="Search"
+                                style="margin-right: 10px;"
                             />
                             <button
                                 class="btn btn-light my-2 my-sm-0"
                                 id="poi_search"
                                 type="submit"
+                                
                             >
                                 <%= i18n.__("Search") %>
                             </button>
