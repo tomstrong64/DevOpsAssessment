@@ -24,9 +24,7 @@ try {
             promises.push(targetPage.waitForNavigation());
         };
         startWaitingForEvents();
-        await targetPage.goto(
-            'https://coordinated-chaos.uksouth.cloudapp.azure.com/register'
-        );
+        await targetPage.goto('http://localhost:3000/register');
         await Promise.all(promises);
     }
     {
