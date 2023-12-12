@@ -44,7 +44,6 @@ export const initSwagger = (app) => {
                     },
                 },
             },
-            
         },
         apis: ['./routes/*.js'],
     };
