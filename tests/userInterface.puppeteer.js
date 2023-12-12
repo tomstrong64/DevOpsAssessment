@@ -879,6 +879,7 @@ try {
         const startWaitingForEvents = () => {
             promises.push(targetPage.waitForNavigation());
         };
+        startWaitingForEvents();
         const target = await Promise.race([
             targetPage.locator('::-p-aria(Delete Account)'),
             targetPage.locator('#DELETE\\ USER'),
