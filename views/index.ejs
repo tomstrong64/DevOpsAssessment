@@ -45,7 +45,6 @@
                 border-radius: 8px; /*rounded corners */
             }
             #addpoi {
-                height: 200px;
                 margin-top: 20px;
                 width: 80%;
             }
@@ -164,12 +163,19 @@
                 </div>
             </div>
 
-            <div class="container-fluid">
-                <div class="row justify-content-center">
-                    <div class="col-md-8 mr-4">
-                        <div id="map1"></div>
+                <div class="container-fluid">
+                    <div class="row justify-content-center">
+                        <div class="col-md-8 mr-4">
+                            <div id="map1"></div>
+                        </div>
+                        <!--<div class="container-fluid">-->
+            
+                        <!--</div>-->
                     </div>
-                    <!--<div class="container-fluid">-->
+                </div>
+
+                <div class="container-fluid">
+                    <div class="row justify-content-center">
                     <div class="col-md-4" hidden id="addpoi">
                         <div class="card">
                             <div class="card-header bg-primary text-white">
@@ -267,10 +273,9 @@
                             </div>
                         </div>
                     </div>
-                    <!--</div>-->
                 </div>
-            </div>
-            <div class="col-sm-6 col-md-8">
+                </div>
+            
                 <div class="container-fluid" id="poi_results" hidden>
                     <div class="card-header bg-primary text-white">
                         <h3 class="text-center"><%= i18n.__("Pois") %></h3>
@@ -306,7 +311,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        
         <div class="container-fluid">
             <div class="footerSetter"><%- include('footer.ejs') %></div>
         </div>
