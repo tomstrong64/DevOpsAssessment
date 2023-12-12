@@ -20,6 +20,19 @@ document.getElementById('ADD POI').addEventListener('click', async (e) => {
     const form = document.getElementById('addPoiForm');
     const formData = new FormData(form);
 
+    if (!formData.get('name')) return alert('Please enter a name for the POI');
+    if (!formData.get('type')) return alert('Please enter a type for the POI');
+    if (!formData.get('country'))
+        return alert('Please enter a country for the POI');
+    if (!formData.get('region'))
+        return alert('Please enter a region for the POI');
+    if (!formData.get('lat'))
+        return alert('Please enter a latitude for the POI');
+    if (!formData.get('lon'))
+        return alert('Please enter a longitude for the POI');
+    if (!formData.get('description'))
+        return alert('Please enter a description for the POI');
+
     try {
         const token = localStorage.getItem('token');
         const response = await fetch('/pois/addPoi', {

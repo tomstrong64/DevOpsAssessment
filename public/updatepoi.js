@@ -47,18 +47,23 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 document.getElementById('UPDATE POI').addEventListener('click', async (e) => {
     e.preventDefault();
-    
-    const poiId = document.getElementById('poiId').value;
 
-    const formData = new FormData();
-    formData.append('name', document.getElementById('name').value);
-    formData.append('type', document.getElementById('type').value);
-    formData.append('country', document.getElementById('country').value);
-    formData.append('region', document.getElementById('region').value);
-    formData.append('lat', document.getElementById('lat').value);
-    formData.append('lon', document.getElementById('lon').value);
-    formData.append('description', document.getElementById('description').value);
-    formData.append('image', document.getElementById('image').files[0]);
+    const poiId = document.getElementById('poiId').value;
+    const form = document.getElementById('updatePoiForm');
+    const formData = new FormData(form);
+
+    if (!formData.get('name')) return alert('Please enter a name for the POI');
+    if (!formData.get('type')) return alert('Please enter a type for the POI');
+    if (!formData.get('country'))
+        return alert('Please enter a country for the POI');
+    if (!formData.get('region'))
+        return alert('Please enter a region for the POI');
+    if (!formData.get('lat'))
+        return alert('Please enter a latitude for the POI');
+    if (!formData.get('lon'))
+        return alert('Please enter a longitude for the POI');
+    if (!formData.get('description'))
+        return alert('Please enter a description for the POI');
 
     try {
         const token = localStorage.getItem('token');
@@ -78,4 +83,3 @@ document.getElementById('UPDATE POI').addEventListener('click', async (e) => {
         alert('Failed to update POI');
     }
 });
-

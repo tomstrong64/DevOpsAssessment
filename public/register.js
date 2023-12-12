@@ -22,6 +22,17 @@ document.getElementById('register').addEventListener('click', async (e) => {
         password: document.getElementById('password').value,
     };
 
+    const privacy = document.getElementById('privacy').checked;
+
+    if (!user.name) return alert('Please enter your name');
+    if (!user.email) return alert('Please enter your email');
+    // validate email with regex
+    if (!user.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/))
+        return alert('Please enter a valid email');
+    if (!user.password) return alert('Please enter a password');
+
+    if (!privacy) return alert('Please accept the privacy policy');
+
     try {
         const response = await fetch('/user/register', {
             method: 'POST',

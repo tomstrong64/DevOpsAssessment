@@ -25,28 +25,8 @@ document.addEventListener('DOMContentLoaded', async (e) => {
         alert('No Pois Found');
         return;
     }
-    const resultsDiv = document.getElementById('pois_results');
-    resultsDiv.innerHTML = '';
+    const tbody = document.getElementById('TableBody');
 
-    // Create table and table headings
-    const table = document.createElement('table');
-    const thead = document.createElement('thead');
-    const trHeadings = document.createElement('tr');
-    trHeadings.innerHTML = `
-      <th>Name</th>
-      <th>Type</th>
-      <th>Country</th>
-      <th>Region</th>
-      <th>Longitude</th>
-      <th>Latitude</th>
-      <th>Description</th>
-      `;
-    thead.appendChild(trHeadings);
-    table.appendChild(thead);
-
-    // Add table rows
-    const tbody = document.createElement('tbody');
-    table.appendChild(tbody);
     pois.forEach((poi) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
@@ -57,11 +37,9 @@ document.addEventListener('DOMContentLoaded', async (e) => {
         <td>${poi.lon}</td>
         <td>${poi.lat}</td>
         <td>${poi.description}</td>
+        <td>${poi.user.name}</td> 
     `;
         tr.id = poi._id;
         tbody.appendChild(tr);
     });
-
-    resultsDiv.innerHTML = '';
-    resultsDiv.appendChild(table);
 });
