@@ -1,4 +1,6 @@
 import puppeteer from 'puppeteer';
+import '../bin/www.js';
+
 try {
     const browser = await puppeteer.launch({ headless: 'new' });
     const page = await browser.newPage();
@@ -900,6 +902,7 @@ try {
 
     await browser.close();
     console.log('Tests completed successfully.');
+    process.exit(0);
 } catch (err) {
     console.error(err);
     process.exit(1);
