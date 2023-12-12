@@ -4,84 +4,78 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-       
         <link rel="stylesheet" href="/public/footer.css" />
-    
     </head>
     <body>
 <footer>
     <div class="footer">
-    <div class="first-main">
-        <div class="privacy">
-            <p><a href="/privacypolicy"><%= i18n.__("PP") %></a></p>
-            <h6 class="repo">
-                <a href="https://github.com/TomStrong/DevOpsAssessment"
-                    >
-                    <%= i18n.__("GitHubRepo") %>
-                </a>
-            </h6>
-        </div>
+        <div class="first-main">
+            <div class="privacy">
+                <p><a href="/privacypolicy"><%= i18n.__("PP") %></a></p>
+                <h6 class="repo">
+                    <a href="https://github.com/TomStrong/DevOpsAssessment"
+                        >
+                        <%= i18n.__("GitHubRepo") %>
+                    </a>
+                </h6>
+            </div>
 
-        <div class="dropdown">
-            <button class="dropbtn"> <%= i18n.__("Lang") %></button>
-            <div class="dropdown-content">
-                <a href="/lang/en"><%= i18n.__("English") %></a>
-                <a href="/lang/fr"><%= i18n.__("French") %></a>
-                <a href="/lang/pt"><%= i18n.__("Portuguese") %></a>
-                <a href="/lang/es"><%= i18n.__("Spanish") %></a>
-                <a href="/lang/tr"><%= i18n.__("Turkish") %></a>
+            <div class="dropdown">
+                <button class="dropbtn"> <%= i18n.__("Lang") %></button>
+                <div class="dropdown-content">
+                    <a href="/lang/en"><%= i18n.__("English") %></a>
+                    <a href="/lang/fr"><%= i18n.__("French") %></a>
+                    <a href="/lang/pt"><%= i18n.__("Portuguese") %></a>
+                    <a href="/lang/es"><%= i18n.__("Spanish") %></a>
+                    <a href="/lang/tr"><%= i18n.__("Turkish") %></a>
+                </div>
+            </div>
+        </div>
+        <div class="second-main">
+            <div class="Api">
+                <h4><%= i18n.__("Doc") %> </a></h4>
+                <p><a href="/api-docs"><%= i18n.__("API") %></a></p>
+                <p><a href="/user-docs"><%= i18n.__("UserDoc") %></a></p>
+            </div>
+        </div>
+        <div class="third-div">
+            <div class="team">
+                <h4 class="h5"><%= i18n.__("Collbrators") %></h4>
+
+                <dl>
+                    <dt class="dt">
+                        Tom Strong
+                        <a href="https://github.com/TomStrong"><img src="icons/GitHub-logo.png" alt="" class="logo" width="40px" height="20px"></a>
+                    </dt>
+
+                    <dt class="dt">
+                        Shivkumar Hitesh Thakkar
+                        <a href="https://github.com/5thaks07"><img src="icons/GitHub-logo.png" alt="" class="logo" width="40px" height="20px"></a>
+                    </dt>
+
+                    <dt class="dt">
+                        Faizan Ahmed
+                        <a href="https://github.com/FaizanAhmedSP707"
+                            ><img src="icons/GitHub-logo.png" alt="" class="logo" width="40px" height="20px"></a
+                        >
+                    </dt>
+
+                    <dt class="dt">
+                        Joao Maria Fragoso Potes
+                        <a href="https://github.com/Joao-Potes"><img src="icons/GitHub-logo.png" alt="" class="logo" width="40px" height="20px"></a>
+                    </dt>
+
+                    <dt class="dt">
+                        Ali Dashti
+                        <a href="https://github.com/ali1373107"><img src="icons/GitHub-logo.png" alt="" class="logo" width="40px" height="20px"></a>
+                    </dt>
+                </dl>
             </div>
         </div>
     </div>
-    <div class="second-main">
-        <div class="Api">
-            <h4><%= i18n.__("Doc") %> </a></h4>
-            <p><a href="/api-docs"><%= i18n.__("API") %></a></p>
-            <p><a href="/user-docs"><%= i18n.__("UserDoc") %></a></p>
-           
-        </div>
-        
+    <div class="copy">
+        <p>&copy; <%= i18n.__("CopyRight") %></p>
     </div>
-    <div class="third-div">
-        <div class="team">
-            <h4 class="h5"><%= i18n.__("Collbrators") %></h4>
-
-            <dl>
-                <dt class="dt">
-                    Tom Strong
-                    <a href="https://github.com/TomStrong"><img src="icons/GitHub-logo.png" alt="" class="logo" width="40px" height="20px"></a>
-                </dt>
-
-                <dt class="dt">
-                    Shivkumar Hitesh Thakkar
-                    <a href="https://github.com/5thaks07"><img src="icons/GitHub-logo.png" alt="" class="logo" width="40px" height="20px"></a>
-                </dt>
-
-                <dt class="dt">
-                    Faizan Ahmed
-                    <a href="https://github.com/FaizanAhmedSP707"
-                        ><img src="icons/GitHub-logo.png" alt="" class="logo" width="40px" height="20px"></a
-                    >
-                </dt>
-
-                <dt class="dt">
-                    Joao Maria Fragoso Potes
-                    <a href="https://github.com/Joao-Potes"><img src="icons/GitHub-logo.png" alt="" class="logo" width="40px" height="20px"></a>
-                </dt>
-
-                <dt class="dt">
-                    Ali Dashti
-                    <a href="https://github.com/ali1373107"><img src="icons/GitHub-logo.png" alt="" class="logo" width="40px" height="20px"></a>
-                </dt>
-            </dl>
-        </div>
-    </div>
-   
-</div>
-<div class="copy">
-    <p>&copy; <%= i18n.__("CopyRight") %></p>
-</div>
-    
 </footer>
 </body>
 </html>
