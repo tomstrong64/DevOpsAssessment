@@ -1,6 +1,6 @@
 import puppeteer from 'puppeteer';
 try {
-    const browser = await puppeteer.launch({ headless: false });
+    const browser = await puppeteer.launch({ headless: 'new' });
     const page = await browser.newPage();
     const timeout = 60000;
     page.setDefaultTimeout(timeout);
