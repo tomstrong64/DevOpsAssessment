@@ -6,7 +6,8 @@ try {
     page.setDefaultTimeout(timeout);
     page.on('dialog', async (dialog) => {
         console.log(dialog.message());
-        await dialog.dismiss();
+        if (dialog.message().includes('?')) return await dialog.accept();
+        return await dialog.dismiss();
     });
 
     {
@@ -721,6 +722,176 @@ try {
             offset: {
                 x: 48.234375,
                 y: 19.40625,
+            },
+        });
+        await Promise.all(promises);
+    }
+
+    {
+        const targetPage = page;
+        const promises = [];
+        const startWaitingForEvents = () => {
+            promises.push(targetPage.waitForNavigation());
+        };
+        startWaitingForEvents();
+        const target = await Promise.race([
+            targetPage.locator('#email'),
+            targetPage.locator('::-p-xpath(//*[@id=\\"email\\"])'),
+        ]);
+        target.setTimeout(timeout);
+        await target.click({
+            offset: {
+                x: 124,
+                y: 24.40625,
+            },
+        });
+    }
+    {
+        const targetPage = page;
+        const promises = [];
+        const startWaitingForEvents = () => {
+            promises.push(targetPage.waitForNavigation());
+        };
+        startWaitingForEvents();
+        const target = await Promise.race([
+            targetPage.locator('#email'),
+            targetPage.locator('::-p-xpath(//*[@id=\\"email\\"])'),
+        ]);
+        target.setTimeout(timeout);
+        await target.fill('test@gmail.com');
+    }
+    {
+        const targetPage = page;
+        const promises = [];
+        const startWaitingForEvents = () => {
+            promises.push(targetPage.waitForNavigation());
+        };
+        startWaitingForEvents();
+        const target = await Promise.race([
+            targetPage.locator('#password'),
+            targetPage.locator('::-p-xpath(//*[@id=\\"password\\"])'),
+        ]);
+        target.setTimeout(timeout);
+        await target.click({
+            offset: {
+                x: 124,
+                y: 18.40625,
+            },
+        });
+    }
+    {
+        const targetPage = page;
+        const promises = [];
+        const startWaitingForEvents = () => {
+            promises.push(targetPage.waitForNavigation());
+        };
+        startWaitingForEvents();
+        const target = await Promise.race([
+            targetPage.locator('#password'),
+            targetPage.locator('::-p-xpath(//*[@id=\\"password\\"])'),
+        ]);
+        target.setTimeout(timeout);
+        await target.fill('123');
+    }
+    {
+        const targetPage = page;
+        const promises = [];
+        const startWaitingForEvents = () => {
+            promises.push(targetPage.waitForNavigation());
+        };
+        startWaitingForEvents();
+        const target = await Promise.race([
+            targetPage.locator('#login'),
+            targetPage.locator('::-p-xpath(//*[@id=\\"login\\"])'),
+        ]);
+        target.setTimeout(timeout);
+        target.on('action', () => startWaitingForEvents());
+        await target.click({
+            offset: {
+                x: 28,
+                y: 24.40625,
+            },
+        });
+        await Promise.all(promises);
+    }
+    {
+        const targetPage = page;
+        const promises = [];
+        const startWaitingForEvents = () => {
+            promises.push(targetPage.waitForNavigation());
+        };
+        startWaitingForEvents();
+        const target = await Promise.race([
+            targetPage.locator('li:nth-of-type(6) > a'),
+            targetPage.locator(
+                '::-p-xpath(//*[@id=\\"siteNavbar\\"]/ul/li[6]/a)'
+            ),
+            targetPage.locator('::-p-text(Profile)'),
+        ]);
+        target.setTimeout(timeout);
+        target.on('action', () => startWaitingForEvents());
+        await target.click({
+            offset: {
+                x: 29.9375,
+                y: 21,
+            },
+        });
+        await Promise.all(promises);
+    }
+    {
+        const targetPage = page;
+        const promises = [];
+        const startWaitingForEvents = () => {
+            promises.push(targetPage.waitForNavigation());
+        };
+        startWaitingForEvents();
+        const target = await Promise.race([
+            targetPage.locator('#Password'),
+            targetPage.locator('::-p-xpath(//*[@id=\\"Password\\"])'),
+        ]);
+        target.setTimeout(timeout);
+        await target.click({
+            offset: {
+                x: 42.5,
+                y: 26.40625,
+            },
+        });
+    }
+    {
+        const targetPage = page;
+        const promises = [];
+        const startWaitingForEvents = () => {
+            promises.push(targetPage.waitForNavigation());
+        };
+        startWaitingForEvents();
+        const target = await Promise.race([
+            targetPage.locator('#Password'),
+            targetPage.locator('::-p-xpath(//*[@id=\\"Password\\"])'),
+            targetPage.locator(':scope >>> #Password'),
+        ]);
+        target.setTimeout(timeout);
+        await target.fill('123');
+    }
+
+    {
+        const targetPage = page;
+        const promises = [];
+        const startWaitingForEvents = () => {
+            promises.push(targetPage.waitForNavigation());
+        };
+        const target = await Promise.race([
+            targetPage.locator('::-p-aria(Delete Account)'),
+            targetPage.locator('#DELETE\\ USER'),
+            targetPage.locator('::-p-xpath(//*[@id=\\"DELETE USER\\"])'),
+            targetPage.locator(':scope >>> #DELETE\\ USER'),
+            targetPage.locator('::-p-text(Delete Account)'),
+        ]);
+
+        target.setTimeout(timeout);
+        await target.click({
+            offset: {
+                x: 81.3125,
+                y: 15.40625,
             },
         });
         await Promise.all(promises);
