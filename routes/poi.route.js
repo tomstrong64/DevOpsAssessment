@@ -58,7 +58,7 @@ const router = Router();
  *     summary: Get a list of Points of Interest
  *     description: Get a list of Points of Interest. Requires standard authentication.
  *     security:
- *       - BearerAuth: []
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: A list of Points of Interest
@@ -78,7 +78,7 @@ router.get('/list', stdAuthAPI, PoiController.getPois);
  *     summary: Get a Point of Interest by ID
  *     description: Get a Point of Interest by ID. Requires standard authentication.
  *     security:
- *       - BearerAuth: []
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -107,7 +107,7 @@ router.get('/:id', stdAuthAPI, PoiController.getPoiById);
  *     summary: Add a new Point of Interest
  *     description: Add a new Point of Interest. Requires standard authentication.
  *     security:
- *       - BearerAuth: []
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -140,7 +140,7 @@ router.post(
  *     summary: Delete a Point of Interest by ID
  *     description: Delete a Point of Interest by ID. Requires standard authentication.
  *     security:
- *       - BearerAuth: []
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -171,7 +171,7 @@ router.delete('/deletePoi/:id', stdAuthAPI, PoiController.deletePoi);
  *     summary: Update a Point of Interest by ID
  *     description: Update a Point of Interest by ID. Requires standard authentication.
  *     security:
- *       - BearerAuth: []
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -213,7 +213,7 @@ router.put(
  *     summary: Get a Point of Interest image by POI ID
  *     description: Get a Point of Interest image by POI ID. Requires standard authentication.
  *     security:
- *       - BearerAuth: []
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id

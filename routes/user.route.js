@@ -111,7 +111,7 @@ router.post('/register', noAuthAPI, UserController.create);
  *     summary: User logout
  *     description: Invalidate the user's access token.
  *     security:
- *       - BearerAuth: []
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Logout successful.
@@ -130,7 +130,7 @@ router.get('/logout', stdAuthAPI, UserController.logout);
  *     summary: Update user details
  *     description: Update the details of the currently authenticated user.
  *     security:
- *       - BearerAuth: []
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -157,7 +157,7 @@ router.put('/updateUser', stdAuthAPI, UserController.updateUser);
  *     summary: Get user by ID
  *     description: Get user details by ID. Requires standard authentication.
  *     security:
- *       - BearerAuth: []
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: User details retrieved successfully.
@@ -177,7 +177,7 @@ router.get('/getUser', stdAuthAPI, UserController.getUserById);
  *     description: >
  *       Delete the user account. Requires standard authentication.
  *     security:
- *       - BearerAuth: []
+ *       - bearerAuth: []
  *     responses:
  *       204:
  *         description: User deleted successfully.
@@ -200,7 +200,7 @@ router.delete('/deleteUser', stdAuthAPI, UserController.deleteUser);
  *     summary: Update user status by ID
  *     description: Update user status by ID. Requires admin authentication.
  *     security:
- *       - BearerAuth: []
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -230,7 +230,7 @@ router.put('/updateUser/:id', adminAuthAPI, UserController.updateUserStatus);
  *     summary: Get all users
  *     description: Get a list of all users. Requires admin authentication.
  *     security:
- *       - BearerAuth: []
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: List of all users.
