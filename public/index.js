@@ -43,6 +43,10 @@ document.addEventListener('DOMContentLoaded', function () {
     map.on('click', async (e) => {
         const lat = `${e.latlng.lat}`;
         const lon = `${e.latlng.lng}`;
+        if (document.getElementById('poi_results').hidden == false) {
+            // Prevent showing the results div on top of the addPoi form!!
+            document.getElementById('poi_results').hidden = true;
+        }
         const addpoi = document.getElementById('addpoi');
         addpoi.hidden = false;
 
@@ -59,6 +63,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 try {
                     const token = localStorage.getItem('token');
+                    if (!formData.get('name'))
+                        return alert('Please enter a name for the POI');
+                    if (!formData.get('type'))
+                        return alert('Please enter a type for the POI');
+                    if (!formData.get('country'))
+                        return alert('Please enter a country for the POI');
+                    if (!formData.get('region'))
+                        return alert('Please enter a region for the POI');
+                    if (!formData.get('lat'))
+                        return alert('Failed to get latitude for the POI');
+                    if (!formData.get('lon'))
+                        return alert('Failed to get longitude for the POI');
+                    if (!formData.get('description'))
+                        return alert('Please enter a description for the POI');
+
                     const response = await fetch('/pois/addPoi', {
                         method: 'POST',
                         headers: {
@@ -86,6 +105,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('poi_search').addEventListener('click', (e) => {
         e.preventDefault();
+        if (document.getElementById('addpoi').hidden == false) {
+            document.getElementById('addpoi').hidden = true;
+        } // Don't show this form right now
         const region = document.getElementById('poi_region').value;
         ajaxSearch(region);
     });

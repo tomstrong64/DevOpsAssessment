@@ -47,11 +47,16 @@ document.getElementById('UPDATE USER').addEventListener('click', async (e) => {
     const confirmpassword = document.getElementById('ConfirmNewPassword').value;
     const password = document.getElementById('Password').value;
 
+    if (!name) return alert('Please enter your name');
+    if (!email) return alert('Please enter your email');
+
     // Check if new password and confirm password match
     if (newpassword !== confirmpassword) {
         alert('New password and confirm password do not match');
         return;
     }
+
+    if (!password) return alert('Please enter your password');
 
     try {
         const token = localStorage.getItem('token');
@@ -120,7 +125,6 @@ document.getElementById('DELETE USER').addEventListener('click', async (e) => {
         });
         await responseHandler(response);
         localStorage.removeItem('token');
-        
     } catch (e) {
         alert('Failed to delete User');
     }

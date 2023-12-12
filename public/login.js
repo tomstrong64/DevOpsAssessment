@@ -23,6 +23,10 @@ async function Login() {
             email: document.getElementById('email').value,
             password: document.getElementById('password').value,
         };
+
+        if (!user.email) return alert('Please enter your email');
+        if (!user.password) return alert('Please enter your password');
+
         try {
             const response = await fetch('/user/login', {
                 method: 'POST',

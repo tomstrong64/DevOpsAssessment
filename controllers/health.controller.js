@@ -14,12 +14,25 @@
  * limitations under the License.
  */
 import mongoose from 'mongoose';
+import { User } from '../models/User.js';
 
-export const check = (req, res) => {
+export const check = async (req, res) => {
     const dbHealthy = mongoose.connection.readyState === 1;
+    const cpu = process.cpuUsage();
+    const uptime = process.uptime();
+    const memory = process.memoryUsage();
+    const loggedInUsers = (await User.find({ token: { $ne: null } })).length;
 
     if (!dbHealthy)
         return res.status(500).json({ status: 'Database connection failed' });
 
-    return res.status(200).json({ status: 'OK' });
+    return res.status(200).json({
+        status: 'OK',
+        stats: {
+            cpu,
+            uptime,
+            memory,
+            loggedInUsers,
+        },
+    });
 };

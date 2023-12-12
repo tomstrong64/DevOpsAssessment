@@ -26,7 +26,34 @@
         <script type="text/javascript" src="/utils.js" defer></script>
         <script type="text/javascript" src="/addpoi.js" defer></script>
     </head>
-    <body>
+    <body class="d-flex flex-column min-vh-100">
+        <!-- Header Section -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+            <a class="navbar-brand text-white" href="/"><%= i18n.__("Home") %></a>
+            <button
+                type="button"
+                class="navbar-toggler"
+                data-toggle="collapse"
+                data-target="#siteNavbar"
+            >
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="siteNavbar">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="navbar-brand text-white" href="/addpoi">
+                            <%= i18n.__("AddPoi") %></a
+                        >
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a href="/updateuser" class="btn btn-light ml-auto">
+                            <%= i18n.__("Profile") %></a
+                        >
+                    </li>
+                </ul>
+            </div>
+        </nav>
         <div class="container mt-5">
             <div class="row">
                 <div class="col-md-6 offset-md-3">
@@ -45,7 +72,6 @@
                                         class="form-control"
                                         id="name"
                                         name="name"
-                                        required
                                     />
                                 </div>
                                 <div class="mb-3">
@@ -87,7 +113,7 @@
                                             > <%= i18n.__("lat") %></label
                                         >
                                         <input
-                                            type="float"
+                                            type="number"
                                             class="form-control"
                                             id="lat"
                                             name="lat"
@@ -99,7 +125,7 @@
                                             > <%= i18n.__("lon") %></label
                                         >
                                         <input
-                                            type="float"
+                                            type="number"
                                             class="form-control"
                                             id="lon"
                                             name="lon"
@@ -147,6 +173,7 @@
                 </div>
             </div>
         </div>
+        <%- include('footer.ejs') %>
 
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.7.2/dist/umd/popper.min.js"></script>
