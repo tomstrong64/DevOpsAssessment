@@ -35,6 +35,13 @@ jobs:
                   JWT_SECRET: secret
                   AZURE_STORAGE_CONNECTION_STRING: 'DefaultEndpointsProtocol=https;AccountName=account;AccountKey=key;EndpointSuffix=core.windows.net'
 
+            - name: Run app
+              run: npm run start
+              env:
+                  MONGODB_URI: mongodb://admin:admin@localhost:27017
+                  JWT_SECRET: secret
+                  AZURE_STORAGE_CONNECTION_STRING: 'DefaultEndpointsProtocol=https;AccountName=account;AccountKey=key;EndpointSuffix=core.windows.net'
+
             - name: Run UI tests
               run: npm run test-ui
               env:
