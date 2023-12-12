@@ -28,8 +28,15 @@ jobs:
             - name: Install dependencies
               run: npm ci
 
-            - name: Run tests
+            - name: Run API tests
               run: npm test
+              env:
+                  MONGODB_URI: mongodb://admin:admin@localhost:27017
+                  JWT_SECRET: secret
+                  AZURE_STORAGE_CONNECTION_STRING: 'DefaultEndpointsProtocol=https;AccountName=account;AccountKey=key;EndpointSuffix=core.windows.net'
+
+            - name: Run UI tests
+              run: npm run test-ui
               env:
                   MONGODB_URI: mongodb://admin:admin@localhost:27017
                   JWT_SECRET: secret

@@ -899,6 +899,7 @@ try {
     }
 
     await browser.close();
+    console.log('Tests completed successfully.');
 } catch (err) {
     console.error(err);
     process.exit(1);
