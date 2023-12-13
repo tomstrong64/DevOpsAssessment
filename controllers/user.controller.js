@@ -18,7 +18,6 @@ import { POI } from '../models/Poi.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
-import cookieParser from 'cookie-parser';
 
 export const getUserById = async (req, res) => {
     try {

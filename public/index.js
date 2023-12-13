@@ -21,7 +21,7 @@ let watchId;
 const geoBtn = document.getElementById('enableGeolocation');
 const revokeBtn = document.getElementById('revokeGeolocation');
 const customIcon = L.icon({
-    iconUrl: 'currentlocationicon.png',
+    iconUrl: './icons/currentlocationicon.png',
     iconSize: [32, 32], // Adjust the size as needed
     iconAnchor: [16, 32],
     popupAnchor: [0, -32],
