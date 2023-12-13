@@ -18,6 +18,6 @@ async function responseHandler(response, noredirect = false) {
     alert(data.message);
     if (response.status !== 200 && response.status !== 201) return false;
     if (data.token) localStorage.setItem('token', data.token);
-    if (data.redirect && !noredirect)  window.location.replace(data.redirect);
+    if (data.redirect && !noredirect) window.location.replace(data.redirect);
     return data;
-};
+}

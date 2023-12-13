@@ -65,4 +65,4 @@ export const userdocs = (req, res) => {
     return res.render('user-docs', {
         i18n: res,
     });
-}
+};
