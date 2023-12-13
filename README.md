@@ -174,6 +174,12 @@ The live application is monitored with uptime robot, it will notify us if the ap
 
 The health check route also gives us information on the resources being used by the app and how many users are logged in.
 
+### Testing
+
+Automated tests are run when commits are made to the repository. Integration testing is done with an NPM package called Jest, this makes calls to the API and verifies it returns the expected result.
+
+We are also testing the UI with a library called Puppeteer. This opens a headless browser and performs actions as if it were a user interacting with the UI, if anything fails it will exit with code 1 (any code other than 0 is percieved as an error).
+
 #### Code Structure and Overview
 
 In the `bin` folder is the starting script for the web server. It handles the database connection and instantiates the web server from `app.js`. 
