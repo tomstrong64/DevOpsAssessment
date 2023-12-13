@@ -166,6 +166,30 @@ For client authentication we are using [jsonwebtoken](https://www.npmjs.com/pack
 
 When a client login or register, a token is generated and is sent in the authentication header as bearer token. And the browser will store the token in the local storage. When a client logout, the token will be removed from the local storage. When a client wants to access the API, the token will be sent in the header of the request. Also for each page the authentication is checked, if the cookie is not valid, the client will be redirected to the login page.
 
+### Additional Notes
+
+#### Monitoring
+
+The live application is monitored with uptime robot, it will notify us if the application stops responding.
+
+The health check route also gives us information on the resources being used by the app and how many users are logged in.
+
+#### Code Structure and Overview
+
+In the `bin` folder is the starting script for the web server. It handles the database connection and instantiates the web server from `app.js`. 
+
+In `app.js` is the configuration for the web server including the middleware to parse cookies, json requests and form data. It also contains the main routes and their corresponding routers.
+
+The routers are stored in the `routes` folder, each route uses a controller method and some have middleware for handling things like file upload and authentication.
+
+The controllers are in the `controllers` folder, they contain the core logic for the API requests and the responses that they can send. For database queries, the controllers make reference to the models, from the `models` folder.
+
+The models are schemas for the mongo collections, enforcing types and defaults. There is an extra 'model' for accessing the Azure Storage Blob, this uses the Azure NPM package to interact with the online service.
+
+All of the site pages are in the `views` folder. They are rendered on the server as they have to inject the translations for internationalisation. The translations are stored in the `locales` folder.
+
+The tests are in `tests` folder, they are run with the respective scripts set in the `package.json`. That file also includes all of the dependencies, configuration for the prettier formatter and the config for the jest tests.
+
 ## Requirements
 
 ### Server
@@ -183,7 +207,7 @@ When a client login or register, a token is generated and is sent in the authent
 ### Client
 
 - [x] it shall be possible to use the application from a mobile device
-- [ ] the web site will render on a mobile and desktop screen (responsive)
+- [x] the web site will render on a mobile and desktop screen (responsive)
 - [x] the mobile client will include code to upload geolocation provided by the device
 - [x] The remote client must authenticate itself and use the ReST api to communicate with the hosted server.
 
